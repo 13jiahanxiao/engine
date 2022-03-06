@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<texture>
+    <Item name="grassTex" address="Resources/Textures/grass.dds" index="0"/>
+	<Item name="waterTex" address="Resources/Textures/water1.dds" index="1"/>
+	<Item name="crateTex" address="Resources/Textures/WoodCrate01.dds" index="2"/>
+	<Item name="bricksTex" address="Resources/Textures/bricks.dds" index="3"/>
+	<Item name="stoneTex" address="Resources/Textures/stone.dds" index="4"/>
+	<Item name="tileTex" address="Resources/Textures/tile.dds" index="5"/>
+	<Item name="wirefenceTex" address="Resources/Textures/WireFence.dds" index="6"/>
+	<Item name="flare" address="Resources/Textures/flare.dds" index="7"/>
+	<Item name="flarealpha" address="Resources/Textures/flarealpha.dds" index="8"/>
+</texture>
