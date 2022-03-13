@@ -1,4 +1,5 @@
 #include "d3dApp.h"
+#include"../Geometry/MeshGeometry.h"
 #include "../Resources/FrameResource.h"
 #include	"../Wave/Wave.h"
 #include"../Resources/DescriptorHeap.h"
@@ -7,6 +8,7 @@
 #include"../Texture/Texture.h"
 #include"../RenderItem/RenderItem.h"
 #include"../Utility/ShaderCompile.h"
+#include"../Geometry/GeometryManager.h"
 using Microsoft::WRL::ComPtr;
 using namespace DirectX;
 using namespace DirectX::PackedVector;
@@ -42,6 +44,7 @@ private:
     void BuildMaterials();
 
     //几何
+    void BuildSkullGeometry();
     void BuildGeometrys();
     void LandGeometry();
 	void WavesGeometry();
@@ -59,7 +62,7 @@ private:
     //列举采样器模式
     std::array<const CD3DX12_STATIC_SAMPLER_DESC, 6> GetStaticSamplers();
     //将缩放和旋转指定到一个矩阵
-    FXMMATRIX PositionMatrix(DirectX::XMFLOAT3 scale, DirectX::XMFLOAT3 translate);
+    FXMMATRIX PositionMatrix(float scaleX, float scaleY, float scaleZ, float  translateX, float translateY, float translateZ);
 	float GetHillsHeight(float x, float z)const;
 	XMFLOAT3 GetHillsNormal(float x, float z)const;
 private:
@@ -71,7 +74,6 @@ private:
     ComPtr<ID3D12RootSignature> mRootSignature = nullptr;
     
 	//无序映射管理
-    std::unordered_map<std::string, std::unique_ptr<MeshGeometry>> mGeometries;
     std::unordered_map<std::string, ComPtr<ID3D12PipelineState>> mPSOs;
 
 	PassConstants mMainPassCB;

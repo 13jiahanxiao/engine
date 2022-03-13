@@ -1,32 +1,36 @@
 #include"RenderItem.h"
 
-RenderItemManager::RenderItemManager(int textureHeapNum, Device* device): m_Device(device)
+RenderItemManager::RenderItemManager(int textureHeapNum, Device* device, ID3D12GraphicsCommandList* cmdList): m_Device(device)
 {
 	m_TextureHeap = std::make_unique<DescriptorHeap>(m_Device, D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV, textureHeapNum, true);
 	m_TextureManager= std::make_unique<TextureManager>();
-	m_TextureManager->LoadTextureXML();
-}
-RenderItemManager::~RenderItemManager() 
-{
 
-}
-void RenderItemManager::LoadTextureAndBuildTexureHeap(ID3D12GraphicsCommandList* cmdList)
-{
+	m_TextureManager->LoadTextureXML();
+
+	m_GeometryManager = std::make_unique<GeometryManager>(m_Device, cmdList);
+
+	//创建描述符
 	m_TextureManager->LoadTexture(m_Device, cmdList);
 	m_TextureManager->BuildTextureHeap(m_TextureHeap.get());
 }
 
-//种类,索引,图片资源索引,反射,菲涅尔,粗糙度
-void RenderItemManager::BuildMaterial(std::string materialName, int cbIndex, int srvIndex, DirectX::XMFLOAT4 diffuseAlbedo, DirectX::XMFLOAT3 fresnelR0, float roughness)
+RenderItemManager::~RenderItemManager() 
 {
-	auto mat = std::make_unique<Material>(materialName, cbIndex, diffuseAlbedo, fresnelR0, roughness, gNumFrameResources);
+
+}
+
+//种类,索引,图片资源索引,反射,菲涅尔,粗糙度
+void RenderItemManager::BuildMaterial(std::string materialName, int srvIndex, DirectX::XMFLOAT4 diffuseAlbedo, DirectX::XMFLOAT3 fresnelR0, float roughness)
+{
+	auto mat = std::make_unique<Material>(materialName, m_MaterialCBIndex, diffuseAlbedo, fresnelR0, roughness, gNumFrameResources);
+	m_MaterialCBIndex++;
 	mat->SetTexture(srvIndex);
 	m_Materials[materialName] = std::move(mat);
 }
 
 //每个要渲染的物体指定属性
-void RenderItemManager::BuildRenderItem(std::string itemName, RenderLayer renderLayer, int objectCBIndex,
-	MeshGeometry* geo, std::string argName, std::string materialName,
+void RenderItemManager::BuildRenderItem(std::string itemName, RenderLayer renderLayer,
+	std::string geoName, std::string argName, std::string materialName,
 	DirectX::XMMATRIX world, DirectX::XMMATRIX texTransform)
 {
 	auto Ritem = std::make_unique<RenderItem>();
@@ -34,13 +38,14 @@ void RenderItemManager::BuildRenderItem(std::string itemName, RenderLayer render
 	Ritem->Name = itemName;
 	Ritem->Layer = renderLayer;
 	Ritem->World = MathHelper::Identity4x4();
-	Ritem->ObjectCBIndex = objectCBIndex;
-	Ritem->Geo = geo;
+	Ritem->ObjectCBIndex = m_ObjectCBIndex;
+	m_ObjectCBIndex++;
+	Ritem->Geo = m_GeometryManager->GetGeo(geoName);
 	Ritem->Mat = m_Materials[materialName].get();
 	Ritem->PrimitiveType = D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
-	Ritem->IndexCount = Ritem->Geo->DrawArgs[argName].IndexCount;
-	Ritem->StartIndexLocation = Ritem->Geo->DrawArgs[argName].StartIndexLocation;
-	Ritem->BaseVertexLocation = Ritem->Geo->DrawArgs[argName].BaseVertexLocation;
+	Ritem->IndexCount = Ritem->Geo->GetSubMesh(argName).IndexCount;
+	Ritem->StartIndexLocation = Ritem->Geo->GetSubMesh(argName).StartIndexLocation;
+	Ritem->BaseVertexLocation = Ritem->Geo->GetSubMesh(argName).BaseVertexLocation;
 	XMStoreFloat4x4(&Ritem->World, world);
 	XMStoreFloat4x4(&Ritem->TexTransform, texTransform);
 

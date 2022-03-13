@@ -3,6 +3,8 @@
 #include"../Texture/Texture.h"
 #include"../Resources/DescriptorHeap.h"
 #include"../Resources/FrameResource.h"
+#include"../Geometry/MeshGeometry.h"
+#include"../Geometry/GeometryManager.h"
 #include <DirectXMath.h>
 extern const int gNumFrameResources;
 
@@ -47,20 +49,19 @@ class RenderItemManager
 {
 public:
     //初始化texture的管理
-    RenderItemManager(int textureHeapNum,Device* device);
+    RenderItemManager(int textureHeapNum,Device* device,ID3D12GraphicsCommandList* cmdList);
     ~RenderItemManager();
     //构建材质
-   void BuildMaterial(std::string materialName, int cbIndex, int srvIndex, DirectX::XMFLOAT4 diffuseAlbedo, DirectX::XMFLOAT3 fresnelR0, float roughness);
+   void BuildMaterial(std::string materialName, int srvIndex, DirectX::XMFLOAT4 diffuseAlbedo, DirectX::XMFLOAT3 fresnelR0, float roughness);
    //渲染项
-   void BuildRenderItem(std::string itemName, RenderLayer renderLayer, int objectCBIndex,
-       MeshGeometry* geo, std::string argName, std::string materialName,
+   void BuildRenderItem(std::string itemName, RenderLayer renderLayer,
+       std::string geoName, std::string argName, std::string materialName,
        DirectX::XMMATRIX world, DirectX::XMMATRIX texTransform);
-   //创建描述符
-   void LoadTextureAndBuildTexureHeap(ID3D12GraphicsCommandList* cmdList);
 
    void DrawRenderItems(UINT objCBByteSize, D3D12_GPU_VIRTUAL_ADDRESS objCBGPUAddress,
        UINT matCBByteSize, D3D12_GPU_VIRTUAL_ADDRESS matCBGPUAddress,
        ID3D12GraphicsCommandList* cmdList, RenderLayer name);
+
    //绑定描述符到list
    void SetDescriptorHeaps(ID3D12GraphicsCommandList* cmdList);
 
@@ -74,6 +75,8 @@ public:
 
   Material* GetMaterial(std::string name) { return m_Materials[name].get(); }
   RenderItem* GetRenderItem(std::string name) { return m_Ritems[name].get(); }
+
+  GeometryManager* GetMeshManager() {return m_GeometryManager.get();}
 private:
     Device* m_Device;
 	std::unordered_map<std::string, std::unique_ptr<Material>> m_Materials;
@@ -84,6 +87,13 @@ private:
 
     std::unordered_map<std::string, std::unique_ptr<RenderItem>> m_Ritems;
 
+    std::unique_ptr <GeometryManager> m_GeometryManager;
+
     //渲染层级管理
     std::vector<RenderItem*> m_RitemLayer[(int)RenderLayer::Count];
+
+    //材质索引
+    int m_MaterialCBIndex = 0;
+    //渲染项的索引
+    int m_ObjectCBIndex = 0;
 };

@@ -28,9 +28,7 @@ bool MyApp::Initialize()
 
 	m_SunLight.SetLight(1.25f * XM_PI, XM_PIDIV4, 1.0f, { 1.0f, 1.0f, 0.9f }, 0);
 
-	m_ItemManager = std::make_unique<RenderItemManager>(textureHeapNum, m_Device.get());
-
-	m_ItemManager->LoadTextureAndBuildTexureHeap(mCommandList.Get());
+	m_ItemManager = std::make_unique<RenderItemManager>(textureHeapNum, m_Device.get(), mCommandList.Get());
 
 	m_Shaders = std::make_unique<ShaderCompile>();
 
@@ -249,7 +247,7 @@ void MyApp::UpdateWaves(const GameTimer& gt)
 	}
 
 	// Set the dynamic VB of the wave renderitem to the current frame VB.
-	m_WavesRitem->Geo->VertexBufferGPU = currWavesVB->GetResource();
+	m_WavesRitem->Geo->SetVertexBufferGPU(currWavesVB->GetResource());
 }
 
 void MyApp::UpdateLight(const GameTimer& gt)
@@ -361,35 +359,10 @@ void MyApp::WavesGeometry()
 	}
 
 	UINT vbByteSize = m_Waves->VertexCount() * sizeof(Vertex);
-	UINT ibByteSize = (UINT)indices.size() * sizeof(std::uint16_t);
 
-	auto geo = std::make_unique<MeshGeometry>();
-	geo->Name = "waterGeo";
-
-	geo->VertexBufferCPU = nullptr;
-	geo->VertexBufferGPU = nullptr;
-
-	ThrowIfFailed(D3DCreateBlob(ibByteSize, &geo->IndexBufferCPU));
-	CopyMemory(geo->IndexBufferCPU->GetBufferPointer(), indices.data(), ibByteSize);
-
-	geo->IndexBufferGPU = d3dUtil::CreateDefaultBuffer(m_Device->GetDevice(),
-		mCommandList.Get(), indices.data(), ibByteSize, geo->IndexBufferUploader);
-
-	geo->VertexByteStride = sizeof(Vertex);
-	geo->VertexBufferByteSize = vbByteSize;
-	geo->IndexFormat = DXGI_FORMAT_R16_UINT;
-	geo->IndexBufferByteSize = ibByteSize;
-
-	SubmeshGeometry submesh;
-	submesh.IndexCount = (UINT)indices.size();
-	submesh.StartIndexLocation = 0;
-	submesh.BaseVertexLocation = 0;
-
-	geo->DrawArgs["grid"] = submesh;
-
-	mGeometries["waterGeo"] = std::move(geo);
+	m_ItemManager->GetMeshManager()->CreateMeshVertexUpload("waterGeo", vbByteSize, indices);
+	m_ItemManager->GetMeshManager()->CreateSubMesh("waterGeo", "grid", (UINT)indices.size(), 0,0);
 }
-
 void MyApp::LandGeometry()
 {
 	GeometryGenerator geoGen;
@@ -405,41 +378,11 @@ void MyApp::LandGeometry()
 		vertices[i].TexC = grid.Vertices[i].TexC;
 	}
 
-	const UINT vbByteSize = (UINT)vertices.size() * sizeof(Vertex);
-
 	std::vector<std::uint16_t> indices = grid.GetIndices16();
-	const UINT ibByteSize = (UINT)indices.size() * sizeof(std::uint16_t);
 
-	auto geo = std::make_unique<MeshGeometry>();
-	geo->Name = "landGeo";
-
-	ThrowIfFailed(D3DCreateBlob(vbByteSize, &geo->VertexBufferCPU));
-	CopyMemory(geo->VertexBufferCPU->GetBufferPointer(), vertices.data(), vbByteSize);
-
-	ThrowIfFailed(D3DCreateBlob(ibByteSize, &geo->IndexBufferCPU));
-	CopyMemory(geo->IndexBufferCPU->GetBufferPointer(), indices.data(), ibByteSize);
-
-	geo->VertexBufferGPU = d3dUtil::CreateDefaultBuffer(m_Device->GetDevice(),
-		mCommandList.Get(), vertices.data(), vbByteSize, geo->VertexBufferUploader);
-
-	geo->IndexBufferGPU = d3dUtil::CreateDefaultBuffer(m_Device->GetDevice(),
-		mCommandList.Get(), indices.data(), ibByteSize, geo->IndexBufferUploader);
-
-	geo->VertexByteStride = sizeof(Vertex);
-	geo->VertexBufferByteSize = vbByteSize;
-	geo->IndexFormat = DXGI_FORMAT_R16_UINT;
-	geo->IndexBufferByteSize = ibByteSize;
-
-	SubmeshGeometry submesh;
-	submesh.IndexCount = (UINT)indices.size();
-	submesh.StartIndexLocation = 0;
-	submesh.BaseVertexLocation = 0;
-
-	geo->DrawArgs["grid"] = submesh;
-
-	mGeometries["landGeo"] = std::move(geo);
+	m_ItemManager->GetMeshManager()->CreateMesh("landGeo", vertices, indices);
+	m_ItemManager->GetMeshManager()->CreateSubMesh("landGeo", "grid", (UINT)indices.size(), 0, 0);
 }
-
 void MyApp::ShapeGeometry()
 {
 	GeometryGenerator geoGen;
@@ -457,26 +400,6 @@ void MyApp::ShapeGeometry()
 	UINT gridIndexOffset = (UINT)box.Indices32.size();
 	UINT sphereIndexOffset = gridIndexOffset + (UINT)grid.Indices32.size(); 
 	UINT cylinderIndexOffset = sphereIndexOffset + (UINT)sphere.Indices32.size();
-
-	SubmeshGeometry boxSubmesh;
-	boxSubmesh.IndexCount = (UINT)box.Indices32.size();
-	boxSubmesh.StartIndexLocation = boxIndexOffset;
-	boxSubmesh.BaseVertexLocation = boxVertexOffset;
-
-	SubmeshGeometry gridSubmesh;
-	gridSubmesh.IndexCount = (UINT)grid.Indices32.size();
-	gridSubmesh.StartIndexLocation = gridIndexOffset;
-	gridSubmesh.BaseVertexLocation = gridVertexOffset;
-
-	SubmeshGeometry sphereSubmesh;
-	sphereSubmesh.IndexCount = (UINT)sphere.Indices32.size();
-	sphereSubmesh.StartIndexLocation = sphereIndexOffset;
-	sphereSubmesh.BaseVertexLocation = sphereVertexOffset;
-
-	SubmeshGeometry cylinderSubmesh;
-	cylinderSubmesh.IndexCount = (UINT)cylinder.Indices32.size();
-	cylinderSubmesh.StartIndexLocation = cylinderIndexOffset;
-	cylinderSubmesh.BaseVertexLocation = cylinderVertexOffset;
 
 	auto totalVertexCount =
 		box.Vertices.size() +
@@ -521,45 +444,63 @@ void MyApp::ShapeGeometry()
 	indices.insert(indices.end(), std::begin(sphere.GetIndices16()), std::end(sphere.GetIndices16()));
 	indices.insert(indices.end(), std::begin(cylinder.GetIndices16()), std::end(cylinder.GetIndices16()));
 
-	//总共顶点大小
-	const UINT vbByteSize = (UINT)vertices.size() * sizeof(Vertex);
-
-	//总共索引大小
-	const UINT ibByteSize = (UINT)indices.size() * sizeof(std::uint16_t);
-
-	auto geo = std::make_unique<MeshGeometry>();
-	geo->Name = "shapeGeo";
-
-	ThrowIfFailed(D3DCreateBlob(vbByteSize, &geo->VertexBufferCPU));
-	CopyMemory(geo->VertexBufferCPU->GetBufferPointer(), vertices.data(), vbByteSize);
-
-	ThrowIfFailed(D3DCreateBlob(ibByteSize, &geo->IndexBufferCPU));
-	CopyMemory(geo->IndexBufferCPU->GetBufferPointer(), indices.data(), ibByteSize);
-
-	geo->VertexBufferGPU = d3dUtil::CreateDefaultBuffer(m_Device->GetDevice(),
-		mCommandList.Get(), vertices.data(), vbByteSize, geo->VertexBufferUploader);
-
-	geo->IndexBufferGPU = d3dUtil::CreateDefaultBuffer(m_Device->GetDevice(),
-		mCommandList.Get(), indices.data(), ibByteSize, geo->IndexBufferUploader);
-
-	geo->VertexByteStride = sizeof(Vertex);
-	geo->VertexBufferByteSize = vbByteSize;
-	geo->IndexFormat = DXGI_FORMAT_R16_UINT;
-	geo->IndexBufferByteSize = ibByteSize;
-
-	geo->DrawArgs["box"] = boxSubmesh;
-	geo->DrawArgs["grid"] = gridSubmesh;
-	geo->DrawArgs["sphere"] = sphereSubmesh;
-	geo->DrawArgs["cylinder"] = cylinderSubmesh;
-
-	mGeometries[geo->Name] = std::move(geo);
+	m_ItemManager->GetMeshManager()->CreateMesh("shapeGeo", vertices, indices);
+	m_ItemManager->GetMeshManager()->CreateSubMesh("shapeGeo", "box", (UINT)box.Indices32.size(), boxIndexOffset, boxVertexOffset);
+	m_ItemManager->GetMeshManager()->CreateSubMesh("shapeGeo", "grid", (UINT)grid.Indices32.size(), gridIndexOffset, gridVertexOffset);
+	m_ItemManager->GetMeshManager()->CreateSubMesh("shapeGeo", "sphere", (UINT)sphere.Indices32.size(), sphereIndexOffset, sphereVertexOffset);
+	m_ItemManager->GetMeshManager()->CreateSubMesh("shapeGeo", "cylinder", (UINT)cylinder.Indices32.size(), cylinderIndexOffset, cylinderVertexOffset);
 }
+void MyApp::BuildSkullGeometry()
+{
+	std::ifstream fin("Resources/Models/car.txt");
 
+	if (!fin)
+	{
+		MessageBox(0, L"Models/skull.txt not found.", 0, 0);
+		return;
+	}
+
+	UINT vcount = 0;
+	UINT tcount = 0;
+	std::string ignore;
+
+	fin >> ignore >> vcount;
+	fin >> ignore >> tcount;
+	fin >> ignore >> ignore >> ignore >> ignore;
+
+	std::vector<Vertex> vertices(vcount);
+	for (UINT i = 0; i < vcount; ++i)
+	{
+		fin >> vertices[i].Pos.x >> vertices[i].Pos.y >> vertices[i].Pos.z;
+		fin >> vertices[i].Normal.x >> vertices[i].Normal.y >> vertices[i].Normal.z;
+	}
+
+	fin >> ignore;
+	fin >> ignore;
+	fin >> ignore;
+
+	std::vector<std::uint16_t> indices(3 * tcount);
+	for (UINT i = 0; i < tcount; ++i)
+	{
+		fin >> indices[i * 3 + 0] >> indices[i * 3 + 1] >> indices[i * 3 + 2];
+	}
+
+	fin.close();
+
+	//
+	// Pack the indices of all the meshes into one index buffer.
+	//
+
+	m_ItemManager->GetMeshManager()->CreateMesh("skullGeo", vertices, indices);
+	m_ItemManager->GetMeshManager()->CreateSubMesh("skullGeo", "skull", (UINT)indices.size(), 0, 0);
+}
 void MyApp::BuildGeometrys()
 {
 	WavesGeometry();
 	LandGeometry();
 	ShapeGeometry();
+	BuildSkullGeometry();
+	m_ItemManager->GetMeshManager()->LoadMesh("Resources/Models/spot.obj", "loadGeo", "cow");
 }
 #pragma endregion
 
@@ -734,6 +675,7 @@ void MyApp::BuildPSOs()
 	opaquePsoDesc.SampleDesc.Count = m4xMsaaState ? 4 : 1;
 	opaquePsoDesc.SampleDesc.Quality = m4xMsaaState ? (m4xMsaaQuality - 1) : 0;
 	opaquePsoDesc.DSVFormat = mDepthStencilFormat;
+	opaquePsoDesc.RasterizerState.CullMode = D3D12_CULL_MODE_NONE;
 	ThrowIfFailed(m_Device->GetDevice()->CreateGraphicsPipelineState(&opaquePsoDesc, IID_PPV_ARGS(&mPSOs["opaque"])));
 
 	//纹理旋转融合指定单独shader
@@ -759,7 +701,7 @@ void MyApp::BuildPSOs()
 	ThrowIfFailed(m_Device->GetDevice()->CreateGraphicsPipelineState(&transparentPsoDesc, IID_PPV_ARGS(&mPSOs["transparent"])))
 
 		//雾效果和alpha剔除
-		D3D12_GRAPHICS_PIPELINE_STATE_DESC alphaTestedPsoDesc = opaquePsoDesc;
+	D3D12_GRAPHICS_PIPELINE_STATE_DESC alphaTestedPsoDesc = opaquePsoDesc;
 	alphaTestedPsoDesc.PS = m_Shaders->GetShaderBYTE("alphaTestedPS");
 	alphaTestedPsoDesc.RasterizerState.CullMode = D3D12_CULL_MODE_NONE;
 	ThrowIfFailed(m_Device->GetDevice()->CreateGraphicsPipelineState(&alphaTestedPsoDesc, IID_PPV_ARGS(&mPSOs["alphaTested"])));
@@ -773,40 +715,46 @@ void MyApp::BuildPSOs()
 //定义材料属性
 void MyApp::BuildMaterials()
 {
-	m_ItemManager->BuildMaterial("grass", 0, 0, XMFLOAT4(0.2f, 0.6f, 0.2f, 1.0f), XMFLOAT3(0.01f, 0.01f, 0.01f), 0);
-	m_ItemManager->BuildMaterial("water", 1, 1, XMFLOAT4(1.0f, 1.0f, 1.0f, 0.5f), XMFLOAT3(0.1f, 0.1f, 0.1f), 0);
-	m_ItemManager->BuildMaterial("crate", 2, 2, XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f), XMFLOAT3(0.1f, 0.1f, 0.1f), 0.25f);
-	m_ItemManager->BuildMaterial("bricks", 3, 3, XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f), XMFLOAT3(0.02f, 0.02f, 0.02f), 0.1f);
-	m_ItemManager->BuildMaterial("stone", 4, 4, XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f), XMFLOAT3(0.05f, 0.05f, 0.05f), 0.3f);
-	m_ItemManager->BuildMaterial("tile", 5, 5, XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f), XMFLOAT3(0.02f, 0.02f, 0.02f), 0.3f);
-	m_ItemManager->BuildMaterial("wirefence", 6, 6, XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f), XMFLOAT3(0.1f, 0.1f, 0.1f), 0.25f);
-	m_ItemManager->BuildMaterial("flare", 7, 7, XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f), XMFLOAT3(0.1f, 0.1f, 0.1f), 0.25f);
-	m_ItemManager->BuildMaterial("flarealpha", 8, 8, XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f), XMFLOAT3(0.1f, 0.1f, 0.1f), 0.25f);
+	m_ItemManager->BuildMaterial("grass", 0, XMFLOAT4(0.2f, 0.6f, 0.2f, 1.0f), XMFLOAT3(0.01f, 0.01f, 0.01f), 0);
+	m_ItemManager->BuildMaterial("water", 1, XMFLOAT4(1.0f, 1.0f, 1.0f, 0.5f), XMFLOAT3(0.1f, 0.1f, 0.1f), 0);
+	m_ItemManager->BuildMaterial("crate",  2, XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f), XMFLOAT3(0.1f, 0.1f, 0.1f), 0.25f);
+	m_ItemManager->BuildMaterial("bricks",  3, XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f), XMFLOAT3(0.02f, 0.02f, 0.02f), 0.1f);
+	m_ItemManager->BuildMaterial("stone",  4, XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f), XMFLOAT3(0.05f, 0.05f, 0.05f), 0.3f);
+	m_ItemManager->BuildMaterial("tile",  5, XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f), XMFLOAT3(0.02f, 0.02f, 0.02f), 0.3f);
+	m_ItemManager->BuildMaterial("wirefence",  6, XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f), XMFLOAT3(0.1f, 0.1f, 0.1f), 0.25f);
+	m_ItemManager->BuildMaterial("flare",  7, XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f), XMFLOAT3(0.1f, 0.1f, 0.1f), 0.25f);
+	m_ItemManager->BuildMaterial("flarealpha",  8, XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f), XMFLOAT3(0.1f, 0.1f, 0.1f), 0.25f);
 }
 
 void MyApp::BuildRenderItems()
 {
 	//水
-	m_ItemManager->BuildRenderItem("water", RenderLayer::Opaque, 0, mGeometries["waterGeo"].get(), "grid", "water",
-		PositionMatrix(DirectX::XMFLOAT3(1.0f, 1.0f, 1.0f), DirectX::XMFLOAT3(0.0f, 0.0f, 0.0f)),
-		PositionMatrix(DirectX::XMFLOAT3(5.0f, 5.0f, 1.0f), DirectX::XMFLOAT3(0.0f, 0.0f, 0.0f)));
+	m_ItemManager->BuildRenderItem("water", RenderLayer::Opaque, "waterGeo", "grid", "water",
+		PositionMatrix(1.0f, 1.0f, 1.0f,0.0f, 0.0f, 0.0f),
+		PositionMatrix(5.0f, 5.0f, 1.0f,0.0f, 0.0f, 0.0f));
 	m_WavesRitem= m_ItemManager->GetRenderItem("water");
 	//草地
-	m_ItemManager->BuildRenderItem("grid", RenderLayer::Opaque, 1, mGeometries["landGeo"].get(), "grid", "grass",
-		PositionMatrix(DirectX::XMFLOAT3(1.0f, 1.0f, 1.0f), DirectX::XMFLOAT3(0.0f, 0.0f, 0.0f)),
-		PositionMatrix(DirectX::XMFLOAT3(5.0f, 5.0f, 1.0f), DirectX::XMFLOAT3(0.0f, 0.0f, 0.0f)));
-	m_ItemManager->BuildRenderItem("grass", RenderLayer::Opaque, 2, mGeometries["shapeGeo"].get(), "sphere", "grass",
-		PositionMatrix(DirectX::XMFLOAT3(3.0f, 3.0f, 3.0f), DirectX::XMFLOAT3(3.0f, 5.0f, -9.0f)),
-		PositionMatrix(DirectX::XMFLOAT3(1.0f, 1.0f, 1.0f), DirectX::XMFLOAT3(0.0f, 0.0f, 0.0f)));
-	m_ItemManager->BuildRenderItem("box", RenderLayer::TexRotate, 3, mGeometries["shapeGeo"].get(), "box", "flare",
-		PositionMatrix(DirectX::XMFLOAT3(3.0f, 3.0f, 3.0f), DirectX::XMFLOAT3(3.0f, 9.0f, -9.0f)),
-		PositionMatrix(DirectX::XMFLOAT3(1.0f, 1.0f, 1.0f), DirectX::XMFLOAT3(0.0f, 0.0f, 0.0f)));
-	m_ItemManager->BuildRenderItem("box2", RenderLayer::Opaque, 4, mGeometries["shapeGeo"].get(), "sphere", "stone",
-		PositionMatrix(DirectX::XMFLOAT3(3.0f, 3.0f, 3.0f), DirectX::XMFLOAT3(7.0f, 2.0f, -9.0f)),
-		PositionMatrix(DirectX::XMFLOAT3(1.0f, 1.0f, 1.0f), DirectX::XMFLOAT3(0.0f, 0.0f, 0.0f)));
-	m_ItemManager->BuildRenderItem("box3", RenderLayer::AlphaTested, 5, mGeometries["shapeGeo"].get(), "box", "wirefence",
-		PositionMatrix(DirectX::XMFLOAT3(3.0f, 3.0f, 3.0f), DirectX::XMFLOAT3(7.0f, 1.0f, -14.0f)),
-		PositionMatrix(DirectX::XMFLOAT3(1.0f, 1.0f, 1.0f), DirectX::XMFLOAT3(0.0f, 0.0f, 0.0f)));
+	m_ItemManager->BuildRenderItem("grid", RenderLayer::Opaque,  "landGeo", "grid", "grass",
+		PositionMatrix(1.0f, 1.0f, 1.0f, 0.0f, 0.0f, 0.0f),
+		PositionMatrix(5.0f, 5.0f, 1.0f, 0.0f, 0.0f, 0.0f));
+	m_ItemManager->BuildRenderItem("grass", RenderLayer::Opaque, "shapeGeo", "sphere", "grass",
+		PositionMatrix(3.0f, 3.0f, 3.0f,3.0f, 5.0f, -9.0f),
+		PositionMatrix(1.0f, 1.0f, 1.0f,0.0f, 0.0f, 0.0f));
+	m_ItemManager->BuildRenderItem("box", RenderLayer::TexRotate, "shapeGeo","box", "flare",
+		PositionMatrix(3.0f, 3.0f, 3.0f, 3.0f, 9.0f, -9.0f),
+		PositionMatrix(1.0f, 1.0f, 1.0f, 0.0f, 0.0f, 0.0f));
+	m_ItemManager->BuildRenderItem("box2", RenderLayer::Opaque, "shapeGeo", "sphere", "stone",
+		PositionMatrix(3.0f, 3.0f, 3.0f, 7.0f, 2.0f, -9.0f),
+		PositionMatrix(1.0f, 1.0f, 1.0f, 0.0f, 0.0f, 0.0f));
+	m_ItemManager->BuildRenderItem("box3", RenderLayer::AlphaTested, "shapeGeo", "box", "wirefence",
+		PositionMatrix(3.0f, 3.0f, 3.0f,7.0f, 1.0f, -14.0f),
+		PositionMatrix(1.0f, 1.0f, 1.0f, 0.0f, 0.0f, 0.0f));
+	m_ItemManager->BuildRenderItem("cow", RenderLayer::Opaque,"loadGeo", "cow", "stone",
+		PositionMatrix(13.0f, 13.0f, 13.0f, 7.0f, 17.0f, -14.0f),
+		PositionMatrix(1.0f, 1.0f, 1.0f, 0.0f, 0.0f, 0.0f));
+	//m_ItemManager->BuildRenderItem("cow1", RenderLayer::Opaque, "skullGeo", "skull", "stone",
+	//	PositionMatrix(13.0f, 13.0f, 13.0f, 7.0f, 17.0f, -14.0f),
+	//	PositionMatrix(1.0f, 1.0f, 1.0f, 0.0f, 0.0f, 0.0f));
 }
 
 void MyApp::DrawRenderItems(ID3D12GraphicsCommandList* cmdList, RenderLayer name)
@@ -823,9 +771,9 @@ void MyApp::DrawRenderItems(ID3D12GraphicsCommandList* cmdList, RenderLayer name
 }
 
 //大小x旋转 无大小改变为1，无旋转改变为0
-FXMMATRIX MyApp::PositionMatrix(DirectX::XMFLOAT3 scale, DirectX::XMFLOAT3 translate)
+FXMMATRIX MyApp::PositionMatrix(float scaleX,float scaleY,float scaleZ, float  translateX,float translateY,float translateZ)
 {
-	return  XMMatrixScaling(scale.x, scale.y, scale.z) * XMMatrixTranslation(translate.x, translate.y, translate.z);
+	return  XMMatrixScaling(scaleX, scaleY, scaleZ) * XMMatrixTranslation(translateX, translateY, translateZ);
 }
 
 float MyApp::GetHillsHeight(float x, float z)const
