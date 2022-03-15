@@ -40,6 +40,6 @@ void GeometryManager::CreateMeshVertexUpload(std::string name, UINT vbSize, std:
 void GeometryManager::LoadMesh(std::string fileName, std::string geoName,std::string subName)
 {
 	lo.LoadOBJ(fileName);
-	CreateMesh(geoName, lo.m_Vertices, lo.m_VertIndices);
-	CreateSubMesh(geoName, subName, (UINT)lo.m_VertIndices.size(), 0, 0);
+	CreateMesh(geoName, lo.m_Vertices, lo.m_Indices);
+	CreateSubMesh(geoName, subName, (UINT)lo.m_Indices.size(), 0, 0);
 }

@@ -9,4 +9,6 @@
 	<Item name="wirefenceTex" address="Resources/Textures/WireFence.dds" index="6"/>
 	<Item name="flare" address="Resources/Textures/flare.dds" index="7"/>
 	<Item name="flarealpha" address="Resources/Textures/flarealpha.dds" index="8"/>
+	<Item name="cow" address="Resources/Textures/cow_dx.dds" index="9"/>
+	<Item name="crate" address="Resources/Textures/rock.dds" index="10"/>
 </texture>

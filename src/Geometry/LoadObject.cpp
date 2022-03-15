@@ -5,6 +5,7 @@
 #include <fstream>
 LoadObject::LoadObject()
 {
+	m_IndiceSize = 0;
 }
 
 LoadObject::~LoadObject()
@@ -90,16 +91,17 @@ inline const T& LoadObject::GetElement(const std::vector<T>& elements, std::stri
 	return elements[idx];
 }
 
-void LoadObject::IndicesCreate(std::string curline)
+void LoadObject::IndicesCreate(std::string curline, std::vector <DirectX::XMFLOAT3> pos,
+std::vector <DirectX::XMFLOAT3> normals,
+std::vector <DirectX::XMFLOAT2> texC)
 {
 	std::vector<std::string> sface, svert;
 	Split(Tail(curline), sface, " ");
-	//每一行
 	for (int i = 0; i < int(sface.size()); i++)
 	{
 		//判断有几个/
 		int vtype;
-
+		
 		Split(sface[i], svert, "/");
 
 		if (svert.size() == 1)
@@ -108,19 +110,18 @@ void LoadObject::IndicesCreate(std::string curline)
 		}
 		if (svert.size() == 2)
 		{
-			vtype = 2;
+			vtype = 3;
 		}
+		//顺序应党是位置/贴图/法线，但有的不是
 		if (svert.size() == 3)
 		{
 			if (svert[1] != "")
 			{
-				// Position, Texture, and Normal
 				vtype = 4;
 			}
 			else
 			{
-				// Position & Normal
-				vtype = 3;
+				vtype = 2;
 			}
 		}
 
@@ -128,26 +129,48 @@ void LoadObject::IndicesCreate(std::string curline)
 		{
 		case 1: 
 		{
-			m_VertIndices.push_back(std::stof(svert[0])-1);
+			Vertex ver;
+			ver.Pos.x = pos[std::stof(svert[0]) - 1].x;
+			ver.Pos.y = pos[std::stof(svert[0]) - 1].y;
+			ver.Pos.z = pos[std::stof(svert[0]) - 1].z;
+			m_Vertices.push_back(ver);
 			break;
 		}
 		case 2: // P/T
 		{
-			m_VertIndices.push_back(std::stof(svert[0])-1);
-			m_TexIndices.push_back(std::stof(svert[1])-1);
+			Vertex ver;
+			ver.Pos.x = pos[std::stof(svert[0]) - 1].x;
+			ver.Pos.y = pos[std::stof(svert[0]) - 1].y;
+			ver.Pos.z = pos[std::stof(svert[0]) - 1].z;
+			ver.TexC.x = texC[std::stof(svert[1]) - 1].x;
+			ver.TexC.y = texC[std::stof(svert[1]) - 1].y;
+			m_Vertices.push_back(ver);
 			break;
 		}
 		case 3: // P//N
 		{
-			m_VertIndices.push_back(std::stof(svert[0])-1);
-			m_NorIndices.push_back(std::stof(svert[1])-1);
+			Vertex ver;
+			ver.Pos.x = pos[std::stof(svert[0]) - 1].x;
+			ver.Pos.y = pos[std::stof(svert[0]) - 1].y;
+			ver.Pos.z = pos[std::stof(svert[0]) - 1].z;
+			ver.Normal.x = normals[std::stof(svert[1]) - 1].x;
+			ver.Normal.y = normals[std::stof(svert[1]) - 1].y;
+			ver.Normal.z = normals[std::stof(svert[1]) - 1].z;
+			m_Vertices.push_back(ver);
 			break;
 		}
 		case 4: // P/T/N
 		{
-			m_VertIndices.push_back(std::stof(svert[0])-1);
-			m_TexIndices.push_back(std::stof(svert[1])-1);
-			m_NorIndices.push_back(std::stof(svert[2])-1);
+			Vertex ver;
+			ver.Pos.x = pos[std::stof(svert[0]) - 1].x;
+			ver.Pos.y = pos[std::stof(svert[0]) - 1].y;
+			ver.Pos.z = pos[std::stof(svert[0]) - 1].z;
+			ver.TexC.x = texC[std::stof(svert[1]) - 1].x;
+			ver.TexC.y = texC[std::stof(svert[1]) - 1].y;
+			ver.Normal.x = normals[std::stof(svert[2]) - 1].x;
+			ver.Normal.y = normals[std::stof(svert[2]) - 1].y;
+			ver.Normal.z = normals[std::stof(svert[2]) - 1].z;
+			m_Vertices.push_back(ver);
 			break;
 		}
 		default:
@@ -155,6 +178,8 @@ void LoadObject::IndicesCreate(std::string curline)
 			break;
 		}
 		}
+		m_Indices.push_back(m_IndiceSize);
+		m_IndiceSize++;
 	}
 
 	//没有法线的时候可以计算面法线
@@ -172,11 +197,9 @@ void LoadObject::IndicesCreate(std::string curline)
 
 void LoadObject::LoadOBJ(std::string fileName)
 {
-
-	m_NorIndices.clear();
-	m_TexIndices.clear();
-	m_VertIndices.clear();
-	m_VertIndices.clear();
+	m_IndiceSize = 0;
+	m_Indices.clear();
+	m_Vertices.clear();
 	std::ifstream file(fileName);
 
 	if (!file.is_open())
@@ -233,31 +256,8 @@ void LoadObject::LoadOBJ(std::string fileName)
 		if (FirstToken(curline) == "f")
 		{
 			std::vector<Vertex> vVerts;
-			IndicesCreate(curline);
+			IndicesCreate(curline,pos,normals,texC);
 		}
 	}
-	for (size_t i = 0; i < pos.size(); ++i)
-	{
-		Vertex ver;
-		ver.Pos.x = pos[i].x;
-		ver.Pos.y = pos[i].y;
-		ver.Pos.z = pos[i].z;
-		ver.TexC.x = 0;
-		ver.TexC.y = 0;
-		ver.Normal.x = 0;
-		ver.Normal.y = 0;
-		ver.Normal.z = 0;
-		m_Vertices.push_back(ver);
-	}
-	//for (size_t i = 0; i < texC.size(); ++i)
-	//{
-	//	m_Vertices[i].TexC.x = texC[i].x;
-	//	m_Vertices[i].TexC.y = texC[i].y;
-	//}
-	for (size_t i = 0; i < normals.size(); ++i)
-	{
-		m_Vertices[i].Normal.x = normals[i].x;
-		m_Vertices[i].Normal.y = normals[i].y;
-		m_Vertices[i].Normal.z = normals[i].z;
-	}
+
 }

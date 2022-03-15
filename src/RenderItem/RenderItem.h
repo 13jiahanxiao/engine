@@ -15,6 +15,7 @@ enum RenderLayer : int
     AlphaTested,
     CullBack,
     TexRotate,
+    NoTexture,
     Count
 };
 

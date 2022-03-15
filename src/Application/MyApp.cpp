@@ -3,7 +3,7 @@
 #include "../Resources/FrameResource.h"
 
 const int gNumFrameResources = 3;
-const int textureHeapNum = 9;
+const int textureHeapNum = 11;
 MyApp::MyApp(HINSTANCE hInstance)
 	: D3DApp(hInstance)
 {
@@ -99,6 +99,9 @@ void MyApp::Draw(const GameTimer& gt)
 
 	mCommandList->SetPipelineState(mPSOs["texRotate"].Get());
 	DrawRenderItems(mCommandList.Get(), RenderLayer::TexRotate);
+
+	mCommandList->SetPipelineState(mPSOs["NoTexture"].Get());
+	DrawRenderItems(mCommandList.Get(), RenderLayer::NoTexture);
 
 	// Indicate a state transition on the resource usage.
 	mCommandList->ResourceBarrier(1, rvalue_to_lvalue(CD3DX12_RESOURCE_BARRIER::Transition(CurrentBackBuffer(),
@@ -487,10 +490,6 @@ void MyApp::BuildSkullGeometry()
 
 	fin.close();
 
-	//
-	// Pack the indices of all the meshes into one index buffer.
-	//
-
 	m_ItemManager->GetMeshManager()->CreateMesh("skullGeo", vertices, indices);
 	m_ItemManager->GetMeshManager()->CreateSubMesh("skullGeo", "skull", (UINT)indices.size(), 0, 0);
 }
@@ -500,7 +499,9 @@ void MyApp::BuildGeometrys()
 	LandGeometry();
 	ShapeGeometry();
 	BuildSkullGeometry();
+
 	m_ItemManager->GetMeshManager()->LoadMesh("Resources/Models/spot.obj", "loadGeo", "cow");
+	//m_ItemManager->GetMeshManager()->LoadMesh("Resources/Models/rock.obj", "rockGeo", "rock");
 }
 #pragma endregion
 
@@ -631,6 +632,8 @@ void MyApp::BuildShadersAndInputLayout()
 	};
 
 	m_Shaders->LoadShader("standardVS", L"Resources\\Shaders\\Default.hlsl", nullptr, "VS", "vs_5_0");
+	m_Shaders->LoadShader("NoTextureVS", L"Resources\\Shaders\\NoTexture.hlsl", nullptr, "VS", "vs_5_0");
+	m_Shaders->LoadShader("NoTexturePS", L"Resources\\Shaders\\NoTexture.hlsl", nullptr, "PS", "ps_5_0");
 	m_Shaders->LoadShader("rotateVS", L"Resources\\Shaders\\Default.hlsl", rotate, "VS", "vs_5_0");
 	m_Shaders->LoadShader("opaquePS", L"Resources\\Shaders\\Default.hlsl", defines, "PS", "ps_5_0");
 	m_Shaders->LoadShader("alphaTestedPS", L"Resources\\Shaders\\Default.hlsl", alphaTestDefines, "PS", "ps_5_0");
@@ -678,6 +681,11 @@ void MyApp::BuildPSOs()
 	opaquePsoDesc.RasterizerState.CullMode = D3D12_CULL_MODE_NONE;
 	ThrowIfFailed(m_Device->GetDevice()->CreateGraphicsPipelineState(&opaquePsoDesc, IID_PPV_ARGS(&mPSOs["opaque"])));
 
+	D3D12_GRAPHICS_PIPELINE_STATE_DESC  NoTextureDesc= opaquePsoDesc;
+	NoTextureDesc.VS = m_Shaders->GetShaderBYTE("NoTextureVS");
+	NoTextureDesc.PS = m_Shaders->GetShaderBYTE("NoTexturePS");
+	ThrowIfFailed(m_Device->GetDevice()->CreateGraphicsPipelineState(&NoTextureDesc, IID_PPV_ARGS(&mPSOs["NoTexture"])));
+
 	//纹理旋转融合指定单独shader
 	D3D12_GRAPHICS_PIPELINE_STATE_DESC texRotatePsoDesc = opaquePsoDesc;
 	texRotatePsoDesc.VS = m_Shaders->GetShaderBYTE("rotateVS");
@@ -724,6 +732,8 @@ void MyApp::BuildMaterials()
 	m_ItemManager->BuildMaterial("wirefence",  6, XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f), XMFLOAT3(0.1f, 0.1f, 0.1f), 0.25f);
 	m_ItemManager->BuildMaterial("flare",  7, XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f), XMFLOAT3(0.1f, 0.1f, 0.1f), 0.25f);
 	m_ItemManager->BuildMaterial("flarealpha",  8, XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f), XMFLOAT3(0.1f, 0.1f, 0.1f), 0.25f);
+	m_ItemManager->BuildMaterial("cow", 9, XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f), XMFLOAT3(0.05f, 0.05f, 0.05), 0.25f);
+	m_ItemManager->BuildMaterial("rock",10, XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f), XMFLOAT3(0.05f, 0.05f, 0.05), 0.25f);
 }
 
 void MyApp::BuildRenderItems()
@@ -749,9 +759,13 @@ void MyApp::BuildRenderItems()
 	m_ItemManager->BuildRenderItem("box3", RenderLayer::AlphaTested, "shapeGeo", "box", "wirefence",
 		PositionMatrix(3.0f, 3.0f, 3.0f,7.0f, 1.0f, -14.0f),
 		PositionMatrix(1.0f, 1.0f, 1.0f, 0.0f, 0.0f, 0.0f));
-	m_ItemManager->BuildRenderItem("cow", RenderLayer::Opaque,"loadGeo", "cow", "stone",
+	m_ItemManager->BuildRenderItem("cow", RenderLayer::Opaque,"loadGeo", "cow", "cow",
 		PositionMatrix(13.0f, 13.0f, 13.0f, 7.0f, 17.0f, -14.0f),
 		PositionMatrix(1.0f, 1.0f, 1.0f, 0.0f, 0.0f, 0.0f));
+	//m_ItemManager->BuildRenderItem("rock", RenderLayer::Opaque, "rockGeo", "rock", "rock",
+	//	PositionMatrix(13.0f, 13.0f, 13.0f, 7.0f, 17.0f, -14.0f),
+	//	PositionMatrix(1.0f, 1.0f, 1.0f, 0.0f, 0.0f, 0.0f));
+	
 	//m_ItemManager->BuildRenderItem("cow1", RenderLayer::Opaque, "skullGeo", "skull", "stone",
 	//	PositionMatrix(13.0f, 13.0f, 13.0f, 7.0f, 17.0f, -14.0f),
 	//	PositionMatrix(1.0f, 1.0f, 1.0f, 0.0f, 0.0f, 0.0f));
