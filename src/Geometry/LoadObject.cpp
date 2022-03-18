@@ -204,7 +204,7 @@ void LoadObject::LoadOBJ(std::string fileName)
 
 	if (!file.is_open())
 	{
-		/*MessageBox(0, L"Resources/Models/bunny.obj not found.", 0, 0);*/
+		MessageBox(0, d3dUtil::String2Wstring(fileName).c_str(), 0, 0);
 		return;
 	}
 

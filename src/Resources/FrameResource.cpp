@@ -8,7 +8,7 @@ FrameResource::FrameResource(Device* device, UINT passCount, UINT objectCount, U
 
     PassCB = std::make_unique<UploadBuffer<PassConstants>>(device, passCount, true);
     ObjectCB = std::make_unique<UploadBuffer<ObjectConstants>>(device, objectCount, true);
-    MaterialCB = std::make_unique<UploadBuffer<MaterialConstants>>(device, materialCount, true);
+    MaterialBuffer = std::make_unique<UploadBuffer<MaterialData>>(device, materialCount, false);
 
 	WavesVB = std::make_unique<UploadBuffer<Vertex>>(device, waveVertCount, false);
 }

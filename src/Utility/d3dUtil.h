@@ -98,6 +98,8 @@ public:
 
     static std::string ToString(HRESULT hr);
 
+    static std::wstring String2Wstring(std::string str);
+
     static UINT CalcConstantBufferByteSize(UINT byteSize)
     {
         // Constant buffers must be a multiple of the minimum hardware

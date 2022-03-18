@@ -8,7 +8,7 @@
 #include <DirectXMath.h>
 extern const int gNumFrameResources;
 
-enum RenderLayer : int
+enum  class  RenderLayer : int
 {
     Opaque = 0,
     Transparent,
@@ -16,6 +16,7 @@ enum RenderLayer : int
     CullBack,
     TexRotate,
     NoTexture,
+    Wireframe,
     Count
 };
 
@@ -60,16 +61,15 @@ public:
        DirectX::XMMATRIX world, DirectX::XMMATRIX texTransform);
 
    void DrawRenderItems(UINT objCBByteSize, D3D12_GPU_VIRTUAL_ADDRESS objCBGPUAddress,
-       UINT matCBByteSize, D3D12_GPU_VIRTUAL_ADDRESS matCBGPUAddress,
        ID3D12GraphicsCommandList* cmdList, RenderLayer name);
 
    //绑定描述符到list
    void SetDescriptorHeaps(ID3D12GraphicsCommandList* cmdList);
-
+   void SetRootDescriptorTable(ID3D12GraphicsCommandList* cmdList);
    //更新缓冲区
    void UpdateCBs(FrameResource* currentFrameResource);
    void UpdateObjectCBs(UploadBuffer<ObjectConstants>* cb);
-   void UpdateMaterialCBs(UploadBuffer<MaterialConstants>* cb);
+   void UpdateMaterialCBs(UploadBuffer<MaterialData>* cb);
    
    int MaterialsSize() { return m_Materials.size(); }
    int ItemsSize() { return m_Ritems.size(); }

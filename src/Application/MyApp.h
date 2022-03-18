@@ -74,7 +74,7 @@ private:
     ComPtr<ID3D12RootSignature> mRootSignature = nullptr;
     
 	//Œﬁ–Ú”≥…‰π‹¿Ì
-    std::unordered_map<std::string, ComPtr<ID3D12PipelineState>> mPSOs;
+    std::unordered_map<RenderLayer, ComPtr<ID3D12PipelineState>> m_PSOs;
 
 	PassConstants mMainPassCB;
 

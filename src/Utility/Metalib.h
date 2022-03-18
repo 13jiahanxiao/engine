@@ -1,6 +1,7 @@
 #pragma once
 #include<type_traits>
 #include<Windows.h>
+
 template<typename T>
 requires(!std::is_lvalue_reference_v<T>)
 T* rvalue_to_lvalue(T&& v) 

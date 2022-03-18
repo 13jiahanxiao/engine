@@ -24,6 +24,14 @@ public:
 	void CreateSRV(ID3D12Resource* resource, const D3D12_SHADER_RESOURCE_VIEW_DESC& pDesc, uint64 index);
 	uint64 GetNum() const { return numDescriptors; }
 	ID3D12DescriptorHeap* GetHeap() const { return m_DescHeap.Get(); }
+	CD3DX12_CPU_DESCRIPTOR_HANDLE GetCPUDescriptorHandleForHeapStart()
+	{
+		return m_hCPUHeapStart;
+	}
+	CD3DX12_GPU_DESCRIPTOR_HANDLE GetGPUDescriptorHandleForHeapStart()
+	{
+		return m_hGPUHeapStart;
+	}
 private:
 	Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> m_DescHeap;
 	D3D12_DESCRIPTOR_HEAP_DESC m_Desc;

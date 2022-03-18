@@ -63,11 +63,15 @@ void RenderItemManager::SetDescriptorHeaps(ID3D12GraphicsCommandList* cmdList)
 	cmdList->SetDescriptorHeaps(_countof(descriptorHeaps), descriptorHeaps);
 }
 
+void RenderItemManager::SetRootDescriptorTable(ID3D12GraphicsCommandList* cmdList)
+{
+	cmdList->SetGraphicsRootDescriptorTable(3, m_TextureHeap->GetHeap()->GetGPUDescriptorHandleForHeapStart());
+}
+
 void RenderItemManager::DrawRenderItems(UINT objCBByteSize , D3D12_GPU_VIRTUAL_ADDRESS objCBGPUAddress, 
-	UINT matCBByteSize, D3D12_GPU_VIRTUAL_ADDRESS matCBGPUAddress,
 	ID3D12GraphicsCommandList* cmdList, RenderLayer name)
 {
-	auto ritems = m_RitemLayer[name];
+	auto ritems = m_RitemLayer[(int)name];
 	for (size_t i = 0; i < ritems.size(); ++i)
 	{
 		auto ri = ritems[i];
@@ -77,11 +81,9 @@ void RenderItemManager::DrawRenderItems(UINT objCBByteSize , D3D12_GPU_VIRTUAL_A
 		cmdList->IASetPrimitiveTopology(ri->PrimitiveType);
 
 		D3D12_GPU_VIRTUAL_ADDRESS objCBAddress = objCBGPUAddress + ri->ObjectCBIndex * objCBByteSize;
-		D3D12_GPU_VIRTUAL_ADDRESS matCBAddress = matCBGPUAddress + ri->Mat->GetMatCBIndex() * matCBByteSize;
 
-		cmdList->SetGraphicsRootDescriptorTable(0, m_TextureHeap->hGPU(ri->Mat->GetDiffuseSrvHeapIndex()));
-		cmdList->SetGraphicsRootConstantBufferView(1, objCBAddress);
-		cmdList->SetGraphicsRootConstantBufferView(3, matCBAddress);
+		//cmdList->SetGraphicsRootDescriptorTable(0, m_TextureHeap->hGPU(ri->Mat->GetDiffuseSrvHeapIndex()));
+		cmdList->SetGraphicsRootConstantBufferView(0, objCBAddress);
 
 		cmdList->DrawIndexedInstanced(ri->IndexCount, 1, ri->StartIndexLocation, ri->BaseVertexLocation, 0);
 	}
@@ -91,8 +93,8 @@ void RenderItemManager::UpdateCBs(FrameResource* currentFrameResource)
 {
 	auto currObjectCB = currentFrameResource->ObjectCB.get();
 	UpdateObjectCBs(currObjectCB);
-	auto currMaterialCB = currentFrameResource->MaterialCB.get();
-	UpdateMaterialCBs(currMaterialCB);
+	auto currMaterialBuffer = currentFrameResource->MaterialBuffer.get();
+	UpdateMaterialCBs(currMaterialBuffer);
 }
 
 void RenderItemManager::UpdateObjectCBs(UploadBuffer<ObjectConstants>* cb)
@@ -107,6 +109,7 @@ void RenderItemManager::UpdateObjectCBs(UploadBuffer<ObjectConstants>* cb)
 			ObjectConstants objConstants;
 			XMStoreFloat4x4(&objConstants.World, DirectX::XMMatrixTranspose(world));
 			XMStoreFloat4x4(&objConstants.TexTransform, DirectX::XMMatrixTranspose(texTransform));
+			objConstants.MaterialIndex = v->Mat->GetMatCBIndex();
 
 			cb->CopyData(v->ObjectCBIndex, objConstants);
 
@@ -115,20 +118,21 @@ void RenderItemManager::UpdateObjectCBs(UploadBuffer<ObjectConstants>* cb)
 	}
 }
 
-void RenderItemManager::UpdateMaterialCBs(UploadBuffer<MaterialConstants>* cb)
+void RenderItemManager::UpdateMaterialCBs(UploadBuffer<MaterialData>* cb)
 {
 	for (auto& e : m_Materials)
 	{
 		Material* mat = e.second.get();
 		if (mat->GetNumFramesDirty() > 0)
 		{
-			MaterialConstants matConstants;
-			matConstants.DiffuseAlbedo = mat->GetDiffuseAlbedo();
-			matConstants.FresnelR0 = mat->GetFresnel();
-			matConstants.Roughness = mat->GetRoughness();
-			matConstants.MatTransform = mat->GetMatTransform();
+			MaterialData matData;
+			matData.DiffuseAlbedo = mat->GetDiffuseAlbedo();
+			matData.FresnelR0 = mat->GetFresnel();
+			matData.Roughness = mat->GetRoughness();
+			matData.MatTransform = mat->GetMatTransform();
+			matData.DiffuseMapIndex = mat->GetDiffuseSrvHeapIndex();
 
-			cb->CopyData(mat->GetMatCBIndex(), matConstants);
+			cb->CopyData(mat->GetMatCBIndex(), matData);
 
 			mat->UpdateDirtyFlag(-1);
 		}

@@ -28,11 +28,13 @@ bool MyApp::Initialize()
 
 	m_SunLight.SetLight(1.25f * XM_PI, XM_PIDIV4, 1.0f, { 1.0f, 1.0f, 0.9f }, 0);
 
+	BuildRootSignature();
+
 	m_ItemManager = std::make_unique<RenderItemManager>(textureHeapNum, m_Device.get(), mCommandList.Get());
 
 	m_Shaders = std::make_unique<ShaderCompile>();
 
-	BuildRootSignature();
+	
 	BuildShadersAndInputLayout();
 	BuildGeometrys();
 	BuildMaterials();
@@ -55,14 +57,9 @@ void MyApp::Draw(const GameTimer& gt)
 
 	ThrowIfFailed(cmdListAlloc->Reset());
 
-	if (mIsWireframe)
-	{
-		ThrowIfFailed(mCommandList->Reset(cmdListAlloc.Get(), mPSOs["opaque_wireframe"].Get()));
-	}
-	else
-	{
-		ThrowIfFailed(mCommandList->Reset(cmdListAlloc.Get(), mPSOs["opaque"].Get()));
-	}
+	ThrowIfFailed(cmdListAlloc->Reset());
+
+	ThrowIfFailed(mCommandList->Reset(cmdListAlloc.Get(), m_PSOs[RenderLayer::Opaque].Get()));
 
 	mCommandList->RSSetViewports(1, &mScreenViewport);
 	mCommandList->RSSetScissorRects(1, &mScissorRect);
@@ -87,43 +84,32 @@ void MyApp::Draw(const GameTimer& gt)
 	//mCommandList->SetGraphicsRootDescriptorTable(1, passCbvHandle);
 
 	auto passCB = mCurrFrameResource->PassCB->GetResource();
-	mCommandList->SetGraphicsRootConstantBufferView(2, passCB->GetGPUVirtualAddress());
+	mCommandList->SetGraphicsRootConstantBufferView(1, passCB->GetGPUVirtualAddress());
 
-	DrawRenderItems(mCommandList.Get(), RenderLayer::Opaque);
+	auto matBuffer = mCurrFrameResource->MaterialBuffer->GetResource();
+	mCommandList->SetGraphicsRootShaderResourceView(2, matBuffer->GetGPUVirtualAddress());
 
-	mCommandList->SetPipelineState(mPSOs["transparent"].Get());
-	DrawRenderItems(mCommandList.Get(), RenderLayer::Transparent);
+	m_ItemManager->SetRootDescriptorTable(mCommandList.Get());
 
-	mCommandList->SetPipelineState(mPSOs["alphaTested"].Get());
-	DrawRenderItems(mCommandList.Get(), RenderLayer::AlphaTested);
+	for (auto& [k, v] : m_PSOs)
+	{
+		mCommandList->SetPipelineState(v.Get());
+		DrawRenderItems(mCommandList.Get(), k);
+	}
 
-	mCommandList->SetPipelineState(mPSOs["texRotate"].Get());
-	DrawRenderItems(mCommandList.Get(), RenderLayer::TexRotate);
-
-	mCommandList->SetPipelineState(mPSOs["NoTexture"].Get());
-	DrawRenderItems(mCommandList.Get(), RenderLayer::NoTexture);
-
-	// Indicate a state transition on the resource usage.
 	mCommandList->ResourceBarrier(1, rvalue_to_lvalue(CD3DX12_RESOURCE_BARRIER::Transition(CurrentBackBuffer(),
 		D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PRESENT)));
 
-	// Done recording commands.
 	ThrowIfFailed(mCommandList->Close());
 
-	// Add the command list to the queue for execution.
 	ID3D12CommandList* cmdsLists[] = { mCommandList.Get() };
 	mCommandQueue->ExecuteCommandLists(_countof(cmdsLists), cmdsLists);
 
-	// swap the back and front buffers
 	ThrowIfFailed(mSwapChain->Present(0, 0));
 	mCurrBackBuffer = (mCurrBackBuffer + 1) % SwapChainBufferCount;
 
-	// Advance the fence value to mark commands up to this fence point.
 	mCurrFrameResource->Fence = ++mCurrentFence;
 
-	// Add an instruction to the command queue to set a new fence point. 
-	// Because we are on the GPU timeline, the new fence point won't be 
-	// set until the GPU finishes processing all the commands prior to this Signal().
 	mCommandQueue->Signal(mFence.Get(), mCurrentFence);
 }
 
@@ -499,9 +485,7 @@ void MyApp::BuildGeometrys()
 	LandGeometry();
 	ShapeGeometry();
 	BuildSkullGeometry();
-
-	m_ItemManager->GetMeshManager()->LoadMesh("Resources/Models/spot.obj", "loadGeo", "cow");
-	//m_ItemManager->GetMeshManager()->LoadMesh("Resources/Models/rock.obj", "rockGeo", "rock");
+	m_ItemManager->GetMeshManager()->LoadMesh("Resources/Models/cow.obj", "loadGeo", "cow");
 }
 #pragma endregion
 
@@ -563,22 +547,20 @@ std::array<const CD3DX12_STATIC_SAMPLER_DESC, 6>  MyApp::GetStaticSamplers()
 //将资源绑定到对应的缓冲区
 void MyApp::BuildRootSignature()
 {
-	// Shader programs typically require resources as input (constant buffers,
-	// textures, samplers).  The root signature defines the resources the shader
-	// programs expect.  If we think of the shader programs as a function, and
-	// the input resources as function parameters, then the root signature can be
-	// thought of as defining the function signature.  
-
+	//11个srv
 	CD3DX12_DESCRIPTOR_RANGE texTable;
-	texTable.Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1, 0);
+	texTable.Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 11, 0,0);
 
 	// 根参数表
 	CD3DX12_ROOT_PARAMETER slotRootParameter[4];
+	//space0 b0
+	slotRootParameter[0].InitAsConstantBufferView(0);
+	//space0 b1
+	slotRootParameter[1].InitAsConstantBufferView(1);
+	//space1 t0
+	slotRootParameter[2].InitAsShaderResourceView(0, 1);
+	slotRootParameter[3].InitAsDescriptorTable(1, &texTable, D3D12_SHADER_VISIBILITY_PIXEL);
 
-	slotRootParameter[0].InitAsDescriptorTable(1, &texTable, D3D12_SHADER_VISIBILITY_PIXEL);
-	slotRootParameter[1].InitAsConstantBufferView(0);
-	slotRootParameter[2].InitAsConstantBufferView(1);
-	slotRootParameter[3].InitAsConstantBufferView(2);
 	//// Create a single descriptor table of CBVs.
 	//CD3DX12_DESCRIPTOR_RANGE cbvTable;
 	////类型,描述符数量,寄存器编号
@@ -631,12 +613,12 @@ void MyApp::BuildShadersAndInputLayout()
 		"FOG","1","ALPHA_TEST","1",NULL,NULL
 	};
 
-	m_Shaders->LoadShader("standardVS", L"Resources\\Shaders\\Default.hlsl", nullptr, "VS", "vs_5_0");
-	m_Shaders->LoadShader("NoTextureVS", L"Resources\\Shaders\\NoTexture.hlsl", nullptr, "VS", "vs_5_0");
-	m_Shaders->LoadShader("NoTexturePS", L"Resources\\Shaders\\NoTexture.hlsl", nullptr, "PS", "ps_5_0");
-	m_Shaders->LoadShader("rotateVS", L"Resources\\Shaders\\Default.hlsl", rotate, "VS", "vs_5_0");
-	m_Shaders->LoadShader("opaquePS", L"Resources\\Shaders\\Default.hlsl", defines, "PS", "ps_5_0");
-	m_Shaders->LoadShader("alphaTestedPS", L"Resources\\Shaders\\Default.hlsl", alphaTestDefines, "PS", "ps_5_0");
+	m_Shaders->LoadShader("standardVS", L"Resources\\Shaders\\Default.hlsl", nullptr, "VS", "vs_5_1");
+	//m_Shaders->LoadShader("NoTextureVS", L"Resources\\Shaders\\NoTexture.hlsl", nullptr, "VS", "vs_5_0");
+	//m_Shaders->LoadShader("NoTexturePS", L"Resources\\Shaders\\NoTexture.hlsl", nullptr, "PS", "ps_5_0");
+	m_Shaders->LoadShader("rotateVS", L"Resources\\Shaders\\Default.hlsl", rotate, "VS", "vs_5_1");
+	m_Shaders->LoadShader("opaquePS", L"Resources\\Shaders\\Default.hlsl", defines, "PS", "ps_5_1");
+	m_Shaders->LoadShader("alphaTestedPS", L"Resources\\Shaders\\Default.hlsl", alphaTestDefines, "PS", "ps_5_1");
 
 	m_Shaders->SetInputLayout(
 		{
@@ -679,17 +661,17 @@ void MyApp::BuildPSOs()
 	opaquePsoDesc.SampleDesc.Quality = m4xMsaaState ? (m4xMsaaQuality - 1) : 0;
 	opaquePsoDesc.DSVFormat = mDepthStencilFormat;
 	opaquePsoDesc.RasterizerState.CullMode = D3D12_CULL_MODE_NONE;
-	ThrowIfFailed(m_Device->GetDevice()->CreateGraphicsPipelineState(&opaquePsoDesc, IID_PPV_ARGS(&mPSOs["opaque"])));
+	ThrowIfFailed(m_Device->GetDevice()->CreateGraphicsPipelineState(&opaquePsoDesc, IID_PPV_ARGS(&m_PSOs[RenderLayer::Opaque])));
 
-	D3D12_GRAPHICS_PIPELINE_STATE_DESC  NoTextureDesc= opaquePsoDesc;
-	NoTextureDesc.VS = m_Shaders->GetShaderBYTE("NoTextureVS");
-	NoTextureDesc.PS = m_Shaders->GetShaderBYTE("NoTexturePS");
-	ThrowIfFailed(m_Device->GetDevice()->CreateGraphicsPipelineState(&NoTextureDesc, IID_PPV_ARGS(&mPSOs["NoTexture"])));
+	//D3D12_GRAPHICS_PIPELINE_STATE_DESC  NoTextureDesc= opaquePsoDesc;
+	//NoTextureDesc.VS = m_Shaders->GetShaderBYTE("NoTextureVS");
+	//NoTextureDesc.PS = m_Shaders->GetShaderBYTE("NoTexturePS");
+	//ThrowIfFailed(m_Device->GetDevice()->CreateGraphicsPipelineState(&NoTextureDesc, IID_PPV_ARGS(&m_PSOs[RenderLayer::NoTexture])));
 
 	//纹理旋转融合指定单独shader
 	D3D12_GRAPHICS_PIPELINE_STATE_DESC texRotatePsoDesc = opaquePsoDesc;
 	texRotatePsoDesc.VS = m_Shaders->GetShaderBYTE("rotateVS");
-	ThrowIfFailed(m_Device->GetDevice()->CreateGraphicsPipelineState(&texRotatePsoDesc, IID_PPV_ARGS(&mPSOs["texRotate"])));
+	ThrowIfFailed(m_Device->GetDevice()->CreateGraphicsPipelineState(&texRotatePsoDesc, IID_PPV_ARGS(&m_PSOs[RenderLayer::TexRotate])));
 
 		//透明海水混合
 	D3D12_GRAPHICS_PIPELINE_STATE_DESC transparentPsoDesc = opaquePsoDesc;
@@ -706,18 +688,18 @@ void MyApp::BuildPSOs()
 	transparencyBlendDesc.RenderTargetWriteMask = D3D12_COLOR_WRITE_ENABLE_ALL;
 
 	transparentPsoDesc.BlendState.RenderTarget[0] = transparencyBlendDesc;
-	ThrowIfFailed(m_Device->GetDevice()->CreateGraphicsPipelineState(&transparentPsoDesc, IID_PPV_ARGS(&mPSOs["transparent"])))
+	ThrowIfFailed(m_Device->GetDevice()->CreateGraphicsPipelineState(&transparentPsoDesc, IID_PPV_ARGS(&m_PSOs[RenderLayer::Transparent])))
 
 		//雾效果和alpha剔除
 	D3D12_GRAPHICS_PIPELINE_STATE_DESC alphaTestedPsoDesc = opaquePsoDesc;
 	alphaTestedPsoDesc.PS = m_Shaders->GetShaderBYTE("alphaTestedPS");
 	alphaTestedPsoDesc.RasterizerState.CullMode = D3D12_CULL_MODE_NONE;
-	ThrowIfFailed(m_Device->GetDevice()->CreateGraphicsPipelineState(&alphaTestedPsoDesc, IID_PPV_ARGS(&mPSOs["alphaTested"])));
+	ThrowIfFailed(m_Device->GetDevice()->CreateGraphicsPipelineState(&alphaTestedPsoDesc, IID_PPV_ARGS(&m_PSOs[RenderLayer::AlphaTested])));
 
 	//线框模式
 	D3D12_GRAPHICS_PIPELINE_STATE_DESC opaqueWireframePsoDesc = opaquePsoDesc;
 	opaqueWireframePsoDesc.RasterizerState.FillMode = D3D12_FILL_MODE_WIREFRAME;
-	ThrowIfFailed(m_Device->GetDevice()->CreateGraphicsPipelineState(&opaqueWireframePsoDesc, IID_PPV_ARGS(&mPSOs["opaque_wireframe"])));
+	ThrowIfFailed(m_Device->GetDevice()->CreateGraphicsPipelineState(&opaqueWireframePsoDesc, IID_PPV_ARGS(&m_PSOs[RenderLayer::Wireframe])));
 }
 
 //定义材料属性
@@ -774,14 +756,10 @@ void MyApp::BuildRenderItems()
 void MyApp::DrawRenderItems(ID3D12GraphicsCommandList* cmdList, RenderLayer name)
 {
 	UINT objCBByteSize = d3dUtil::CalcConstantBufferByteSize(sizeof(ObjectConstants));
-	UINT matCBByteSize = d3dUtil::CalcConstantBufferByteSize(sizeof(MaterialConstants));
 
 	auto objectCB = mCurrFrameResource->ObjectCB->GetResource();
-	auto matCB = mCurrFrameResource->MaterialCB->GetResource();
 
-	m_ItemManager->DrawRenderItems(objCBByteSize, objectCB->GetGPUVirtualAddress(),
-		matCBByteSize, matCB->GetGPUVirtualAddress(),
-		cmdList, name);
+	m_ItemManager->DrawRenderItems(objCBByteSize, objectCB->GetGPUVirtualAddress(),cmdList, name);
 }
 
 //大小x旋转 无大小改变为1，无旋转改变为0
