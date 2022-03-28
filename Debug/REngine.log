@@ -1,0 +1,668 @@
+﻿  AnimationHelper.cpp
+  The contents of <span> are available only with C++20 or later.
+E:\ademo\REngine\src\Utility\Metalib.h(6,9): error C2988: 不可识别的模板声明/定义
+E:\ademo\REngine\src\Utility\Metalib.h(6,9): error C2059: 语法错误:“(”
+E:\ademo\REngine\src\Utility\Metalib.h(8,1): error C2143: 语法错误: 缺少“;”(在“{”的前面)
+E:\ademo\REngine\src\Utility\Metalib.h(8,1): error C2447: “{”: 缺少函数标题(是否是老式的形式表?)
+E:\ademo\REngine\src\Utility\Metalib.h(21,15): error C2039: "is_bounded_array_v": 不是 "std" 的成员
+D:\Microsoft\VisualStudio\2019\VC\Tools\MSVC\14.29.30133\include\sstream(20): message : 参见“std”的声明
+E:\ademo\REngine\src\Utility\Metalib.h(21,9): error C2988: 不可识别的模板声明/定义
+E:\ademo\REngine\src\Utility\Metalib.h(21,9): error C2059: 语法错误:“(”
+E:\ademo\REngine\src\Utility\Metalib.h(22,1): error C2143: 语法错误: 缺少“;”(在“{”的前面)
+E:\ademo\REngine\src\Utility\Metalib.h(22,1): error C2447: “{”: 缺少函数标题(是否是老式的形式表?)
+E:\ademo\REngine\src\Utility\Metalib.h(26,15): error C2039: "is_bounded_array_v": 不是 "std" 的成员
+D:\Microsoft\VisualStudio\2019\VC\Tools\MSVC\14.29.30133\include\sstream(20): message : 参见“std”的声明
+E:\ademo\REngine\src\Utility\Metalib.h(26,9): error C2988: 不可识别的模板声明/定义
+E:\ademo\REngine\src\Utility\Metalib.h(26,9): error C2059: 语法错误:“(”
+E:\ademo\REngine\src\Utility\Metalib.h(27,1): error C2143: 语法错误: 缺少“;”(在“{”的前面)
+E:\ademo\REngine\src\Utility\Metalib.h(27,1): error C2447: “{”: 缺少函数标题(是否是老式的形式表?)
+E:\ademo\REngine\src\Utility\d3dUtil.h(61,53): error C2065: “buffer”: 未声明的标识符
+E:\ademo\REngine\src\Utility\d3dUtil.h(62,25): error C2065: “buffer”: 未声明的标识符
+E:\ademo\REngine\src\Animation\AnimationHelper.cpp(5,11): error C2039: "{ctor}": 不是 "Keyframe" 的成员
+E:\ademo\REngine\src\Animation\AnimationHelper.h(16): message : 参见“Keyframe”的声明
+E:\ademo\REngine\src\Animation\AnimationHelper.cpp(6,2): error C4430: 缺少类型说明符 - 假定为 int。注意: C++ 不支持默认 int
+E:\ademo\REngine\src\Animation\AnimationHelper.cpp(10,1): error C2550: “{ctor}”: 构造函数初始值设定项列表只能在构造函数定义中使用
+E:\ademo\REngine\src\Animation\AnimationHelper.cpp(11,1): warning C4508: “{ctor}”: 函数应返回一个值；假定“void”返回类型
+E:\ademo\REngine\src\Animation\AnimationHelper.cpp(13,12): error C2039: "{dtor}": 不是 "Keyframe" 的成员
+E:\ademo\REngine\src\Animation\AnimationHelper.h(16): message : 参见“Keyframe”的声明
+E:\ademo\REngine\src\Animation\AnimationHelper.cpp(14,1): error C4430: 缺少类型说明符 - 假定为 int。注意: C++ 不支持默认 int
+E:\ademo\REngine\src\Animation\AnimationHelper.cpp(15,1): warning C4508: “{dtor}”: 函数应返回一个值；假定“void”返回类型
+E:\ademo\REngine\src\Animation\AnimationHelper.cpp(17,22): error C2039: "GetStartTime": 不是 "BoneAnimation" 的成员
+E:\ademo\REngine\src\Animation\AnimationHelper.h(34): message : 参见“BoneAnimation”的声明
+E:\ademo\REngine\src\Animation\AnimationHelper.cpp(18,1): error C2270: “GetStartTime”: 非成员函数上不允许修饰符
+E:\ademo\REngine\src\Animation\AnimationHelper.cpp(20,9): error C2065: “Keyframes”: 未声明的标识符
+E:\ademo\REngine\src\Animation\AnimationHelper.cpp(23,22): error C2039: "GetEndTime": 不是 "BoneAnimation" 的成员
+E:\ademo\REngine\src\Animation\AnimationHelper.h(34): message : 参见“BoneAnimation”的声明
+E:\ademo\REngine\src\Animation\AnimationHelper.cpp(24,1): error C2270: “GetEndTime”: 非成员函数上不允许修饰符
+E:\ademo\REngine\src\Animation\AnimationHelper.cpp(26,12): error C2065: “Keyframes”: 未声明的标识符
+E:\ademo\REngine\src\Animation\AnimationHelper.cpp(31,21): error C2039: "Interpolate": 不是 "BoneAnimation" 的成员
+E:\ademo\REngine\src\Animation\AnimationHelper.h(34): message : 参见“BoneAnimation”的声明
+E:\ademo\REngine\src\Animation\AnimationHelper.cpp(32,1): error C2270: “Interpolate”: 非成员函数上不允许修饰符
+E:\ademo\REngine\src\Animation\AnimationHelper.cpp(33,11): error C2065: “Keyframes”: 未声明的标识符
+E:\ademo\REngine\src\Animation\AnimationHelper.cpp(35,30): error C2065: “Keyframes”: 未声明的标识符
+E:\ademo\REngine\src\Animation\AnimationHelper.cpp(36,30): error C2065: “Keyframes”: 未声明的标识符
+E:\ademo\REngine\src\Animation\AnimationHelper.cpp(37,30): error C2065: “Keyframes”: 未声明的标识符
+E:\ademo\REngine\src\Animation\AnimationHelper.cpp(42,16): error C2065: “Keyframes”: 未声明的标识符
+E:\ademo\REngine\src\Animation\AnimationHelper.cpp(44,30): error C2065: “Keyframes”: 未声明的标识符
+E:\ademo\REngine\src\Animation\AnimationHelper.cpp(45,30): error C2065: “Keyframes”: 未声明的标识符
+E:\ademo\REngine\src\Animation\AnimationHelper.cpp(46,30): error C2065: “Keyframes”: 未声明的标识符
+E:\ademo\REngine\src\Animation\AnimationHelper.cpp(53,23): error C2065: “Keyframes”: 未声明的标识符
+E:\ademo\REngine\src\Animation\AnimationHelper.cpp(55,13): error C2065: “Keyframes”: 未声明的标识符
+E:\ademo\REngine\src\Animation\AnimationHelper.cpp(55,42): error C2065: “Keyframes”: 未声明的标识符
+E:\ademo\REngine\src\Animation\AnimationHelper.cpp(57,30): error C2065: “Keyframes”: 未声明的标识符
+E:\ademo\REngine\src\Animation\AnimationHelper.cpp(57,55): error C2065: “Keyframes”: 未声明的标识符
+E:\ademo\REngine\src\Animation\AnimationHelper.cpp(57,80): error C2065: “Keyframes”: 未声明的标识符
+E:\ademo\REngine\src\Animation\AnimationHelper.cpp(59,33): error C2065: “Keyframes”: 未声明的标识符
+E:\ademo\REngine\src\Animation\AnimationHelper.cpp(60,33): error C2065: “Keyframes”: 未声明的标识符
+E:\ademo\REngine\src\Animation\AnimationHelper.cpp(62,33): error C2065: “Keyframes”: 未声明的标识符
+E:\ademo\REngine\src\Animation\AnimationHelper.cpp(63,33): error C2065: “Keyframes”: 未声明的标识符
+E:\ademo\REngine\src\Animation\AnimationHelper.cpp(65,33): error C2065: “Keyframes”: 未声明的标识符
+E:\ademo\REngine\src\Animation\AnimationHelper.cpp(66,33): error C2065: “Keyframes”: 未声明的标识符
+  d3dApp.cpp
+  The contents of <span> are available only with C++20 or later.
+E:\ademo\REngine\src\Utility\Metalib.h(6,9): error C2988: 不可识别的模板声明/定义
+E:\ademo\REngine\src\Utility\Metalib.h(6,9): error C2059: 语法错误:“(”
+E:\ademo\REngine\src\Utility\Metalib.h(8,1): error C2143: 语法错误: 缺少“;”(在“{”的前面)
+E:\ademo\REngine\src\Utility\Metalib.h(8,1): error C2447: “{”: 缺少函数标题(是否是老式的形式表?)
+E:\ademo\REngine\src\Utility\Metalib.h(21,15): error C2039: "is_bounded_array_v": 不是 "std" 的成员
+D:\Microsoft\VisualStudio\2019\VC\Tools\MSVC\14.29.30133\include\sstream(20): message : 参见“std”的声明
+E:\ademo\REngine\src\Utility\Metalib.h(21,9): error C2988: 不可识别的模板声明/定义
+E:\ademo\REngine\src\Utility\Metalib.h(21,9): error C2059: 语法错误:“(”
+E:\ademo\REngine\src\Utility\Metalib.h(22,1): error C2143: 语法错误: 缺少“;”(在“{”的前面)
+E:\ademo\REngine\src\Utility\Metalib.h(22,1): error C2447: “{”: 缺少函数标题(是否是老式的形式表?)
+E:\ademo\REngine\src\Utility\Metalib.h(26,15): error C2039: "is_bounded_array_v": 不是 "std" 的成员
+D:\Microsoft\VisualStudio\2019\VC\Tools\MSVC\14.29.30133\include\sstream(20): message : 参见“std”的声明
+E:\ademo\REngine\src\Utility\Metalib.h(26,9): error C2988: 不可识别的模板声明/定义
+E:\ademo\REngine\src\Utility\Metalib.h(26,9): error C2059: 语法错误:“(”
+E:\ademo\REngine\src\Utility\Metalib.h(27,1): error C2143: 语法错误: 缺少“;”(在“{”的前面)
+E:\ademo\REngine\src\Utility\Metalib.h(27,1): error C2447: “{”: 缺少函数标题(是否是老式的形式表?)
+E:\ademo\REngine\src\Utility\d3dUtil.h(61,53): error C2065: “buffer”: 未声明的标识符
+E:\ademo\REngine\src\Utility\d3dUtil.h(62,25): error C2065: “buffer”: 未声明的标识符
+E:\ademo\REngine\src\Application\d3dApp.cpp(13,20): error C2039: "GetApp": 不是 "D3DApp" 的成员
+E:\ademo\REngine\src\Application\d3dApp.h(15): message : 参见“D3DApp”的声明
+E:\ademo\REngine\src\Application\d3dApp.cpp(13,26): error C3861: “GetApp”: 找不到标识符
+E:\ademo\REngine\src\Application\d3dApp.cpp(16,17): error C2039: "mApp": 不是 "D3DApp" 的成员
+E:\ademo\REngine\src\Application\d3dApp.h(15): message : 参见“D3DApp”的声明
+E:\ademo\REngine\src\Application\d3dApp.cpp(17,17): error C2039: "GetApp": 不是 "D3DApp" 的成员
+E:\ademo\REngine\src\Application\d3dApp.h(15): message : 参见“D3DApp”的声明
+E:\ademo\REngine\src\Application\d3dApp.cpp(22,9): error C2039: "{ctor}": 不是 "D3DApp" 的成员
+E:\ademo\REngine\src\Application\d3dApp.h(15): message : 参见“D3DApp”的声明
+E:\ademo\REngine\src\Application\d3dApp.cpp(23,1): error C4430: 缺少类型说明符 - 假定为 int。注意: C++ 不支持默认 int
+E:\ademo\REngine\src\Application\d3dApp.cpp(24,1): error C2550: “{ctor}”: 构造函数初始值设定项列表只能在构造函数定义中使用
+E:\ademo\REngine\src\Application\d3dApp.cpp(26,12): error C2355: “this”: 只能在非静态成员函数或非静态数据成员初始值设定项的内部引用
+E:\ademo\REngine\src\Application\d3dApp.cpp(27,1): warning C4508: “{ctor}”: 函数应返回一个值；假定“void”返回类型
+E:\ademo\REngine\src\Application\d3dApp.cpp(29,10): error C2039: "{dtor}": 不是 "D3DApp" 的成员
+E:\ademo\REngine\src\Application\d3dApp.h(15): message : 参见“D3DApp”的声明
+E:\ademo\REngine\src\Application\d3dApp.cpp(30,1): error C4430: 缺少类型说明符 - 假定为 int。注意: C++ 不支持默认 int
+E:\ademo\REngine\src\Application\d3dApp.cpp(31,5): error C2065: “m_Device”: 未声明的标识符
+E:\ademo\REngine\src\Application\d3dApp.cpp(32,3): error C3861: “FlushCommandQueue”: 找不到标识符
+E:\ademo\REngine\src\Application\d3dApp.cpp(33,1): warning C4508: “{dtor}”: 函数应返回一个值；假定“void”返回类型
+E:\ademo\REngine\src\Application\d3dApp.cpp(35,19): error C2039: "AppInst": 不是 "D3DApp" 的成员
+E:\ademo\REngine\src\Application\d3dApp.h(15): message : 参见“D3DApp”的声明
+E:\ademo\REngine\src\Application\d3dApp.cpp(36,1): error C2270: “AppInst”: 非成员函数上不允许修饰符
+E:\ademo\REngine\src\Application\d3dApp.cpp(37,9): error C2065: “mhAppInst”: 未声明的标识符
+E:\ademo\REngine\src\Application\d3dApp.cpp(40,14): error C2039: "MainWnd": 不是 "D3DApp" 的成员
+E:\ademo\REngine\src\Application\d3dApp.h(15): message : 参见“D3DApp”的声明
+E:\ademo\REngine\src\Application\d3dApp.cpp(41,1): error C2270: “MainWnd”: 非成员函数上不允许修饰符
+E:\ademo\REngine\src\Application\d3dApp.cpp(42,9): error C2065: “mhMainWnd”: 未声明的标识符
+E:\ademo\REngine\src\Application\d3dApp.cpp(45,15): error C2039: "AspectRatio": 不是 "D3DApp" 的成员
+E:\ademo\REngine\src\Application\d3dApp.h(15): message : 参见“D3DApp”的声明
+E:\ademo\REngine\src\Application\d3dApp.cpp(46,1): error C2270: “AspectRatio”: 非成员函数上不允许修饰符
+E:\ademo\REngine\src\Application\d3dApp.cpp(47,28): error C2065: “mClientWidth”: 未声明的标识符
+E:\ademo\REngine\src\Application\d3dApp.cpp(47,44): error C2065: “mClientHeight”: 未声明的标识符
+E:\ademo\REngine\src\Application\d3dApp.cpp(50,14): error C2039: "Get4xMsaaState": 不是 "D3DApp" 的成员
+E:\ademo\REngine\src\Application\d3dApp.h(15): message : 参见“D3DApp”的声明
+E:\ademo\REngine\src\Application\d3dApp.cpp(51,1): error C2270: “Get4xMsaaState”: 非成员函数上不允许修饰符
+E:\ademo\REngine\src\Application\d3dApp.cpp(52,12): error C2065: “m4xMsaaState”: 未声明的标识符
+E:\ademo\REngine\src\Application\d3dApp.cpp(55,14): error C2039: "Set4xMsaaState": 不是 "D3DApp" 的成员
+E:\ademo\REngine\src\Application\d3dApp.h(15): message : 参见“D3DApp”的声明
+E:\ademo\REngine\src\Application\d3dApp.cpp(57,8): error C2065: “m4xMsaaState”: 未声明的标识符
+E:\ademo\REngine\src\Application\d3dApp.cpp(57,24): warning C4805: “!=”: 在操作中将类型“unknown-type”与类型“bool”混合不安全
+E:\ademo\REngine\src\Application\d3dApp.cpp(59,9): error C2065: “m4xMsaaState”: 未声明的标识符
+E:\ademo\REngine\src\Application\d3dApp.cpp(62,9): error C3861: “CreateSwapChain”: 找不到标识符
+E:\ademo\REngine\src\Application\d3dApp.cpp(63,9): error C3861: “OnResize”: 找不到标识符
+E:\ademo\REngine\src\Application\d3dApp.cpp(66,14): error C2039: "SetWindows": 不是 "D3DApp" 的成员
+E:\ademo\REngine\src\Application\d3dApp.h(15): message : 参见“D3DApp”的声明
+E:\ademo\REngine\src\Application\d3dApp.cpp(68,2): error C2065: “mClientWidth”: 未声明的标识符
+E:\ademo\REngine\src\Application\d3dApp.cpp(69,2): error C2065: “mClientHeight”: 未声明的标识符
+E:\ademo\REngine\src\Application\d3dApp.cpp(70,2): error C2065: “mMainWndCaption”: 未声明的标识符
+E:\ademo\REngine\src\Application\d3dApp.cpp(73,13): error C2039: "Run": 不是 "D3DApp" 的成员
+E:\ademo\REngine\src\Application\d3dApp.h(15): message : 参见“D3DApp”的声明
+E:\ademo\REngine\src\Application\d3dApp.cpp(77,2): error C2065: “mTimer”: 未声明的标识符
+E:\ademo\REngine\src\Application\d3dApp.cpp(90,4): error C2065: “mTimer”: 未声明的标识符
+E:\ademo\REngine\src\Application\d3dApp.cpp(92,9): error C2065: “mAppPaused”: 未声明的标识符
+E:\ademo\REngine\src\Application\d3dApp.cpp(94,5): error C3861: “CalculateFrameStats”: 找不到标识符
+E:\ademo\REngine\src\Application\d3dApp.cpp(95,12): error C2065: “mTimer”: 未声明的标识符
+E:\ademo\REngine\src\Application\d3dApp.cpp(95,5): error C3861: “Update”: 找不到标识符
+E:\ademo\REngine\src\Application\d3dApp.cpp(96,22): error C2065: “mTimer”: 未声明的标识符
+E:\ademo\REngine\src\Application\d3dApp.cpp(96,17): error C3861: “Draw”: 找不到标识符
+E:\ademo\REngine\src\Application\d3dApp.cpp(108,14): error C2039: "Initialize": 不是 "D3DApp" 的成员
+E:\ademo\REngine\src\Application\d3dApp.h(15): message : 参见“D3DApp”的声明
+E:\ademo\REngine\src\Application\d3dApp.cpp(110,6): error C3861: “InitMainWindow”: 找不到标识符
+E:\ademo\REngine\src\Application\d3dApp.cpp(113,6): error C3861: “InitDirect3D”: 找不到标识符
+E:\ademo\REngine\src\Application\d3dApp.cpp(117,5): error C3861: “OnResize”: 找不到标识符
+E:\ademo\REngine\src\Application\d3dApp.cpp(122,14): error C2039: "CreateRtvAndDsvDescriptorHeaps": 不是 "D3DApp" 的成员
+E:\ademo\REngine\src\Application\d3dApp.h(15): message : 参见“D3DApp”的声明
+E:\ademo\REngine\src\Application\d3dApp.cpp(125,5): error C2065: “rtvHeapDesc”: 未声明的标识符
+E:\ademo\REngine\src\Application\d3dApp.cpp(125,34): error C2065: “SwapChainBufferCount”: 未声明的标识符
+E:\ademo\REngine\src\Application\d3dApp.cpp(126,5): error C2065: “rtvHeapDesc”: 未声明的标识符
+E:\ademo\REngine\src\Application\d3dApp.cpp(127,5): error C2065: “rtvHeapDesc”: 未声明的标识符
+E:\ademo\REngine\src\Application\d3dApp.cpp(128,2): error C2065: “rtvHeapDesc”: 未声明的标识符
+E:\ademo\REngine\src\Application\d3dApp.cpp(129,1): error C2065: “m_Device”: 未声明的标识符
+E:\ademo\REngine\src\Application\d3dApp.cpp(129,1): error C2065: “rtvHeapDesc”: 未声明的标识符
+E:\ademo\REngine\src\Application\d3dApp.cpp(129,1): error C2065: “mRtvHeap”: 未声明的标识符
+E:\ademo\REngine\src\Application\d3dApp.cpp(129,1): error C2955: “DxException”: 使用 类 模板 需要 模板 参数列表
+E:\ademo\REngine\src\Utility\d3dUtil.h(130): message : 参见“DxException”的声明
+E:\ademo\REngine\src\Application\d3dApp.cpp(134,5): error C2065: “dsvHeapDesc”: 未声明的标识符
+E:\ademo\REngine\src\Application\d3dApp.cpp(135,5): error C2065: “dsvHeapDesc”: 未声明的标识符
+E:\ademo\REngine\src\Application\d3dApp.cpp(136,5): error C2065: “dsvHeapDesc”: 未声明的标识符
+E:\ademo\REngine\src\Application\d3dApp.cpp(137,2): error C2065: “dsvHeapDesc”: 未声明的标识符
+E:\ademo\REngine\src\Application\d3dApp.cpp(138,1): error C2065: “m_Device”: 未声明的标识符
+E:\ademo\REngine\src\Application\d3dApp.cpp(138,1): error C2065: “dsvHeapDesc”: 未声明的标识符
+E:\ademo\REngine\src\Application\d3dApp.cpp(138,1): error C2065: “mDsvHeap”: 未声明的标识符
+E:\ademo\REngine\src\Application\d3dApp.cpp(138,1): error C2955: “DxException”: 使用 类 模板 需要 模板 参数列表
+E:\ademo\REngine\src\Utility\d3dUtil.h(130): message : 参见“DxException”的声明
+E:\ademo\REngine\src\Application\d3dApp.cpp(142,14): error C2039: "OnResize": 不是 "D3DApp" 的成员
+E:\ademo\REngine\src\Application\d3dApp.h(15): message : 参见“D3DApp”的声明
+E:\ademo\REngine\src\Application\d3dApp.cpp(144,2): error C2065: “m_Device”: 未声明的标识符
+E:\ademo\REngine\src\Application\d3dApp.cpp(145,2): error C2065: “mSwapChain”: 未声明的标识符
+E:\ademo\REngine\src\Application\d3dApp.cpp(146,5): error C2065: “mDirectCmdListAlloc”: 未声明的标识符
+E:\ademo\REngine\src\Application\d3dApp.cpp(149,2): error C3861: “FlushCommandQueue”: 找不到标识符
+E:\ademo\REngine\src\Application\d3dApp.cpp(151,5): error C2065: “mCommandList”: 未声明的标识符
+E:\ademo\REngine\src\Application\d3dApp.cpp(151,5): error C2065: “mDirectCmdListAlloc”: 未声明的标识符
+E:\ademo\REngine\src\Application\d3dApp.cpp(151,5): error C2955: “DxException”: 使用 类 模板 需要 模板 参数列表
+E:\ademo\REngine\src\Utility\d3dUtil.h(130): message : 参见“DxException”的声明
+E:\ademo\REngine\src\Application\d3dApp.cpp(154,22): error C2065: “SwapChainBufferCount”: 未声明的标识符
+E:\ademo\REngine\src\Application\d3dApp.cpp(155,3): error C2065: “mSwapChainBuffer”: 未声明的标识符
+E:\ademo\REngine\src\Application\d3dApp.cpp(156,5): error C2065: “mDepthStencilBuffer”: 未声明的标识符
+E:\ademo\REngine\src\Application\d3dApp.cpp(159,1): error C2065: “mSwapChain”: 未声明的标识符
+E:\ademo\REngine\src\Application\d3dApp.cpp(159,1): error C2065: “SwapChainBufferCount”: 未声明的标识符
+E:\ademo\REngine\src\Application\d3dApp.cpp(159,1): error C2065: “mClientWidth”: 未声明的标识符
+E:\ademo\REngine\src\Application\d3dApp.cpp(159,1): error C2065: “mClientHeight”: 未声明的标识符
+E:\ademo\REngine\src\Application\d3dApp.cpp(159,1): error C2065: “mBackBufferFormat”: 未声明的标识符
+E:\ademo\REngine\src\Application\d3dApp.cpp(159,1): error C2955: “DxException”: 使用 类 模板 需要 模板 参数列表
+E:\ademo\REngine\src\Utility\d3dUtil.h(130): message : 参见“DxException”的声明
+E:\ademo\REngine\src\Application\d3dApp.cpp(165,2): error C2065: “mCurrBackBuffer”: 未声明的标识符
+E:\ademo\REngine\src\Application\d3dApp.cpp(167,46): error C2065: “mRtvHeap”: 未声明的标识符
+E:\ademo\REngine\src\Application\d3dApp.cpp(168,23): error C2065: “SwapChainBufferCount”: 未声明的标识符
+E:\ademo\REngine\src\Application\d3dApp.cpp(170,3): error C2065: “mSwapChain”: 未声明的标识符
+E:\ademo\REngine\src\Application\d3dApp.cpp(170,3): error C2065: “mSwapChainBuffer”: 未声明的标识符
+E:\ademo\REngine\src\Application\d3dApp.cpp(170,3): fatal error C1003: 错误计数超过 100；正在停止编译
+  MyApp.cpp
+  The contents of <span> are available only with C++20 or later.
+E:\ademo\REngine\src\Utility\Metalib.h(6,9): error C2988: 不可识别的模板声明/定义
+E:\ademo\REngine\src\Utility\Metalib.h(6,9): error C2059: 语法错误:“(”
+E:\ademo\REngine\src\Utility\Metalib.h(8,1): error C2143: 语法错误: 缺少“;”(在“{”的前面)
+E:\ademo\REngine\src\Utility\Metalib.h(8,1): error C2447: “{”: 缺少函数标题(是否是老式的形式表?)
+E:\ademo\REngine\src\Utility\Metalib.h(21,15): error C2039: "is_bounded_array_v": 不是 "std" 的成员
+D:\Microsoft\VisualStudio\2019\VC\Tools\MSVC\14.29.30133\include\sstream(20): message : 参见“std”的声明
+E:\ademo\REngine\src\Utility\Metalib.h(21,9): error C2988: 不可识别的模板声明/定义
+E:\ademo\REngine\src\Utility\Metalib.h(21,9): error C2059: 语法错误:“(”
+E:\ademo\REngine\src\Utility\Metalib.h(22,1): error C2143: 语法错误: 缺少“;”(在“{”的前面)
+E:\ademo\REngine\src\Utility\Metalib.h(22,1): error C2447: “{”: 缺少函数标题(是否是老式的形式表?)
+E:\ademo\REngine\src\Utility\Metalib.h(26,15): error C2039: "is_bounded_array_v": 不是 "std" 的成员
+D:\Microsoft\VisualStudio\2019\VC\Tools\MSVC\14.29.30133\include\sstream(20): message : 参见“std”的声明
+E:\ademo\REngine\src\Utility\Metalib.h(26,9): error C2988: 不可识别的模板声明/定义
+E:\ademo\REngine\src\Utility\Metalib.h(26,9): error C2059: 语法错误:“(”
+E:\ademo\REngine\src\Utility\Metalib.h(27,1): error C2143: 语法错误: 缺少“;”(在“{”的前面)
+E:\ademo\REngine\src\Utility\Metalib.h(27,1): error C2447: “{”: 缺少函数标题(是否是老式的形式表?)
+E:\ademo\REngine\src\Utility\d3dUtil.h(61,53): error C2065: “buffer”: 未声明的标识符
+E:\ademo\REngine\src\Utility\d3dUtil.h(62,25): error C2065: “buffer”: 未声明的标识符
+E:\ademo\REngine\src\Resources\UploadBuffer.h(7,1): error C2955: “Buffer”: 使用 类 模板 需要 模板 参数列表
+E:\ademo\REngine\src\Resources\Buffer.h(4): message : 参见“Buffer”的声明
+E:\ademo\REngine\src\Resources\UploadBuffer.h(66): message : 查看对正在编译的 类 模板 实例化“UploadBuffer<T>”的引用
+E:\ademo\REngine\src\Resources\UploadBuffer.h(18,1): error C2027: 使用了未定义类型“Device”
+E:\ademo\REngine\src\DXRuntime\Device.h(5): message : 参见“Device”的声明
+E:\ademo\REngine\src\Resources\UploadBuffer.h(18,1): error C2955: “DxException”: 使用 类 模板 需要 模板 参数列表
+E:\ademo\REngine\src\Utility\d3dUtil.h(130): message : 参见“DxException”的声明
+E:\ademo\REngine\src\Resources\UploadBuffer.h(18,1): message : “DxException”: 函数声明必须可用，因为所有参数都不依赖于模板参数
+E:\ademo\REngine\src\Resources\UploadBuffer.h(26,9): error C2955: “DxException”: 使用 类 模板 需要 模板 参数列表
+E:\ademo\REngine\src\Utility\d3dUtil.h(130): message : 参见“DxException”的声明
+E:\ademo\REngine\src\Resources\UploadBuffer.h(26,9): message : “DxException”: 函数声明必须可用，因为所有参数都不依赖于模板参数
+E:\ademo\REngine\src\Light\Light.h(10,54): error C2131: 表达式的计算结果不是常数
+E:\ademo\REngine\src\Light\Light.h(10,54): message : 遇到非常量(子)表达式
+E:\ademo\REngine\src\Light\Light.h(11,30): error C2131: 表达式的计算结果不是常数
+E:\ademo\REngine\src\Light\Light.h(11,30): message : 遇到非常量(子)表达式
+E:\ademo\REngine\src\Light\Light.h(12,56): error C2131: 表达式的计算结果不是常数
+E:\ademo\REngine\src\Light\Light.h(12,56): message : 遇到非常量(子)表达式
+E:\ademo\REngine\src\Light\Light.h(13,29): error C2131: 表达式的计算结果不是常数
+E:\ademo\REngine\src\Light\Light.h(13,29): message : 遇到非常量(子)表达式
+E:\ademo\REngine\src\Light\Light.h(14,54): error C2131: 表达式的计算结果不是常数
+E:\ademo\REngine\src\Light\Light.h(14,54): message : 遇到非常量(子)表达式
+E:\ademo\REngine\src\Light\Light.h(15,28): error C2131: 表达式的计算结果不是常数
+E:\ademo\REngine\src\Light\Light.h(15,28): message : 遇到非常量(子)表达式
+E:\ademo\REngine\src\Material\Materials.h(9,62): error C2131: 表达式的计算结果不是常数
+E:\ademo\REngine\src\Material\Materials.h(9,62): message : 遇到非常量(子)表达式
+E:\ademo\REngine\src\Material\Materials.h(10,55): error C2131: 表达式的计算结果不是常数
+E:\ademo\REngine\src\Material\Materials.h(10,55): message : 遇到非常量(子)表达式
+E:\ademo\REngine\src\Material\Materials.h(11,25): error C2131: 表达式的计算结果不是常数
+E:\ademo\REngine\src\Material\Materials.h(11,25): message : 遇到非常量(子)表达式
+E:\ademo\REngine\src\Material\Materials.h(13,62): error C2131: 表达式的计算结果不是常数
+E:\ademo\REngine\src\Material\Materials.h(13,62): message : 遇到非常量(子)表达式
+E:\ademo\REngine\src\Material\Materials.h(14,26): error C2131: 表达式的计算结果不是常数
+E:\ademo\REngine\src\Material\Materials.h(14,26): message : 遇到非常量(子)表达式
+E:\ademo\REngine\src\Material\Materials.h(26,23): error C2059: 语法错误:“=”
+E:\ademo\REngine\src\Material\Materials.h(26,38): error C2238: 意外的标记位于“;”之前
+E:\ademo\REngine\src\Material\Materials.h(27,16): error C2059: 语法错误:“=”
+E:\ademo\REngine\src\Material\Materials.h(27,30): error C2238: 意外的标记位于“;”之前
+E:\ademo\REngine\src\Material\Materials.h(29,2): error C2628: “Material”后面接“void”是非法的(是否忘记了“;”?)
+E:\ademo\REngine\src\Material\Materials.h(31,3): error C2065: “DiffuseSrvHeapIndex”: 未声明的标识符
+E:\ademo\REngine\src\Material\Materials.h(35,3): error C2065: “MatTransform”: 未声明的标识符
+E:\ademo\REngine\src\Material\Materials.h(39,20): error C2065: “MatTransform”: 未声明的标识符
+E:\ademo\REngine\src\Material\Materials.h(44,3): error C3861: “MatTransform”: 找不到标识符
+E:\ademo\REngine\src\Material\Materials.h(46,56): error C3861: “MatTransform”: 找不到标识符
+E:\ademo\REngine\src\Material\Materials.h(49,3): error C2065: “NumFramesDirty”: 未声明的标识符
+E:\ademo\REngine\src\Material\Materials.h(52,32): error C2065: “NumFramesDirty”: 未声明的标识符
+E:\ademo\REngine\src\Material\Materials.h(54,40): error C2065: “DiffuseSrvHeapIndex”: 未声明的标识符
+E:\ademo\REngine\src\Material\Materials.h(55,31): error C2065: “MatCBIndex”: 未声明的标识符
+E:\ademo\REngine\src\Material\Materials.h(56,35): error C2065: “NumFramesDirty”: 未声明的标识符
+E:\ademo\REngine\src\Material\Materials.h(57,48): error C2065: “DiffuseAlbedo”: 未声明的标识符
+E:\ademo\REngine\src\Material\Materials.h(58,42): error C2065: “FresnelR0”: 未声明的标识符
+E:\ademo\REngine\src\Material\Materials.h(59,30): error C2065: “Roughness”: 未声明的标识符
+E:\ademo\REngine\src\Material\Materials.h(60,49): error C2065: “MatTransform”: 未声明的标识符
+E:\ademo\REngine\src\Material\Materials.h(61,11): error C2588: “::~Material”: 非法的全局 析构函数
+E:\ademo\REngine\src\Material\Materials.h(62,1): error C2059: 语法错误:“private”
+E:\ademo\REngine\src\Material\Materials.h(77,1): error C2059: 语法错误:“}”
+E:\ademo\REngine\src\Material\Materials.h(77,1): error C2143: 语法错误: 缺少“;”(在“}”的前面)
+E:\ademo\REngine\src\Resources\FrameResource.h(11,58): error C2131: 表达式的计算结果不是常数
+E:\ademo\REngine\src\Resources\FrameResource.h(11,58): message : 遇到非常量(子)表达式
+E:\ademo\REngine\src\Resources\FrameResource.h(12,65): error C2131: 表达式的计算结果不是常数
+E:\ademo\REngine\src\Resources\FrameResource.h(12,65): message : 遇到非常量(子)表达式
+E:\ademo\REngine\src\Resources\FrameResource.h(21,57): error C2131: 表达式的计算结果不是常数
+E:\ademo\REngine\src\Resources\FrameResource.h(21,57): message : 遇到非常量(子)表达式
+E:\ademo\REngine\src\Resources\FrameResource.h(22,60): error C2131: 表达式的计算结果不是常数
+E:\ademo\REngine\src\Resources\FrameResource.h(22,60): message : 遇到非常量(子)表达式
+E:\ademo\REngine\src\Resources\FrameResource.h(23,57): error C2131: 表达式的计算结果不是常数
+E:\ademo\REngine\src\Resources\FrameResource.h(23,57): message : 遇到非常量(子)表达式
+E:\ademo\REngine\src\Resources\FrameResource.h(24,60): error C2131: 表达式的计算结果不是常数
+E:\ademo\REngine\src\Resources\FrameResource.h(24,60): message : 遇到非常量(子)表达式
+E:\ademo\REngine\src\Resources\FrameResource.h(25,61): error C2131: 表达式的计算结果不是常数
+E:\ademo\REngine\src\Resources\FrameResource.h(25,61): message : 遇到非常量(子)表达式
+E:\ademo\REngine\src\Resources\FrameResource.h(26,64): error C2131: 表达式的计算结果不是常数
+E:\ademo\REngine\src\Resources\FrameResource.h(26,64): message : 遇到非常量(子)表达式
+E:\ademo\REngine\src\Resources\FrameResource.h(27,53): error C2131: 表达式的计算结果不是常数
+E:\ademo\REngine\src\Resources\FrameResource.h(27,53): message : 遇到非常量(子)表达式
+E:\ademo\REngine\src\Resources\FrameResource.h(28,33): error C2131: 表达式的计算结果不是常数
+E:\ademo\REngine\src\Resources\FrameResource.h(28,33): message : 遇到非常量(子)表达式
+E:\ademo\REngine\src\Resources\FrameResource.h(29,56): error C2131: 表达式的计算结果不是常数
+E:\ademo\REngine\src\Resources\FrameResource.h(29,56): message : 遇到非常量(子)表达式
+E:\ademo\REngine\src\Resources\FrameResource.h(30,59): error C2131: 表达式的计算结果不是常数
+E:\ademo\REngine\src\Resources\FrameResource.h(30,59): message : 遇到非常量(子)表达式
+E:\ademo\REngine\src\Resources\FrameResource.h(31,23): error C2131: 表达式的计算结果不是常数
+E:\ademo\REngine\src\Resources\FrameResource.h(31,23): message : 遇到非常量(子)表达式
+E:\ademo\REngine\src\Resources\FrameResource.h(32,22): error C2131: 表达式的计算结果不是常数
+E:\ademo\REngine\src\Resources\FrameResource.h(32,22): message : 遇到非常量(子)表达式
+E:\ademo\REngine\src\Resources\FrameResource.h(33,27): error C2131: 表达式的计算结果不是常数
+E:\ademo\REngine\src\Resources\FrameResource.h(33,27): message : 遇到非常量(子)表达式
+E:\ademo\REngine\src\Resources\FrameResource.h(34,27): error C2131: 表达式的计算结果不是常数
+E:\ademo\REngine\src\Resources\FrameResource.h(34,27): message : 遇到非常量(子)表达式
+E:\ademo\REngine\src\Resources\FrameResource.h(35,64): error C2131: 表达式的计算结果不是常数
+E:\ademo\REngine\src\Resources\FrameResource.h(35,64): message : 遇到非常量(子)表达式
+E:\ademo\REngine\src\Resources\FrameResource.h(37,60): error C2131: 表达式的计算结果不是常数
+E:\ademo\REngine\src\Resources\FrameResource.h(37,60): message : 遇到非常量(子)表达式
+E:\ademo\REngine\src\Resources\FrameResource.h(38,27): error C2131: 表达式的计算结果不是常数
+E:\ademo\REngine\src\Resources\FrameResource.h(38,27): message : 遇到非常量(子)表达式
+E:\ademo\REngine\src\Resources\FrameResource.h(39,29): error C2131: 表达式的计算结果不是常数
+E:\ademo\REngine\src\Resources\FrameResource.h(39,29): message : 遇到非常量(子)表达式
+E:\ademo\REngine\src\Resources\FrameResource.h(65,66): error C2131: 表达式的计算结果不是常数
+E:\ademo\REngine\src\Resources\FrameResource.h(65,66): message : 遇到非常量(子)表达式
+E:\ademo\REngine\src\Resources\FrameResource.h(66,70): error C2131: 表达式的计算结果不是常数
+E:\ademo\REngine\src\Resources\FrameResource.h(66,70): message : 遇到非常量(子)表达式
+E:\ademo\REngine\src\Resources\FrameResource.h(67,73): error C2131: 表达式的计算结果不是常数
+E:\ademo\REngine\src\Resources\FrameResource.h(67,73): message : 遇到非常量(子)表达式
+E:\ademo\REngine\src\Resources\FrameResource.h(69,57): error C2131: 表达式的计算结果不是常数
+E:\ademo\REngine\src\Resources\FrameResource.h(69,57): message : 遇到非常量(子)表达式
+E:\ademo\REngine\src\Resources\FrameResource.h(72,21): error C2131: 表达式的计算结果不是常数
+E:\ademo\REngine\src\Resources\FrameResource.h(72,21): message : 遇到非常量(子)表达式
+E:\ademo\REngine\src\Geometry\MeshGeometry.h(6,21): error C2131: 表达式的计算结果不是常数
+E:\ademo\REngine\src\Geometry\MeshGeometry.h(6,21): message : 遇到非常量(子)表达式
+E:\ademo\REngine\src\Geometry\MeshGeometry.h(7,29): error C2131: 表达式的计算结果不是常数
+E:\ademo\REngine\src\Geometry\MeshGeometry.h(7,29): message : 遇到非常量(子)表达式
+E:\ademo\REngine\src\Geometry\MeshGeometry.h(8,28): error C2131: 表达式的计算结果不是常数
+E:\ademo\REngine\src\Geometry\MeshGeometry.h(8,28): message : 遇到非常量(子)表达式
+E:\ademo\REngine\src\Geometry\MeshGeometry.h(30,70): error C2065: “name”: 未声明的标识符
+E:\ademo\REngine\src\Geometry\MeshGeometry.h(30,76): error C2059: 语法错误:“=”
+E:\ademo\REngine\src\Geometry\MeshGeometry.h(30,81): error C2238: 意外的标记位于“;”之前
+E:\ademo\REngine\src\Geometry\MeshGeometry.h(31,19): error C2146: 语法错误: 缺少“;”(在标识符“GetSubMesh”的前面)
+E:\ademo\REngine\src\Geometry\MeshGeometry.h(31,49): error C4430: 缺少类型说明符 - 假定为 int。注意: C++ 不支持默认 int
+E:\ademo\REngine\src\Geometry\MeshGeometry.h(31,58): error C2065: “m_DrawArgs”: 未声明的标识符
+E:\ademo\REngine\src\Geometry\MeshGeometry.h(31,51): warning C4508: “GetSubMesh”: 函数应返回一个值；假定“void”返回类型
+E:\ademo\REngine\src\Geometry\MeshGeometry.h(31,76): error C2617: “GetSubMesh”: return 语句不一致
+E:\ademo\REngine\src\Geometry\MeshGeometry.h(31): message : 参见“GetSubMesh”的声明
+E:\ademo\REngine\src\Geometry\MeshGeometry.h(33,54): error C2065: “m_VertexBufferGPU”: 未声明的标识符
+E:\ademo\REngine\src\Geometry\MeshGeometry.h(34,1): error C2059: 语法错误:“private”
+E:\ademo\REngine\src\Geometry\MeshGeometry.h(52,1): error C2059: 语法错误:“}”
+E:\ademo\REngine\src\Geometry\MeshGeometry.h(52,1): error C2143: 语法错误: 缺少“;”(在“}”的前面)
+E:\ademo\REngine\src\Wave\Wave.h(22,50): error C2059: 语法错误:“return”
+E:\ademo\REngine\src\Wave\Wave.h(22,73): error C2238: 意外的标记位于“;”之前
+E:\ademo\REngine\src\Wave\Wave.h(23,25): error C2143: 语法错误: 缺少“;”(在“&”的前面)
+E:\ademo\REngine\src\Wave\Wave.h(23,46): error C2270: “Normal”: 非成员函数上不允许修饰符
+E:\ademo\REngine\src\Wave\Wave.h(23,46): error C2059: 语法错误:“{”
+E:\ademo\REngine\src\Wave\Wave.h(23,46): error C2143: 语法错误: 缺少“;”(在“{”的前面)
+E:\ademo\REngine\src\Wave\Wave.h(23,46): error C2447: “{”: 缺少函数标题(是否是老式的形式表?)
+E:\ademo\REngine\src\Wave\Wave.h(24,48): error C2270: “TangentX”: 非成员函数上不允许修饰符
+E:\ademo\REngine\src\Wave\Wave.h(24,57): error C2065: “mTangentX”: 未声明的标识符
+E:\ademo\REngine\src\Wave\Wave.h(24,66): fatal error C1003: 错误计数超过 100；正在停止编译
+  Camera.cpp
+  The contents of <span> are available only with C++20 or later.
+E:\ademo\REngine\src\Utility\Metalib.h(6,9): error C2988: 不可识别的模板声明/定义
+E:\ademo\REngine\src\Utility\Metalib.h(6,9): error C2059: 语法错误:“(”
+E:\ademo\REngine\src\Utility\Metalib.h(8,1): error C2143: 语法错误: 缺少“;”(在“{”的前面)
+E:\ademo\REngine\src\Utility\Metalib.h(8,1): error C2447: “{”: 缺少函数标题(是否是老式的形式表?)
+E:\ademo\REngine\src\Utility\Metalib.h(21,15): error C2039: "is_bounded_array_v": 不是 "std" 的成员
+D:\Microsoft\VisualStudio\2019\VC\Tools\MSVC\14.29.30133\include\sstream(20): message : 参见“std”的声明
+E:\ademo\REngine\src\Utility\Metalib.h(21,9): error C2988: 不可识别的模板声明/定义
+E:\ademo\REngine\src\Utility\Metalib.h(21,9): error C2059: 语法错误:“(”
+E:\ademo\REngine\src\Utility\Metalib.h(22,1): error C2143: 语法错误: 缺少“;”(在“{”的前面)
+E:\ademo\REngine\src\Utility\Metalib.h(22,1): error C2447: “{”: 缺少函数标题(是否是老式的形式表?)
+E:\ademo\REngine\src\Utility\Metalib.h(26,15): error C2039: "is_bounded_array_v": 不是 "std" 的成员
+D:\Microsoft\VisualStudio\2019\VC\Tools\MSVC\14.29.30133\include\sstream(20): message : 参见“std”的声明
+E:\ademo\REngine\src\Utility\Metalib.h(26,9): error C2988: 不可识别的模板声明/定义
+E:\ademo\REngine\src\Utility\Metalib.h(26,9): error C2059: 语法错误:“(”
+E:\ademo\REngine\src\Utility\Metalib.h(27,1): error C2143: 语法错误: 缺少“;”(在“{”的前面)
+E:\ademo\REngine\src\Utility\Metalib.h(27,1): error C2447: “{”: 缺少函数标题(是否是老式的形式表?)
+E:\ademo\REngine\src\Utility\d3dUtil.h(61,53): error C2065: “buffer”: 未声明的标识符
+E:\ademo\REngine\src\Utility\d3dUtil.h(62,25): error C2065: “buffer”: 未声明的标识符
+E:\ademo\REngine\src\Components\Camera.cpp(9,9): error C2039: "{ctor}": 不是 "Camera" 的成员
+E:\ademo\REngine\src\Components\Camera.h(17): message : 参见“Camera”的声明
+E:\ademo\REngine\src\Components\Camera.cpp(10,1): error C4430: 缺少类型说明符 - 假定为 int。注意: C++ 不支持默认 int
+E:\ademo\REngine\src\Components\Camera.cpp(11,2): error C3861: “SetLens”: 找不到标识符
+E:\ademo\REngine\src\Components\Camera.cpp(12,1): warning C4508: “{ctor}”: 函数应返回一个值；假定“void”返回类型
+E:\ademo\REngine\src\Components\Camera.cpp(14,10): error C2039: "{dtor}": 不是 "Camera" 的成员
+E:\ademo\REngine\src\Components\Camera.h(17): message : 参见“Camera”的声明
+E:\ademo\REngine\src\Components\Camera.cpp(15,1): error C4430: 缺少类型说明符 - 假定为 int。注意: C++ 不支持默认 int
+E:\ademo\REngine\src\Components\Camera.cpp(16,1): warning C4508: “{dtor}”: 函数应返回一个值；假定“void”返回类型
+E:\ademo\REngine\src\Components\Camera.cpp(18,18): error C2039: "GetPosition": 不是 "Camera" 的成员
+E:\ademo\REngine\src\Components\Camera.h(17): message : 参见“Camera”的声明
+E:\ademo\REngine\src\Components\Camera.cpp(19,1): error C2270: “GetPosition”: 非成员函数上不允许修饰符
+E:\ademo\REngine\src\Components\Camera.cpp(20,23): error C2065: “mPosition”: 未声明的标识符
+E:\ademo\REngine\src\Components\Camera.cpp(23,18): error C2039: "GetPosition3f": 不是 "Camera" 的成员
+E:\ademo\REngine\src\Components\Camera.h(17): message : 参见“Camera”的声明
+E:\ademo\REngine\src\Components\Camera.cpp(24,1): error C2270: “GetPosition3f”: 非成员函数上不允许修饰符
+E:\ademo\REngine\src\Components\Camera.cpp(25,9): error C2065: “mPosition”: 未声明的标识符
+E:\ademo\REngine\src\Components\Camera.cpp(28,14): error C2039: "SetPosition": 不是 "Camera" 的成员
+E:\ademo\REngine\src\Components\Camera.h(17): message : 参见“Camera”的声明
+E:\ademo\REngine\src\Components\Camera.cpp(30,2): error C2065: “mPosition”: 未声明的标识符
+E:\ademo\REngine\src\Components\Camera.cpp(31,2): error C2065: “mViewDirty”: 未声明的标识符
+E:\ademo\REngine\src\Components\Camera.cpp(34,14): error C2039: "SetPosition": 不是 "Camera" 的成员
+E:\ademo\REngine\src\Components\Camera.h(17): message : 参见“Camera”的声明
+E:\ademo\REngine\src\Components\Camera.cpp(36,2): error C2065: “mPosition”: 未声明的标识符
+E:\ademo\REngine\src\Components\Camera.cpp(37,2): error C2065: “mViewDirty”: 未声明的标识符
+E:\ademo\REngine\src\Components\Camera.cpp(40,18): error C2039: "GetRight": 不是 "Camera" 的成员
+E:\ademo\REngine\src\Components\Camera.h(17): message : 参见“Camera”的声明
+E:\ademo\REngine\src\Components\Camera.cpp(41,1): error C2270: “GetRight”: 非成员函数上不允许修饰符
+E:\ademo\REngine\src\Components\Camera.cpp(42,23): error C2065: “mRight”: 未声明的标识符
+E:\ademo\REngine\src\Components\Camera.cpp(45,18): error C2039: "GetRight3f": 不是 "Camera" 的成员
+E:\ademo\REngine\src\Components\Camera.h(17): message : 参见“Camera”的声明
+E:\ademo\REngine\src\Components\Camera.cpp(46,1): error C2270: “GetRight3f”: 非成员函数上不允许修饰符
+E:\ademo\REngine\src\Components\Camera.cpp(47,9): error C2065: “mRight”: 未声明的标识符
+E:\ademo\REngine\src\Components\Camera.cpp(50,18): error C2039: "GetUp": 不是 "Camera" 的成员
+E:\ademo\REngine\src\Components\Camera.h(17): message : 参见“Camera”的声明
+E:\ademo\REngine\src\Components\Camera.cpp(51,1): error C2270: “GetUp”: 非成员函数上不允许修饰符
+E:\ademo\REngine\src\Components\Camera.cpp(52,23): error C2065: “mUp”: 未声明的标识符
+E:\ademo\REngine\src\Components\Camera.cpp(55,18): error C2039: "GetUp3f": 不是 "Camera" 的成员
+E:\ademo\REngine\src\Components\Camera.h(17): message : 参见“Camera”的声明
+E:\ademo\REngine\src\Components\Camera.cpp(56,1): error C2270: “GetUp3f”: 非成员函数上不允许修饰符
+E:\ademo\REngine\src\Components\Camera.cpp(57,9): error C2065: “mUp”: 未声明的标识符
+E:\ademo\REngine\src\Components\Camera.cpp(60,18): error C2039: "GetLook": 不是 "Camera" 的成员
+E:\ademo\REngine\src\Components\Camera.h(17): message : 参见“Camera”的声明
+E:\ademo\REngine\src\Components\Camera.cpp(61,1): error C2270: “GetLook”: 非成员函数上不允许修饰符
+E:\ademo\REngine\src\Components\Camera.cpp(62,23): error C2065: “mLook”: 未声明的标识符
+E:\ademo\REngine\src\Components\Camera.cpp(65,18): error C2039: "GetLook3f": 不是 "Camera" 的成员
+E:\ademo\REngine\src\Components\Camera.h(17): message : 参见“Camera”的声明
+E:\ademo\REngine\src\Components\Camera.cpp(66,1): error C2270: “GetLook3f”: 非成员函数上不允许修饰符
+E:\ademo\REngine\src\Components\Camera.cpp(67,9): error C2065: “mLook”: 未声明的标识符
+E:\ademo\REngine\src\Components\Camera.cpp(70,15): error C2039: "GetNearZ": 不是 "Camera" 的成员
+E:\ademo\REngine\src\Components\Camera.h(17): message : 参见“Camera”的声明
+E:\ademo\REngine\src\Components\Camera.cpp(71,1): error C2270: “GetNearZ”: 非成员函数上不允许修饰符
+E:\ademo\REngine\src\Components\Camera.cpp(72,9): error C2065: “mNearZ”: 未声明的标识符
+E:\ademo\REngine\src\Components\Camera.cpp(75,15): error C2039: "GetFarZ": 不是 "Camera" 的成员
+E:\ademo\REngine\src\Components\Camera.h(17): message : 参见“Camera”的声明
+E:\ademo\REngine\src\Components\Camera.cpp(76,1): error C2270: “GetFarZ”: 非成员函数上不允许修饰符
+E:\ademo\REngine\src\Components\Camera.cpp(77,9): error C2065: “mFarZ”: 未声明的标识符
+E:\ademo\REngine\src\Components\Camera.cpp(80,15): error C2039: "GetAspect": 不是 "Camera" 的成员
+E:\ademo\REngine\src\Components\Camera.h(17): message : 参见“Camera”的声明
+E:\ademo\REngine\src\Components\Camera.cpp(81,1): error C2270: “GetAspect”: 非成员函数上不允许修饰符
+E:\ademo\REngine\src\Components\Camera.cpp(82,9): error C2065: “mAspect”: 未声明的标识符
+E:\ademo\REngine\src\Components\Camera.cpp(85,15): error C2039: "GetFovY": 不是 "Camera" 的成员
+E:\ademo\REngine\src\Components\Camera.h(17): message : 参见“Camera”的声明
+E:\ademo\REngine\src\Components\Camera.cpp(86,1): error C2270: “GetFovY”: 非成员函数上不允许修饰符
+E:\ademo\REngine\src\Components\Camera.cpp(87,9): error C2065: “mFovY”: 未声明的标识符
+E:\ademo\REngine\src\Components\Camera.cpp(90,15): error C2039: "GetFovX": 不是 "Camera" 的成员
+E:\ademo\REngine\src\Components\Camera.h(17): message : 参见“Camera”的声明
+E:\ademo\REngine\src\Components\Camera.cpp(91,1): error C2270: “GetFovX”: 非成员函数上不允许修饰符
+E:\ademo\REngine\src\Components\Camera.cpp(92,25): error C3861: “GetNearWindowWidth”: 找不到标识符
+E:\ademo\REngine\src\Components\Camera.cpp(93,31): error C2065: “mNearZ”: 未声明的标识符
+E:\ademo\REngine\src\Components\Camera.cpp(96,15): error C2039: "GetNearWindowWidth": 不是 "Camera" 的成员
+E:\ademo\REngine\src\Components\Camera.h(17): message : 参见“Camera”的声明
+E:\ademo\REngine\src\Components\Camera.cpp(97,1): error C2270: “GetNearWindowWidth”: 非成员函数上不允许修饰符
+E:\ademo\REngine\src\Components\Camera.cpp(98,9): error C2065: “mAspect”: 未声明的标识符
+E:\ademo\REngine\src\Components\Camera.cpp(98,19): error C2065: “mNearWindowHeight”: 未声明的标识符
+E:\ademo\REngine\src\Components\Camera.cpp(101,15): error C2039: "GetNearWindowHeight": 不是 "Camera" 的成员
+E:\ademo\REngine\src\Components\Camera.h(17): message : 参见“Camera”的声明
+E:\ademo\REngine\src\Components\Camera.cpp(102,1): error C2270: “GetNearWindowHeight”: 非成员函数上不允许修饰符
+E:\ademo\REngine\src\Components\Camera.cpp(103,9): error C2065: “mNearWindowHeight”: 未声明的标识符
+E:\ademo\REngine\src\Components\Camera.cpp(106,15): error C2039: "GetFarWindowWidth": 不是 "Camera" 的成员
+E:\ademo\REngine\src\Components\Camera.h(17): message : 参见“Camera”的声明
+E:\ademo\REngine\src\Components\Camera.cpp(107,1): error C2270: “GetFarWindowWidth”: 非成员函数上不允许修饰符
+E:\ademo\REngine\src\Components\Camera.cpp(108,9): error C2065: “mAspect”: 未声明的标识符
+E:\ademo\REngine\src\Components\Camera.cpp(108,19): error C2065: “mFarWindowHeight”: 未声明的标识符
+E:\ademo\REngine\src\Components\Camera.cpp(111,15): error C2039: "GetFarWindowHeight": 不是 "Camera" 的成员
+E:\ademo\REngine\src\Components\Camera.h(17): message : 参见“Camera”的声明
+E:\ademo\REngine\src\Components\Camera.cpp(112,1): error C2270: “GetFarWindowHeight”: 非成员函数上不允许修饰符
+E:\ademo\REngine\src\Components\Camera.cpp(113,9): error C2065: “mFarWindowHeight”: 未声明的标识符
+E:\ademo\REngine\src\Components\Camera.cpp(116,14): error C2039: "SetLens": 不是 "Camera" 的成员
+E:\ademo\REngine\src\Components\Camera.h(17): message : 参见“Camera”的声明
+E:\ademo\REngine\src\Components\Camera.cpp(119,2): error C2065: “mFovY”: 未声明的标识符
+E:\ademo\REngine\src\Components\Camera.cpp(120,2): error C2065: “mAspect”: 未声明的标识符
+E:\ademo\REngine\src\Components\Camera.cpp(121,2): error C2065: “mNearZ”: 未声明的标识符
+E:\ademo\REngine\src\Components\Camera.cpp(122,2): error C2065: “mFarZ”: 未声明的标识符
+E:\ademo\REngine\src\Components\Camera.cpp(124,2): error C2065: “mNearWindowHeight”: 未声明的标识符
+E:\ademo\REngine\src\Components\Camera.cpp(124,29): error C2065: “mNearZ”: 未声明的标识符
+E:\ademo\REngine\src\Components\Camera.cpp(124,49): error C2065: “mFovY”: 未声明的标识符
+E:\ademo\REngine\src\Components\Camera.cpp(125,2): error C2065: “mFarWindowHeight”: 未声明的标识符
+E:\ademo\REngine\src\Components\Camera.cpp(125,29): error C2065: “mFarZ”: 未声明的标识符
+E:\ademo\REngine\src\Components\Camera.cpp(125,48): error C2065: “mFovY”: 未声明的标识符
+E:\ademo\REngine\src\Components\Camera.cpp(127,40): error C2065: “mFovY”: 未声明的标识符
+E:\ademo\REngine\src\Components\Camera.cpp(127,47): error C2065: “mAspect”: 未声明的标识符
+E:\ademo\REngine\src\Components\Camera.cpp(127,56): error C2065: “mNearZ”: 未声明的标识符
+E:\ademo\REngine\src\Components\Camera.cpp(127,64): error C2065: “mFarZ”: 未声明的标识符
+E:\ademo\REngine\src\Components\Camera.cpp(128,19): error C2065: “mProj”: 未声明的标识符
+E:\ademo\REngine\src\Components\Camera.cpp(131,14): error C2039: "LookAt": 不是 "Camera" 的成员
+E:\ademo\REngine\src\Components\Camera.h(17): message : 参见“Camera”的声明
+E:\ademo\REngine\src\Components\Camera.cpp(137,17): error C2065: “mPosition”: 未声明的标识符
+E:\ademo\REngine\src\Components\Camera.cpp(138,17): error C2065: “mLook”: 未声明的标识符
+E:\ademo\REngine\src\Components\Camera.cpp(139,17): error C2065: “mRight”: 未声明的标识符
+E:\ademo\REngine\src\Components\Camera.cpp(140,17): error C2065: “mUp”: 未声明的标识符
+E:\ademo\REngine\src\Components\Camera.cpp(142,2): error C2065: “mViewDirty”: 未声明的标识符
+E:\ademo\REngine\src\Components\Camera.cpp(142,13): fatal error C1003: 错误计数超过 100；正在停止编译
+  Device.cpp
+  The contents of <span> are available only with C++20 or later.
+E:\ademo\REngine\src\Utility\Metalib.h(6,9): error C2988: 不可识别的模板声明/定义
+E:\ademo\REngine\src\Utility\Metalib.h(6,9): error C2059: 语法错误:“(”
+E:\ademo\REngine\src\Utility\Metalib.h(8,1): error C2143: 语法错误: 缺少“;”(在“{”的前面)
+E:\ademo\REngine\src\Utility\Metalib.h(8,1): error C2447: “{”: 缺少函数标题(是否是老式的形式表?)
+E:\ademo\REngine\src\Utility\Metalib.h(21,15): error C2039: "is_bounded_array_v": 不是 "std" 的成员
+D:\Microsoft\VisualStudio\2019\VC\Tools\MSVC\14.29.30133\include\sstream(20): message : 参见“std”的声明
+E:\ademo\REngine\src\Utility\Metalib.h(21,9): error C2988: 不可识别的模板声明/定义
+E:\ademo\REngine\src\Utility\Metalib.h(21,9): error C2059: 语法错误:“(”
+E:\ademo\REngine\src\Utility\Metalib.h(22,1): error C2143: 语法错误: 缺少“;”(在“{”的前面)
+E:\ademo\REngine\src\Utility\Metalib.h(22,1): error C2447: “{”: 缺少函数标题(是否是老式的形式表?)
+E:\ademo\REngine\src\Utility\Metalib.h(26,15): error C2039: "is_bounded_array_v": 不是 "std" 的成员
+D:\Microsoft\VisualStudio\2019\VC\Tools\MSVC\14.29.30133\include\sstream(20): message : 参见“std”的声明
+E:\ademo\REngine\src\Utility\Metalib.h(26,9): error C2988: 不可识别的模板声明/定义
+E:\ademo\REngine\src\Utility\Metalib.h(26,9): error C2059: 语法错误:“(”
+E:\ademo\REngine\src\Utility\Metalib.h(27,1): error C2143: 语法错误: 缺少“;”(在“{”的前面)
+E:\ademo\REngine\src\Utility\Metalib.h(27,1): error C2447: “{”: 缺少函数标题(是否是老式的形式表?)
+E:\ademo\REngine\src\Utility\d3dUtil.h(61,53): error C2065: “buffer”: 未声明的标识符
+E:\ademo\REngine\src\Utility\d3dUtil.h(62,25): error C2065: “buffer”: 未声明的标识符
+E:\ademo\REngine\src\DXRuntime\Device.cpp(4,9): error C2039: "{ctor}": 不是 "Device" 的成员
+E:\ademo\REngine\src\DXRuntime\Device.h(5): message : 参见“Device”的声明
+E:\ademo\REngine\src\DXRuntime\Device.cpp(5,1): error C4430: 缺少类型说明符 - 假定为 int。注意: C++ 不支持默认 int
+E:\ademo\REngine\src\DXRuntime\Device.cpp(11,6): error C2065: “debugController”: 未声明的标识符
+E:\ademo\REngine\src\DXRuntime\Device.cpp(12,3): error C2065: “debugController”: 未声明的标识符
+E:\ademo\REngine\src\DXRuntime\Device.cpp(16,2): error C2065: “m_Factory”: 未声明的标识符
+E:\ademo\REngine\src\DXRuntime\Device.cpp(16,2): error C2660: “CreateDXGIFactory2”: 函数不接受 1 个参数
+D:\Windows Kits\10\Include\10.0.19041.0\shared\dxgi1_3.h(113,16): message : 参见“CreateDXGIFactory2”的声明
+E:\ademo\REngine\src\DXRuntime\Device.cpp(16,2): error C2955: “DxException”: 使用 类 模板 需要 模板 参数列表
+E:\ademo\REngine\src\Utility\d3dUtil.h(130): message : 参见“DxException”的声明
+E:\ademo\REngine\src\DXRuntime\Device.cpp(19,9): error C2065: “m_Factory”: 未声明的标识符
+E:\ademo\REngine\src\DXRuntime\Device.cpp(19,49): error C2065: “m_Adapter”: 未声明的标识符
+E:\ademo\REngine\src\DXRuntime\Device.cpp(21,3): error C2065: “m_Adapter”: 未声明的标识符
+E:\ademo\REngine\src\DXRuntime\Device.cpp(21,24): error C2065: “desc”: 未声明的标识符
+E:\ademo\REngine\src\DXRuntime\Device.cpp(22,8): error C2065: “desc”: 未声明的标识符
+E:\ademo\REngine\src\DXRuntime\Device.cpp(23,35): error C2065: “m_Adapter”: 未声明的标识符
+E:\ademo\REngine\src\DXRuntime\Device.cpp(24,5): error C2065: “m_Device”: 未声明的标识符
+E:\ademo\REngine\src\DXRuntime\Device.cpp(30,3): error C2065: “m_Adapter”: 未声明的标识符
+E:\ademo\REngine\src\DXRuntime\Device.cpp(33,1): warning C4508: “{ctor}”: 函数应返回一个值；假定“void”返回类型
+E:\ademo\REngine\src\DXRuntime\Device.cpp(35,10): error C2039: "{dtor}": 不是 "Device" 的成员
+E:\ademo\REngine\src\DXRuntime\Device.h(5): message : 参见“Device”的声明
+E:\ademo\REngine\src\DXRuntime\Device.cpp(35,19): error C4430: 缺少类型说明符 - 假定为 int。注意: C++ 不支持默认 int
+E:\ademo\REngine\src\DXRuntime\Device.cpp(35,20): warning C4508: “{dtor}”: 函数应返回一个值；假定“void”返回类型
+  GeometryGenerator.cpp
+  GeometryManager.cpp
+  The contents of <span> are available only with C++20 or later.
+E:\ademo\REngine\src\Utility\Metalib.h(6,9): error C2988: 不可识别的模板声明/定义
+E:\ademo\REngine\src\Utility\Metalib.h(6,9): error C2059: 语法错误:“(”
+E:\ademo\REngine\src\Utility\Metalib.h(8,1): error C2143: 语法错误: 缺少“;”(在“{”的前面)
+E:\ademo\REngine\src\Utility\Metalib.h(8,1): error C2447: “{”: 缺少函数标题(是否是老式的形式表?)
+E:\ademo\REngine\src\Utility\Metalib.h(21,15): error C2039: "is_bounded_array_v": 不是 "std" 的成员
+D:\Microsoft\VisualStudio\2019\VC\Tools\MSVC\14.29.30133\include\sstream(20): message : 参见“std”的声明
+E:\ademo\REngine\src\Utility\Metalib.h(21,9): error C2988: 不可识别的模板声明/定义
+E:\ademo\REngine\src\Utility\Metalib.h(21,9): error C2059: 语法错误:“(”
+E:\ademo\REngine\src\Utility\Metalib.h(22,1): error C2143: 语法错误: 缺少“;”(在“{”的前面)
+E:\ademo\REngine\src\Utility\Metalib.h(22,1): error C2447: “{”: 缺少函数标题(是否是老式的形式表?)
+E:\ademo\REngine\src\Utility\Metalib.h(26,15): error C2039: "is_bounded_array_v": 不是 "std" 的成员
+D:\Microsoft\VisualStudio\2019\VC\Tools\MSVC\14.29.30133\include\sstream(20): message : 参见“std”的声明
+E:\ademo\REngine\src\Utility\Metalib.h(26,9): error C2988: 不可识别的模板声明/定义
+E:\ademo\REngine\src\Utility\Metalib.h(26,9): error C2059: 语法错误:“(”
+E:\ademo\REngine\src\Utility\Metalib.h(27,1): error C2143: 语法错误: 缺少“;”(在“{”的前面)
+E:\ademo\REngine\src\Utility\Metalib.h(27,1): error C2447: “{”: 缺少函数标题(是否是老式的形式表?)
+E:\ademo\REngine\src\Utility\d3dUtil.h(61,53): error C2065: “buffer”: 未声明的标识符
+E:\ademo\REngine\src\Utility\d3dUtil.h(62,25): error C2065: “buffer”: 未声明的标识符
+E:\ademo\REngine\src\Resources\UploadBuffer.h(7,1): error C2955: “Buffer”: 使用 类 模板 需要 模板 参数列表
+E:\ademo\REngine\src\Resources\Buffer.h(4): message : 参见“Buffer”的声明
+E:\ademo\REngine\src\Resources\UploadBuffer.h(66): message : 查看对正在编译的 类 模板 实例化“UploadBuffer<T>”的引用
+E:\ademo\REngine\src\Resources\UploadBuffer.h(18,1): error C2027: 使用了未定义类型“Device”
+E:\ademo\REngine\src\DXRuntime\Device.h(5): message : 参见“Device”的声明
+E:\ademo\REngine\src\Resources\UploadBuffer.h(18,1): error C2955: “DxException”: 使用 类 模板 需要 模板 参数列表
+E:\ademo\REngine\src\Utility\d3dUtil.h(130): message : 参见“DxException”的声明
+E:\ademo\REngine\src\Resources\UploadBuffer.h(18,1): message : “DxException”: 函数声明必须可用，因为所有参数都不依赖于模板参数
+E:\ademo\REngine\src\Resources\UploadBuffer.h(26,9): error C2955: “DxException”: 使用 类 模板 需要 模板 参数列表
+E:\ademo\REngine\src\Utility\d3dUtil.h(130): message : 参见“DxException”的声明
+E:\ademo\REngine\src\Resources\UploadBuffer.h(26,9): message : “DxException”: 函数声明必须可用，因为所有参数都不依赖于模板参数
+E:\ademo\REngine\src\Light\Light.h(10,54): error C2131: 表达式的计算结果不是常数
+E:\ademo\REngine\src\Light\Light.h(10,54): message : 遇到非常量(子)表达式
+E:\ademo\REngine\src\Light\Light.h(11,30): error C2131: 表达式的计算结果不是常数
+E:\ademo\REngine\src\Light\Light.h(11,30): message : 遇到非常量(子)表达式
+E:\ademo\REngine\src\Light\Light.h(12,56): error C2131: 表达式的计算结果不是常数
+E:\ademo\REngine\src\Light\Light.h(12,56): message : 遇到非常量(子)表达式
+E:\ademo\REngine\src\Light\Light.h(13,29): error C2131: 表达式的计算结果不是常数
+E:\ademo\REngine\src\Light\Light.h(13,29): message : 遇到非常量(子)表达式
+E:\ademo\REngine\src\Light\Light.h(14,54): error C2131: 表达式的计算结果不是常数
+E:\ademo\REngine\src\Light\Light.h(14,54): message : 遇到非常量(子)表达式
+E:\ademo\REngine\src\Light\Light.h(15,28): error C2131: 表达式的计算结果不是常数
+E:\ademo\REngine\src\Light\Light.h(15,28): message : 遇到非常量(子)表达式
+E:\ademo\REngine\src\Material\Materials.h(9,62): error C2131: 表达式的计算结果不是常数
+E:\ademo\REngine\src\Material\Materials.h(9,62): message : 遇到非常量(子)表达式
+E:\ademo\REngine\src\Material\Materials.h(10,55): error C2131: 表达式的计算结果不是常数
+E:\ademo\REngine\src\Material\Materials.h(10,55): message : 遇到非常量(子)表达式
+E:\ademo\REngine\src\Material\Materials.h(11,25): error C2131: 表达式的计算结果不是常数
+E:\ademo\REngine\src\Material\Materials.h(11,25): message : 遇到非常量(子)表达式
+E:\ademo\REngine\src\Material\Materials.h(13,62): error C2131: 表达式的计算结果不是常数
+E:\ademo\REngine\src\Material\Materials.h(13,62): message : 遇到非常量(子)表达式
+E:\ademo\REngine\src\Material\Materials.h(14,26): error C2131: 表达式的计算结果不是常数
+E:\ademo\REngine\src\Material\Materials.h(14,26): message : 遇到非常量(子)表达式
+E:\ademo\REngine\src\Material\Materials.h(26,23): error C2059: 语法错误:“=”
+E:\ademo\REngine\src\Material\Materials.h(26,38): error C2238: 意外的标记位于“;”之前
+E:\ademo\REngine\src\Material\Materials.h(27,16): error C2059: 语法错误:“=”
+E:\ademo\REngine\src\Material\Materials.h(27,30): error C2238: 意外的标记位于“;”之前
+E:\ademo\REngine\src\Material\Materials.h(29,2): error C2628: “Material”后面接“void”是非法的(是否忘记了“;”?)
+E:\ademo\REngine\src\Material\Materials.h(31,3): error C2065: “DiffuseSrvHeapIndex”: 未声明的标识符
+E:\ademo\REngine\src\Material\Materials.h(35,3): error C2065: “MatTransform”: 未声明的标识符
+E:\ademo\REngine\src\Material\Materials.h(39,20): error C2065: “MatTransform”: 未声明的标识符
+E:\ademo\REngine\src\Material\Materials.h(44,3): error C3861: “MatTransform”: 找不到标识符
+E:\ademo\REngine\src\Material\Materials.h(46,56): error C3861: “MatTransform”: 找不到标识符
+E:\ademo\REngine\src\Material\Materials.h(49,3): error C2065: “NumFramesDirty”: 未声明的标识符
+E:\ademo\REngine\src\Material\Materials.h(52,32): error C2065: “NumFramesDirty”: 未声明的标识符
+E:\ademo\REngine\src\Material\Materials.h(54,40): error C2065: “DiffuseSrvHeapIndex”: 未声明的标识符
+E:\ademo\REngine\src\Material\Materials.h(55,31): error C2065: “MatCBIndex”: 未声明的标识符
+E:\ademo\REngine\src\Material\Materials.h(56,35): error C2065: “NumFramesDirty”: 未声明的标识符
+E:\ademo\REngine\src\Material\Materials.h(57,48): error C2065: “DiffuseAlbedo”: 未声明的标识符
+E:\ademo\REngine\src\Material\Materials.h(58,42): error C2065: “FresnelR0”: 未声明的标识符
+E:\ademo\REngine\src\Material\Materials.h(59,30): error C2065: “Roughness”: 未声明的标识符
+E:\ademo\REngine\src\Material\Materials.h(60,49): error C2065: “MatTransform”: 未声明的标识符
+E:\ademo\REngine\src\Material\Materials.h(61,11): error C2588: “::~Material”: 非法的全局 析构函数
+E:\ademo\REngine\src\Material\Materials.h(62,1): error C2059: 语法错误:“private”
+E:\ademo\REngine\src\Material\Materials.h(77,1): error C2059: 语法错误:“}”
+E:\ademo\REngine\src\Material\Materials.h(77,1): error C2143: 语法错误: 缺少“;”(在“}”的前面)
+E:\ademo\REngine\src\Resources\FrameResource.h(11,58): error C2131: 表达式的计算结果不是常数
+E:\ademo\REngine\src\Resources\FrameResource.h(11,58): message : 遇到非常量(子)表达式
+E:\ademo\REngine\src\Resources\FrameResource.h(12,65): error C2131: 表达式的计算结果不是常数
+E:\ademo\REngine\src\Resources\FrameResource.h(12,65): message : 遇到非常量(子)表达式
+E:\ademo\REngine\src\Resources\FrameResource.h(21,57): error C2131: 表达式的计算结果不是常数
+E:\ademo\REngine\src\Resources\FrameResource.h(21,57): message : 遇到非常量(子)表达式
+E:\ademo\REngine\src\Resources\FrameResource.h(22,60): error C2131: 表达式的计算结果不是常数
+E:\ademo\REngine\src\Resources\FrameResource.h(22,60): message : 遇到非常量(子)表达式
+E:\ademo\REngine\src\Resources\FrameResource.h(23,57): error C2131: 表达式的计算结果不是常数
+E:\ademo\REngine\src\Resources\FrameResource.h(23,57): message : 遇到非常量(子)表达式
+E:\ademo\REngine\src\Resources\FrameResource.h(24,60): error C2131: 表达式的计算结果不是常数
+E:\ademo\REngine\src\Resources\FrameResource.h(24,60): message : 遇到非常量(子)表达式
+E:\ademo\REngine\src\Resources\FrameResource.h(25,61): error C2131: 表达式的计算结果不是常数
+E:\ademo\REngine\src\Resources\FrameResource.h(25,61): message : 遇到非常量(子)表达式
+E:\ademo\REngine\src\Resources\FrameResource.h(26,64): error C2131: 表达式的计算结果不是常数
+E:\ademo\REngine\src\Resources\FrameResource.h(26,64): message : 遇到非常量(子)表达式
+E:\ademo\REngine\src\Resources\FrameResource.h(27,53): error C2131: 表达式的计算结果不是常数
+E:\ademo\REngine\src\Resources\FrameResource.h(27,53): message : 遇到非常量(子)表达式
+E:\ademo\REngine\src\Resources\FrameResource.h(28,33): error C2131: 表达式的计算结果不是常数
+E:\ademo\REngine\src\Resources\FrameResource.h(28,33): message : 遇到非常量(子)表达式
+E:\ademo\REngine\src\Resources\FrameResource.h(29,56): error C2131: 表达式的计算结果不是常数
+E:\ademo\REngine\src\Resources\FrameResource.h(29,56): message : 遇到非常量(子)表达式
+E:\ademo\REngine\src\Resources\FrameResource.h(30,59): error C2131: 表达式的计算结果不是常数
+E:\ademo\REngine\src\Resources\FrameResource.h(30,59): message : 遇到非常量(子)表达式
+E:\ademo\REngine\src\Resources\FrameResource.h(31,23): error C2131: 表达式的计算结果不是常数
+E:\ademo\REngine\src\Resources\FrameResource.h(31,23): message : 遇到非常量(子)表达式
+E:\ademo\REngine\src\Resources\FrameResource.h(32,22): error C2131: 表达式的计算结果不是常数
+E:\ademo\REngine\src\Resources\FrameResource.h(32,22): message : 遇到非常量(子)表达式
+E:\ademo\REngine\src\Resources\FrameResource.h(33,27): error C2131: 表达式的计算结果不是常数
+E:\ademo\REngine\src\Resources\FrameResource.h(33,27): message : 遇到非常量(子)表达式
+E:\ademo\REngine\src\Resources\FrameResource.h(34,27): error C2131: 表达式的计算结果不是常数
+E:\ademo\REngine\src\Resources\FrameResource.h(34,27): message : 遇到非常量(子)表达式
+E:\ademo\REngine\src\Resources\FrameResource.h(35,64): error C2131: 表达式的计算结果不是常数
+E:\ademo\REngine\src\Resources\FrameResource.h(35,64): message : 遇到非常量(子)表达式
+E:\ademo\REngine\src\Resources\FrameResource.h(37,60): error C2131: 表达式的计算结果不是常数
+E:\ademo\REngine\src\Resources\FrameResource.h(37,60): message : 遇到非常量(子)表达式
+E:\ademo\REngine\src\Resources\FrameResource.h(38,27): error C2131: 表达式的计算结果不是常数
+E:\ademo\REngine\src\Resources\FrameResource.h(38,27): message : 遇到非常量(子)表达式
+E:\ademo\REngine\src\Resources\FrameResource.h(39,29): error C2131: 表达式的计算结果不是常数
+E:\ademo\REngine\src\Resources\FrameResource.h(39,29): message : 遇到非常量(子)表达式
+E:\ademo\REngine\src\Resources\FrameResource.h(65,66): error C2131: 表达式的计算结果不是常数
+E:\ademo\REngine\src\Resources\FrameResource.h(65,66): message : 遇到非常量(子)表达式
+E:\ademo\REngine\src\Resources\FrameResource.h(66,70): error C2131: 表达式的计算结果不是常数
+E:\ademo\REngine\src\Resources\FrameResource.h(66,70): message : 遇到非常量(子)表达式
+E:\ademo\REngine\src\Resources\FrameResource.h(67,73): error C2131: 表达式的计算结果不是常数
+E:\ademo\REngine\src\Resources\FrameResource.h(67,73): message : 遇到非常量(子)表达式
+E:\ademo\REngine\src\Resources\FrameResource.h(69,57): error C2131: 表达式的计算结果不是常数
+E:\ademo\REngine\src\Resources\FrameResource.h(69,57): message : 遇到非常量(子)表达式
+E:\ademo\REngine\src\Resources\FrameResource.h(72,21): error C2131: 表达式的计算结果不是常数
+E:\ademo\REngine\src\Resources\FrameResource.h(72,21): message : 遇到非常量(子)表达式
+E:\ademo\REngine\src\Geometry\MeshGeometry.h(6,21): error C2131: 表达式的计算结果不是常数
+E:\ademo\REngine\src\Geometry\MeshGeometry.h(6,21): message : 遇到非常量(子)表达式
+E:\ademo\REngine\src\Geometry\MeshGeometry.h(7,29): error C2131: 表达式的计算结果不是常数
+E:\ademo\REngine\src\Geometry\MeshGeometry.h(7,29): message : 遇到非常量(子)表达式
+E:\ademo\REngine\src\Geometry\MeshGeometry.h(8,28): error C2131: 表达式的计算结果不是常数
+E:\ademo\REngine\src\Geometry\MeshGeometry.h(8,28): message : 遇到非常量(子)表达式
+E:\ademo\REngine\src\Geometry\MeshGeometry.h(30,70): error C2065: “name”: 未声明的标识符
+E:\ademo\REngine\src\Geometry\MeshGeometry.h(30,76): error C2059: 语法错误:“=”
+E:\ademo\REngine\src\Geometry\MeshGeometry.h(30,81): error C2238: 意外的标记位于“;”之前
+E:\ademo\REngine\src\Geometry\MeshGeometry.h(31,19): error C2146: 语法错误: 缺少“;”(在标识符“GetSubMesh”的前面)
+E:\ademo\REngine\src\Geometry\MeshGeometry.h(31,49): error C4430: 缺少类型说明符 - 假定为 int。注意: C++ 不支持默认 int
+E:\ademo\REngine\src\Geometry\MeshGeometry.h(31,58): error C2065: “m_DrawArgs”: 未声明的标识符
+E:\ademo\REngine\src\Geometry\MeshGeometry.h(31,51): warning C4508: “GetSubMesh”: 函数应返回一个值；假定“void”返回类型
+E:\ademo\REngine\src\Geometry\MeshGeometry.h(31,76): error C2617: “GetSubMesh”: return 语句不一致
+E:\ademo\REngine\src\Geometry\MeshGeometry.h(31): message : 参见“GetSubMesh”的声明
+E:\ademo\REngine\src\Geometry\MeshGeometry.h(33,54): error C2065: “m_VertexBufferGPU”: 未声明的标识符
+E:\ademo\REngine\src\Geometry\MeshGeometry.h(34,1): error C2059: 语法错误:“private”
+E:\ademo\REngine\src\Geometry\MeshGeometry.h(52,1): error C2059: 语法错误:“}”
+E:\ademo\REngine\src\Geometry\MeshGeometry.h(52,1): error C2143: 语法错误: 缺少“;”(在“}”的前面)
+  LoadObject.cpp
