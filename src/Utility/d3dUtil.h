@@ -30,6 +30,7 @@
 #include "../Texture/DDSTextureLoader.h"
 #include "MathHelper.h"
 #include "Metalib.h"
+#include"../Base/Singleton.h"
 
 extern const int gNumFrameResources;
 

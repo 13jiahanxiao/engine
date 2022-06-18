@@ -6,7 +6,6 @@ using namespace  tinyxml2;
 
 TextureManager::TextureManager()
 {
-
 }
 TextureManager::~TextureManager()
 {
@@ -46,7 +45,7 @@ void TextureManager::LoadTextureXML()
 	}
 }
 
-void TextureManager::LoadTexture(Device* device, ID3D12GraphicsCommandList* cmdList)
+void TextureManager::CreateDDSTexture(Device* device, ID3D12GraphicsCommandList* cmdList)
 {
 	for (auto& [k, v] : m_Textures) 
 	{

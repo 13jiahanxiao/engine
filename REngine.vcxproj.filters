@@ -18,10 +18,10 @@
     <ClCompile Include="src\Animation\AnimationHelper.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="src\Application\d3dApp.cpp">
+    <ClCompile Include="src\Scene\D3DScene.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="src\Application\MyApp.cpp">
+    <ClCompile Include="src\Scene\DefaultScene.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="src\Components\Camera.cpp">
@@ -96,15 +96,18 @@
     <ClCompile Include="src\MainApp.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="src\RenderItem\PsoContainer.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Animation\AnimationHelper.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="src\Application\d3dApp.h">
+    <ClInclude Include="src\Scene\D3DScene.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="src\Application\MyApp.h">
+    <ClInclude Include="src\Scene\DefaultScene.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="src\Components\Camera.h">
@@ -189,6 +192,12 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="src\Wave\Wave.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Base\Singleton.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\RenderItem\PsoContainer.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

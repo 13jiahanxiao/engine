@@ -1,4 +1,4 @@
-#include"Application/MyApp.h"
+#include"Scene/DefaultScene.h"
 using Microsoft::WRL::ComPtr;
 using namespace DirectX;
 using namespace DirectX::PackedVector;
@@ -10,8 +10,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE prevInstance, PSTR cmdLIne, in
 #endif
 	try
 	{
-		MyApp theApp(hInstance);
-		theApp.SetWindows(1280, 720, L"myApp");
+		DefaultScene theApp(hInstance);
+		theApp.SetWindows(1280, 720, L"FirstScene");
 		if (!theApp.Initialize())
 			return 0;
 		return theApp.Run();

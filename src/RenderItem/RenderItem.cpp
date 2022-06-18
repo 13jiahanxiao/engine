@@ -1,16 +1,17 @@
 #include"RenderItem.h"
 
-RenderItemManager::RenderItemManager(int textureHeapNum, Device* device, ID3D12GraphicsCommandList* cmdList): m_Device(device)
+RenderItemManager::RenderItemManager(Device* device, ID3D12GraphicsCommandList* cmdList): m_Device(device)
 {
-	m_TextureHeap = std::make_unique<DescriptorHeap>(m_Device, D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV, textureHeapNum, true);
+	//加载资源
 	m_TextureManager= std::make_unique<TextureManager>();
-
 	m_TextureManager->LoadTextureXML();
+
+	m_TextureHeap = std::make_unique<DescriptorHeap>(m_Device, D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV, m_TextureManager->GetTextureNum(), true);
 
 	m_GeometryManager = std::make_unique<GeometryManager>(m_Device, cmdList);
 
 	//创建描述符
-	m_TextureManager->LoadTexture(m_Device, cmdList);
+	m_TextureManager->CreateDDSTexture(m_Device, cmdList);
 	m_TextureManager->BuildTextureHeap(m_TextureHeap.get());
 }
 

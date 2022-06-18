@@ -29,7 +29,9 @@ public:
 	//构建描述符堆
 	void BuildTextureHeap(DescriptorHeap* heap);
 	//创建描述符
-	void LoadTexture(Device* device, ID3D12GraphicsCommandList* cmdList);
+	void CreateDDSTexture(Device* device, ID3D12GraphicsCommandList* cmdList);
+
+	int GetTextureNum() { return m_Textures.size(); }
 private:
 	std::unordered_map<std::string, std::unique_ptr<Texture>> m_Textures;
 };

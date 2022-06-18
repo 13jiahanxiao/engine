@@ -20,8 +20,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Animation\AnimationHelper.cpp" />
-    <ClCompile Include="src\Application\d3dApp.cpp" />
-    <ClCompile Include="src\Application\MyApp.cpp" />
+    <ClCompile Include="src\Scene\D3DScene.cpp" />
+    <ClCompile Include="src\Scene\DefaultScene.cpp" />
     <ClCompile Include="src\Components\Camera.cpp" />
     <ClCompile Include="src\DXRuntime\Device.cpp" />
     <ClCompile Include="src\Geometry\GeometryGenerator.cpp" />
@@ -31,6 +31,7 @@
     <ClCompile Include="src\Light\Light.cpp" />
     <ClCompile Include="src\MainApp.cpp" />
     <ClCompile Include="src\Material\Materials.cpp" />
+    <ClCompile Include="src\RenderItem\PsoContainer.cpp" />
     <ClCompile Include="src\RenderItem\RenderItem.cpp" />
     <ClCompile Include="src\Resources\Buffer.cpp" />
     <ClCompile Include="src\Resources\DefaultBuffer.cpp" />
@@ -49,8 +50,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Animation\AnimationHelper.h" />
-    <ClInclude Include="src\Application\d3dApp.h" />
-    <ClInclude Include="src\Application\MyApp.h" />
+    <ClInclude Include="src\Scene\D3DScene.h" />
+    <ClInclude Include="src\Scene\DefaultScene.h" />
+    <ClInclude Include="src\Base\Singleton.h" />
     <ClInclude Include="src\Components\Camera.h" />
     <ClInclude Include="src\DXRuntime\Device.h" />
     <ClInclude Include="src\Geometry\GeometryGenerator.h" />
@@ -59,6 +61,7 @@
     <ClInclude Include="src\Geometry\MeshGeometry.h" />
     <ClInclude Include="src\Light\Light.h" />
     <ClInclude Include="src\Material\Materials.h" />
+    <ClInclude Include="src\RenderItem\PsoContainer.h" />
     <ClInclude Include="src\RenderItem\RenderItem.h" />
     <ClInclude Include="src\Resources\Buffer.h" />
     <ClInclude Include="src\Resources\BufferView.h" />
@@ -85,32 +88,32 @@
     <Keyword>Win32Proj</Keyword>
     <ProjectGuid>{c213ade9-275c-4849-abe2-d74c5ddba085}</ProjectGuid>
     <RootNamespace>REngine</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.19041.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.20348.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>

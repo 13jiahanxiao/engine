@@ -51,7 +51,7 @@ class RenderItemManager
 {
 public:
     //初始化texture的管理
-    RenderItemManager(int textureHeapNum,Device* device,ID3D12GraphicsCommandList* cmdList);
+    RenderItemManager(Device* device,ID3D12GraphicsCommandList* cmdList);
     ~RenderItemManager();
     //构建材质
    void BuildMaterial(std::string materialName, int srvIndex, DirectX::XMFLOAT4 diffuseAlbedo, DirectX::XMFLOAT3 fresnelR0, float roughness);
@@ -80,6 +80,7 @@ public:
   GeometryManager* GetMeshManager() {return m_GeometryManager.get();}
 private:
     Device* m_Device;
+
 	std::unordered_map<std::string, std::unique_ptr<Material>> m_Materials;
 
     std::unique_ptr <TextureManager> m_TextureManager;

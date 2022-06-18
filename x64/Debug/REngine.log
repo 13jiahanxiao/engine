@@ -1,0 +1,6 @@
+﻿D:\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.CppBuild.targets(1098,5): warning MSB8027: 名为 PsoContainer.cpp 的两个或更多文件将生成到同一位置的输出。这会导致错误的生成结果。   调用的文件是 src\RenderItem\PsoContainer.cpp, src\Utility\PsoContainer.cpp。
+  D3DScene.cpp
+E:\ademo\REngine\src\Texture\Texture.h(34,22): warning C4267: “return”: 从“size_t”转换到“int”，可能丢失数据
+E:\ademo\REngine\src\RenderItem\RenderItem.h(74,24): warning C4267: “return”: 从“size_t”转换到“int”，可能丢失数据
+E:\ademo\REngine\src\RenderItem\RenderItem.h(75,20): warning C4267: “return”: 从“size_t”转换到“int”，可能丢失数据
+  REngine.vcxproj -> E:\ademo\REngine\x64\Debug\REngine.exe
