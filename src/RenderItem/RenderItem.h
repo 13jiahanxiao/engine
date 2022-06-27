@@ -17,7 +17,9 @@ enum  class  RenderLayer : int
     TexRotate,
     NoTexture,
     Wireframe,
-    Count
+    Mirror,
+    Reflection,
+    Count,
 };
 
 struct RenderItem
@@ -53,8 +55,6 @@ public:
     //初始化texture的管理
     RenderItemManager(Device* device,ID3D12GraphicsCommandList* cmdList);
     ~RenderItemManager();
-    //构建材质
-   void BuildMaterial(std::string materialName, int srvIndex, DirectX::XMFLOAT4 diffuseAlbedo, DirectX::XMFLOAT3 fresnelR0, float roughness);
    //渲染项
    void BuildRenderItem(std::string itemName, RenderLayer renderLayer,
        std::string geoName, std::string argName, std::string materialName,
@@ -69,33 +69,31 @@ public:
    //更新缓冲区
    void UpdateCBs(FrameResource* currentFrameResource);
    void UpdateObjectCBs(UploadBuffer<ObjectConstants>* cb);
-   void UpdateMaterialCBs(UploadBuffer<MaterialData>* cb);
    
-   int MaterialsSize() { return m_Materials.size(); }
-   int ItemsSize() { return m_Ritems.size(); }
+   int ItemsSize() { return mRitems.size(); }
 
-  Material* GetMaterial(std::string name) { return m_Materials[name].get(); }
-  RenderItem* GetRenderItem(std::string name) { return m_Ritems[name].get(); }
+   Material* GetMaterial(std::string name) { return mMaterialManager->GetMaterial(name); }
+   RenderItem* GetRenderItem(std::string name) { return mRitems[name].get(); }
 
-  GeometryManager* GetMeshManager() {return m_GeometryManager.get();}
+   GeometryManager* GetMeshManager() {return mGeometryManager.get();}
+
+   int GetMaterilalsNum() { return  mMaterialManager->MaterilalsSize(); }
 private:
-    Device* m_Device;
+    Device* mDevice;
 
-	std::unordered_map<std::string, std::unique_ptr<Material>> m_Materials;
+    std::unique_ptr <MaterialManager> mMaterialManager;
 
-    std::unique_ptr <TextureManager> m_TextureManager;
+    std::unique_ptr <TextureManager> mTextureManager;
     //绑定贴图资源的heap
-    std::unique_ptr<DescriptorHeap> m_TextureHeap;
+    std::unique_ptr<DescriptorHeap> mTextureHeap;
 
-    std::unordered_map<std::string, std::unique_ptr<RenderItem>> m_Ritems;
+    std::unordered_map<std::string, std::unique_ptr<RenderItem>> mRitems;
 
-    std::unique_ptr <GeometryManager> m_GeometryManager;
+    std::unique_ptr <GeometryManager> mGeometryManager;
 
     //渲染层级管理
-    std::vector<RenderItem*> m_RitemLayer[(int)RenderLayer::Count];
+    std::vector<RenderItem*> mRitemLayer[(int)RenderLayer::Count];
 
-    //材质索引
-    int m_MaterialCBIndex = 0;
     //渲染项的索引
-    int m_ObjectCBIndex = 0;
+    int mObjectCBIndex = 0;
 };

@@ -36,9 +36,9 @@ private:
     void UpdateLight(const GameTimer& gt);
     void AnimateMaterials(const GameTimer& gt);
 
-    void BuildRootSignature();
+    void DrawItems();
 
-    void BuildMaterials();
+    void BuildRootSignature();
 
     //几何
     void BuildSkullGeometry();
@@ -59,7 +59,9 @@ private:
     //列举采样器模式
     std::array<const CD3DX12_STATIC_SAMPLER_DESC, 6> GetStaticSamplers();
     //将缩放和旋转指定到一个矩阵
-    FXMMATRIX PositionMatrix(float scaleX, float scaleY, float scaleZ, float  translateX, float translateY, float translateZ);
+    FXMMATRIX PositionMatrix(float scaleX = 1.0f, float scaleY = 1.0f, float scaleZ = 1.0f,
+        float  translateX = 0.0f, float translateY = 0.0f, float translateZ = 0.0f,
+        float rotationZ = 0.0f);
 	float GetHillsHeight(float x, float z)const;
 	XMFLOAT3 GetHillsNormal(float x, float z)const;
 private:

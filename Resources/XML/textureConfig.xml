@@ -11,4 +11,5 @@
 	<Item name="flarealpha" address="Resources/Textures/flarealpha.dds" index="8"/>
 	<Item name="cow" address="Resources/Textures/cow_dx.dds" index="9"/>
 	<Item name="crate" address="Resources/Textures/rock.dds" index="10"/>
+	<Item name="ice" address="Resources/Textures/ice.dds" index="11"/>
 </texture>

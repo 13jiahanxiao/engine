@@ -3,7 +3,7 @@
 #include "../Resources/FrameResource.h"
 
 const int gNumFrameResources = 3;
-
+using namespace DirectX;
 DefaultScene::DefaultScene(HINSTANCE hInstance)
 	: D3DScene(hInstance)
 {
@@ -27,7 +27,6 @@ bool DefaultScene::Initialize()
 	BuildRootSignature();
 	mPsoContainer = std::make_unique<PsoContainer>(m_Device.get(), mRootSignature);
 	BuildGeometrys();
-	BuildMaterials();
 	BuildRenderItems();
 	BuildFrameResources();
 	BuildPSOs();
@@ -79,11 +78,7 @@ void DefaultScene::Draw(const GameTimer& gt)
 
 	m_ItemManager->SetRootDescriptorTable(mCommandList.Get());
 
-	for (auto& [k, v] : mPsoContainer->GetPsoMap())
-	{
-		mCommandList->SetPipelineState(v.Get());
-		DrawRenderItems(mCommandList.Get(), k);
-	}
+	DrawItems();
 
 	mCommandList->ResourceBarrier(1, rvalue_to_lvalue(CD3DX12_RESOURCE_BARRIER::Transition(CurrentBackBuffer(),
 		D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PRESENT)));
@@ -99,6 +94,21 @@ void DefaultScene::Draw(const GameTimer& gt)
 	mCurrFrameResource->Fence = ++mCurrentFence;
 
 	mCommandQueue->Signal(mFence.Get(), mCurrentFence);
+}
+
+void DefaultScene::DrawItems() 
+{
+	mCommandList->SetPipelineState(mPsoContainer->GetPsoByRenderLayer(RenderLayer::Opaque));
+	DrawRenderItems(mCommandList.Get(), RenderLayer::Opaque);
+
+	mCommandList->OMSetStencilRef(1);
+	mCommandList->SetPipelineState(mPsoContainer->GetPsoByRenderLayer(RenderLayer::Mirror));
+	DrawRenderItems(mCommandList.Get(), RenderLayer::Mirror);
+
+	mCommandList->OMSetStencilRef(0);
+
+	mCommandList->SetPipelineState(mPsoContainer->GetPsoByRenderLayer(RenderLayer::Transparent));
+	DrawRenderItems(mCommandList.Get(), RenderLayer::Transparent);
 }
 
 void DefaultScene::OnResize()
@@ -367,6 +377,7 @@ void DefaultScene::ShapeGeometry()
 	GeometryGenerator::MeshData grid = geoGen.CreateGrid(20.0f, 30.0f, 60, 40);
 	GeometryGenerator::MeshData sphere = geoGen.CreateSphere(0.5f, 20, 20);
 	GeometryGenerator::MeshData cylinder = geoGen.CreateCylinder(0.5f, 0.3f, 3.0f, 20, 20);
+	GeometryGenerator::MeshData mirror = geoGen.CreateGrid(20.0f, 30.0f, 60, 40);
 
 	UINT boxVertexOffset = 0;
 	UINT gridVertexOffset = (UINT)box.Vertices.size();
@@ -589,7 +600,7 @@ void DefaultScene::BuildFrameResources()
 	for (int i = 0; i < gNumFrameResources; ++i)
 	{
 		mFrameResources.push_back(std::make_unique<FrameResource>(m_Device.get(),
-			1, (UINT)m_ItemManager->ItemsSize(), (UINT)m_ItemManager->MaterialsSize(), m_Waves->VertexCount()));
+			1, (UINT)m_ItemManager->ItemsSize(), (UINT)m_ItemManager->GetMaterilalsNum(), m_Waves->VertexCount()));
 	}
 }
 
@@ -637,57 +648,49 @@ void DefaultScene::BuildPSOs()
 	D3D12_GRAPHICS_PIPELINE_STATE_DESC opaqueWireframePsoDesc = mPsoContainer->GetOpaquePsoDesc();
 	opaqueWireframePsoDesc.RasterizerState.FillMode = D3D12_FILL_MODE_WIREFRAME;
 	mPsoContainer->AddPsoContainer(opaqueWireframePsoDesc,RenderLayer::Wireframe);
-}
 
-//定义材料属性
-void DefaultScene::BuildMaterials()
-{
-	m_ItemManager->BuildMaterial("grass", 0, XMFLOAT4(0.2f, 0.6f, 0.2f, 1.0f), XMFLOAT3(0.01f, 0.01f, 0.01f), 0);
-	m_ItemManager->BuildMaterial("water", 1, XMFLOAT4(1.0f, 1.0f, 1.0f, 0.5f), XMFLOAT3(0.1f, 0.1f, 0.1f), 0);
-	m_ItemManager->BuildMaterial("crate",  2, XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f), XMFLOAT3(0.1f, 0.1f, 0.1f), 0.25f);
-	m_ItemManager->BuildMaterial("bricks",  3, XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f), XMFLOAT3(0.02f, 0.02f, 0.02f), 0.1f);
-	m_ItemManager->BuildMaterial("stone",  4, XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f), XMFLOAT3(0.05f, 0.05f, 0.05f), 0.3f);
-	m_ItemManager->BuildMaterial("tile",  5, XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f), XMFLOAT3(0.02f, 0.02f, 0.02f), 0.3f);
-	m_ItemManager->BuildMaterial("wirefence",  6, XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f), XMFLOAT3(0.1f, 0.1f, 0.1f), 0.25f);
-	m_ItemManager->BuildMaterial("flare",  7, XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f), XMFLOAT3(0.1f, 0.1f, 0.1f), 0.25f);
-	m_ItemManager->BuildMaterial("flarealpha",  8, XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f), XMFLOAT3(0.1f, 0.1f, 0.1f), 0.25f);
-	m_ItemManager->BuildMaterial("cow", 9, XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f), XMFLOAT3(0.05f, 0.05f, 0.05), 0.25f);
-	m_ItemManager->BuildMaterial("rock",10, XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f), XMFLOAT3(0.05f, 0.05f, 0.05), 0.25f);
+	//mirror
+	CD3DX12_BLEND_DESC mirrorBlendState(D3D12_DEFAULT);
+	mirrorBlendState.RenderTarget[0].RenderTargetWriteMask = 0;
+
+	D3D12_GRAPHICS_PIPELINE_STATE_DESC markMirrorsPsoDesc = mPsoContainer->GetOpaquePsoDesc();
+	markMirrorsPsoDesc.BlendState = mirrorBlendState;
+	markMirrorsPsoDesc.DepthStencilState = mPsoContainer->GetStencilDefault();
+	mPsoContainer->AddPsoContainer(markMirrorsPsoDesc, RenderLayer::Mirror);
+
+
+	D3D12_GRAPHICS_PIPELINE_STATE_DESC drawReflectionsPsoDesc = mPsoContainer->GetOpaquePsoDesc();
+	drawReflectionsPsoDesc.DepthStencilState = mPsoContainer->GetStencilDefault();
+	drawReflectionsPsoDesc.RasterizerState.CullMode = D3D12_CULL_MODE_BACK;
+	drawReflectionsPsoDesc.RasterizerState.FrontCounterClockwise = true;
+	mPsoContainer->AddPsoContainer(drawReflectionsPsoDesc, RenderLayer::Reflection);
 }
 
 void DefaultScene::BuildRenderItems()
 {
 	//水
 	m_ItemManager->BuildRenderItem("water", RenderLayer::Opaque, "waterGeo", "grid", "water",
-		PositionMatrix(1.0f, 1.0f, 1.0f,0.0f, 0.0f, 0.0f),
-		PositionMatrix(5.0f, 5.0f, 1.0f,0.0f, 0.0f, 0.0f));
+		PositionMatrix(0.5f,0.5f,0.5f,0.0f,-8.0f),PositionMatrix(5.0f, 5.0f));
 	m_WavesRitem= m_ItemManager->GetRenderItem("water");
 	//草地
 	m_ItemManager->BuildRenderItem("grid", RenderLayer::Opaque,  "landGeo", "grid", "grass",
-		PositionMatrix(1.0f, 1.0f, 1.0f, 0.0f, 0.0f, 0.0f),
-		PositionMatrix(5.0f, 5.0f, 1.0f, 0.0f, 0.0f, 0.0f));
+		PositionMatrix(0.5f, 0.5f, 0.5f, 0.0f,- 8.0f),	PositionMatrix(5.0f, 5.0f));
 	m_ItemManager->BuildRenderItem("grass", RenderLayer::Opaque, "shapeGeo", "sphere", "grass",
-		PositionMatrix(3.0f, 3.0f, 3.0f,3.0f, 5.0f, -9.0f),
-		PositionMatrix(1.0f, 1.0f, 1.0f,0.0f, 0.0f, 0.0f));
+		PositionMatrix(3.0f, 3.0f, 3.0f,1.0f, 0.0f, 5.0f),PositionMatrix());
 	m_ItemManager->BuildRenderItem("box", RenderLayer::TexRotate, "shapeGeo","box", "flare",
-		PositionMatrix(3.0f, 3.0f, 3.0f, 3.0f, 9.0f, -9.0f),
-		PositionMatrix(1.0f, 1.0f, 1.0f, 0.0f, 0.0f, 0.0f));
+		PositionMatrix(3.0f, 3.0f, 3.0f, 4.0f, 0.0f, 5.0f),PositionMatrix());
 	m_ItemManager->BuildRenderItem("box2", RenderLayer::Opaque, "shapeGeo", "sphere", "stone",
-		PositionMatrix(3.0f, 3.0f, 3.0f, 7.0f, 2.0f, -9.0f),
-		PositionMatrix(1.0f, 1.0f, 1.0f, 0.0f, 0.0f, 0.0f));
+		PositionMatrix(3.0f, 3.0f, 3.0f, 7.0f, 0.0f, 5.0f),PositionMatrix());
 	m_ItemManager->BuildRenderItem("box3", RenderLayer::AlphaTested, "shapeGeo", "box", "wirefence",
-		PositionMatrix(3.0f, 3.0f, 3.0f,7.0f, 1.0f, -14.0f),
-		PositionMatrix(1.0f, 1.0f, 1.0f, 0.0f, 0.0f, 0.0f));
+		PositionMatrix(3.0f, 3.0f, 3.0f,4.0f, 0.0f, 0.0f),PositionMatrix());
 	m_ItemManager->BuildRenderItem("cow", RenderLayer::Opaque,"loadGeo", "cow", "cow",
-		PositionMatrix(13.0f, 13.0f, 13.0f, 7.0f, 17.0f, -14.0f),
-		PositionMatrix(1.0f, 1.0f, 1.0f, 0.0f, 0.0f, 0.0f));
-	//m_ItemManager->BuildRenderItem("rock", RenderLayer::Opaque, "rockGeo", "rock", "rock",
-	//	PositionMatrix(13.0f, 13.0f, 13.0f, 7.0f, 17.0f, -14.0f),
-	//	PositionMatrix(1.0f, 1.0f, 1.0f, 0.0f, 0.0f, 0.0f));
-	
-	//m_ItemManager->BuildRenderItem("cow1", RenderLayer::Opaque, "skullGeo", "skull", "stone",
-	//	PositionMatrix(13.0f, 13.0f, 13.0f, 7.0f, 17.0f, -14.0f),
-	//	PositionMatrix(1.0f, 1.0f, 1.0f, 0.0f, 0.0f, 0.0f));
+		PositionMatrix(4.0f, 4.0f, 4.0f, 11.0f, 0.0f, 0.0f),PositionMatrix());
+
+	m_ItemManager->BuildRenderItem("mirror", RenderLayer::Opaque, "shapeGeo", "grid", "ice",
+		PositionMatrix(1.0f, 1.0f, 1.0f, 5.0f, -3.0f, 0.0f,0.5),PositionMatrix());
+
+	m_ItemManager->BuildRenderItem("cowReflection", RenderLayer::Reflection, "loadGeo", "cow", "cow",
+		PositionMatrix(4.0f, 4.0f, 4.0f, 11.0f, 0.0f, 0.0f), PositionMatrix());
 }
 
 void DefaultScene::DrawRenderItems(ID3D12GraphicsCommandList* cmdList, RenderLayer name)
@@ -699,10 +702,16 @@ void DefaultScene::DrawRenderItems(ID3D12GraphicsCommandList* cmdList, RenderLay
 	m_ItemManager->DrawRenderItems(objCBByteSize, objectCB->GetGPUVirtualAddress(),cmdList, name);
 }
 
-//大小x旋转 无大小改变为1，无旋转改变为0
-FXMMATRIX DefaultScene::PositionMatrix(float scaleX,float scaleY,float scaleZ, float  translateX,float translateY,float translateZ)
+//大小*旋转*平移 
+FXMMATRIX DefaultScene::PositionMatrix(float scaleX,float scaleY,float scaleZ, 
+	float  translateX,float translateY ,float translateZ ,
+	float rotationZ)
 {
-	return  XMMatrixScaling(scaleX, scaleY, scaleZ) * XMMatrixTranslation(translateX, translateY, translateZ);
+	XMMATRIX Rotate = XMMatrixRotationZ(rotationZ * MathHelper::Pi);
+	XMMATRIX Scale = XMMatrixScaling(scaleX, scaleY, scaleZ);
+	XMMATRIX Offset = XMMatrixTranslation(translateX, translateY, translateZ);
+	XMMATRIX World = Rotate * Scale * Offset;
+	return World;
 }
 
 float DefaultScene::GetHillsHeight(float x, float z)const

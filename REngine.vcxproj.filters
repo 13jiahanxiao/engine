@@ -81,9 +81,6 @@
     <ClCompile Include="src\Utility\MathHelper.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="src\Utility\PsoContainer.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="src\Utility\ReflectableStruct.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
@@ -180,9 +177,6 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="src\Utility\Metalib.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Utility\PsoContainer.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="src\Utility\ReflactableStruct.h">

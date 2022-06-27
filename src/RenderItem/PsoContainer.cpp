@@ -34,6 +34,40 @@ D3D12_GRAPHICS_PIPELINE_STATE_DESC  PsoContainer::GetOpaquePsoDesc()
 	return opaquePsoDesc;
 }
 
+D3D12_DEPTH_STENCIL_DESC   PsoContainer::GetStencilDefault()
+{
+	D3D12_DEPTH_STENCIL_DESC mirrorDSS;
+	//开启深度测试
+	mirrorDSS.DepthEnable = true;
+	//深度测试但是禁止写入
+	mirrorDSS.DepthWriteMask = D3D12_DEPTH_WRITE_MASK_ZERO;
+	//深度小则接受
+	mirrorDSS.DepthFunc = D3D12_COMPARISON_FUNC_LESS;
+	//模板测试开启
+	mirrorDSS.StencilEnable = true;
+	//0xff不会屏蔽任何一位模板值
+	mirrorDSS.StencilReadMask = 0xff;
+	//0xff不会屏蔽任何一位模板值 防止前4位被改写 0x0f
+	mirrorDSS.StencilWriteMask = 0xff;
+
+	//未通过模板测试，该如何操作，保持不变
+	mirrorDSS.FrontFace.StencilFailOp = D3D12_STENCIL_OP_KEEP;
+	//通过模板未通过深度
+	mirrorDSS.FrontFace.StencilDepthFailOp = D3D12_STENCIL_OP_KEEP;
+	//都通过，替代
+	mirrorDSS.FrontFace.StencilPassOp = D3D12_STENCIL_OP_REPLACE;
+	//比较函数
+	mirrorDSS.FrontFace.StencilFunc = D3D12_COMPARISON_FUNC_ALWAYS;
+
+	// 背面设置
+	mirrorDSS.BackFace.StencilFailOp = D3D12_STENCIL_OP_KEEP;
+	mirrorDSS.BackFace.StencilDepthFailOp = D3D12_STENCIL_OP_KEEP;
+	mirrorDSS.BackFace.StencilPassOp = D3D12_STENCIL_OP_REPLACE;
+	mirrorDSS.BackFace.StencilFunc = D3D12_COMPARISON_FUNC_ALWAYS;
+
+	return mirrorDSS;
+}
+
 void PsoContainer::AddPsoContainer(D3D12_GRAPHICS_PIPELINE_STATE_DESC desc,RenderLayer index) 
 {
 	ThrowIfFailed(mDevice->GetDevice()->CreateGraphicsPipelineState(&desc, IID_PPV_ARGS(&mPsos[index])));

@@ -1,8 +1,14 @@
 #pragma once
 
 #include"../Utility/MathHelper.h"
+#include"../Resources/UploadBuffer.h"
+#include"../Tools/tinyxml2.h"
 #include <DirectXMath.h>
 #include<string>
+#include<unordered_map> 
+#include<memory>
+
+using namespace  tinyxml2;
 
 struct MaterialData
 {
@@ -74,4 +80,24 @@ private:
 	DirectX::XMFLOAT3 FresnelR0 ;
 	float Roughness;
 	DirectX::XMFLOAT4X4 MatTransform;
+};
+
+class MaterialManager
+{
+public:
+	MaterialManager(int FrameNum);
+	~MaterialManager();
+
+	void BuildMaterial(std::string materialName, int srvIndex, DirectX::XMFLOAT4 diffuseAlbedo, DirectX::XMFLOAT3 fresnelR0, float roughness);
+	//从xml读取配置的texture地址
+	void LoadMaterialXML();
+
+	int MaterilalsSize() { return mMaterials.size(); }
+	void UpdateMaterialCBs(UploadBuffer<MaterialData>* cb);
+
+	Material* GetMaterial(std::string name) { return mMaterials[name].get(); }
+private:
+	std::unordered_map<std::string, std::unique_ptr<Material>> mMaterials;
+	int mFrameNum = 0;
+	int mMaterialCBIndex = 0;
 };
