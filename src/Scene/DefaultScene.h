@@ -32,6 +32,7 @@ private:
 
     void OnKeyboardInput(const GameTimer& gt);
     void UpdateMainPassCB(const GameTimer& gt);
+    void UpdateReflectPassCB(const GameTimer& gt);
 	void UpdateWaves(const GameTimer& gt);
     void UpdateLight(const GameTimer& gt);
     void AnimateMaterials(const GameTimer& gt);
@@ -71,6 +72,7 @@ private:
     int mCurrFrameResourceIndex = 0;
     
 	PassConstants mMainPassCB;
+    PassConstants mReflectPassCB;
 
 	std::unique_ptr<Waves> m_Waves;
 	RenderItem* m_WavesRitem = nullptr;

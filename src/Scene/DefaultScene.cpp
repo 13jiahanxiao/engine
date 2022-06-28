@@ -70,14 +70,6 @@ void DefaultScene::Draw(const GameTimer& gt)
 	////根参数的起始索引
 	//mCommandList->SetGraphicsRootDescriptorTable(1, passCbvHandle);
 
-	auto passCB = mCurrFrameResource->PassCB->GetResource();
-	mCommandList->SetGraphicsRootConstantBufferView(1, passCB->GetGPUVirtualAddress());
-
-	auto matBuffer = mCurrFrameResource->MaterialBuffer->GetResource();
-	mCommandList->SetGraphicsRootShaderResourceView(2, matBuffer->GetGPUVirtualAddress());
-
-	m_ItemManager->SetRootDescriptorTable(mCommandList.Get());
-
 	DrawItems();
 
 	mCommandList->ResourceBarrier(1, rvalue_to_lvalue(CD3DX12_RESOURCE_BARRIER::Transition(CurrentBackBuffer(),
@@ -98,15 +90,40 @@ void DefaultScene::Draw(const GameTimer& gt)
 
 void DefaultScene::DrawItems() 
 {
+	auto passCB = mCurrFrameResource->PassCB->GetResource();
+	mCommandList->SetGraphicsRootConstantBufferView(1, passCB->GetGPUVirtualAddress());
+
+	auto matBuffer = mCurrFrameResource->MaterialBuffer->GetResource();
+	mCommandList->SetGraphicsRootShaderResourceView(2, matBuffer->GetGPUVirtualAddress());
+
+	m_ItemManager->SetRootDescriptorTable(mCommandList.Get());
+
 	mCommandList->SetPipelineState(mPsoContainer->GetPsoByRenderLayer(RenderLayer::Opaque));
 	DrawRenderItems(mCommandList.Get(), RenderLayer::Opaque);
+
+	mCommandList->SetPipelineState(mPsoContainer->GetPsoByRenderLayer(RenderLayer::AlphaTested));
+	DrawRenderItems(mCommandList.Get(), RenderLayer::AlphaTested);
+
+	mCommandList->SetPipelineState(mPsoContainer->GetPsoByRenderLayer(RenderLayer::TexRotate));
+	DrawRenderItems(mCommandList.Get(), RenderLayer::TexRotate);
 
 	mCommandList->OMSetStencilRef(1);
 	mCommandList->SetPipelineState(mPsoContainer->GetPsoByRenderLayer(RenderLayer::Mirror));
 	DrawRenderItems(mCommandList.Get(), RenderLayer::Mirror);
 
+	//2个pass要在frame体现出来
+	UINT passCBByteSize = d3dUtil::CalcConstantBufferByteSize(sizeof(PassConstants));
+	mCommandList->SetGraphicsRootConstantBufferView(1, passCB->GetGPUVirtualAddress() + 1 * passCBByteSize);
+	mCommandList->SetPipelineState(mPsoContainer->GetPsoByRenderLayer(RenderLayer::Reflection));
+	DrawRenderItems(mCommandList.Get(), RenderLayer::Reflection);
+
+	mCommandList->SetPipelineState(mPsoContainer->GetPsoByRenderLayer(RenderLayer::AlphaTestedAndRefection));
+	DrawRenderItems(mCommandList.Get(), RenderLayer::AlphaTestedAndRefection);
+
+	mCommandList->SetGraphicsRootConstantBufferView(1, passCB->GetGPUVirtualAddress());
 	mCommandList->OMSetStencilRef(0);
 
+	//做混合
 	mCommandList->SetPipelineState(mPsoContainer->GetPsoByRenderLayer(RenderLayer::Transparent));
 	DrawRenderItems(mCommandList.Get(), RenderLayer::Transparent);
 }
@@ -138,6 +155,7 @@ void DefaultScene::Update(const GameTimer& gt)
 	AnimateMaterials(gt);
 	m_ItemManager->UpdateCBs(mCurrFrameResource);
 	UpdateMainPassCB(gt);
+	UpdateReflectPassCB(gt);
 	UpdateWaves(gt);
 }
 
@@ -198,6 +216,21 @@ void DefaultScene::UpdateMainPassCB(const GameTimer& gt)
 
 	auto currPassCB = mCurrFrameResource->PassCB.get();
 	currPassCB->CopyData(0, mMainPassCB);
+}
+
+void DefaultScene::UpdateReflectPassCB(const GameTimer& gt)
+{
+	mReflectPassCB = mMainPassCB;
+
+	XMVECTOR mirrorPlane = XMVectorSet(5.0f, 0.0f, 0.0f, 0.0f); // xy plane
+	XMMATRIX R = XMMatrixReflect(mirrorPlane);
+
+	XMVECTOR lightDir = XMLoadFloat3(&mMainPassCB.Lights[0].Direction);
+	XMVECTOR reflectedLightDir = XMVector3TransformNormal(lightDir, R);
+	XMStoreFloat3(&mReflectPassCB.Lights[0].Direction, reflectedLightDir);
+
+	auto currPassCB = mCurrFrameResource->PassCB.get();
+	currPassCB->CopyData(1, mReflectPassCB);
 }
 
 void DefaultScene::UpdateWaves(const GameTimer& gt)
@@ -600,7 +633,7 @@ void DefaultScene::BuildFrameResources()
 	for (int i = 0; i < gNumFrameResources; ++i)
 	{
 		mFrameResources.push_back(std::make_unique<FrameResource>(m_Device.get(),
-			1, (UINT)m_ItemManager->ItemsSize(), (UINT)m_ItemManager->GetMaterilalsNum(), m_Waves->VertexCount()));
+			2, (UINT)m_ItemManager->ItemsSize(), (UINT)m_ItemManager->GetMaterilalsNum(), m_Waves->VertexCount()));
 	}
 }
 
@@ -658,12 +691,23 @@ void DefaultScene::BuildPSOs()
 	markMirrorsPsoDesc.DepthStencilState = mPsoContainer->GetStencilDefault();
 	mPsoContainer->AddPsoContainer(markMirrorsPsoDesc, RenderLayer::Mirror);
 
-
+	//映射物体
+	D3D12_DEPTH_STENCIL_DESC reflectionsDSS = mPsoContainer->GetStencilDefault();
+	reflectionsDSS.DepthWriteMask = D3D12_DEPTH_WRITE_MASK_ALL;
+	reflectionsDSS.FrontFace.StencilPassOp = D3D12_STENCIL_OP_KEEP;
+	reflectionsDSS.FrontFace.StencilFunc = D3D12_COMPARISON_FUNC_EQUAL;
+	reflectionsDSS.BackFace.StencilPassOp = D3D12_STENCIL_OP_KEEP;
+	reflectionsDSS.BackFace.StencilFunc = D3D12_COMPARISON_FUNC_EQUAL;
 	D3D12_GRAPHICS_PIPELINE_STATE_DESC drawReflectionsPsoDesc = mPsoContainer->GetOpaquePsoDesc();
-	drawReflectionsPsoDesc.DepthStencilState = mPsoContainer->GetStencilDefault();
-	drawReflectionsPsoDesc.RasterizerState.CullMode = D3D12_CULL_MODE_BACK;
+	drawReflectionsPsoDesc.DepthStencilState = reflectionsDSS;
+	drawReflectionsPsoDesc.RasterizerState.CullMode = D3D12_CULL_MODE_FRONT;
 	drawReflectionsPsoDesc.RasterizerState.FrontCounterClockwise = true;
 	mPsoContainer->AddPsoContainer(drawReflectionsPsoDesc, RenderLayer::Reflection);
+
+	D3D12_GRAPHICS_PIPELINE_STATE_DESC alphatextAndReflect = drawReflectionsPsoDesc;
+	alphatextAndReflect.PS = mPsoContainer->SetShader("alphaTestedPS");
+	alphatextAndReflect.RasterizerState.CullMode = D3D12_CULL_MODE_NONE;
+	mPsoContainer->AddPsoContainer(alphaTestedPsoDesc, RenderLayer::AlphaTestedAndRefection);
 }
 
 void DefaultScene::BuildRenderItems()
@@ -676,21 +720,33 @@ void DefaultScene::BuildRenderItems()
 	m_ItemManager->BuildRenderItem("grid", RenderLayer::Opaque,  "landGeo", "grid", "grass",
 		PositionMatrix(0.5f, 0.5f, 0.5f, 0.0f,- 8.0f),	PositionMatrix(5.0f, 5.0f));
 	m_ItemManager->BuildRenderItem("grass", RenderLayer::Opaque, "shapeGeo", "sphere", "grass",
-		PositionMatrix(3.0f, 3.0f, 3.0f,1.0f, 0.0f, 5.0f),PositionMatrix());
-	m_ItemManager->BuildRenderItem("box", RenderLayer::TexRotate, "shapeGeo","box", "flare",
-		PositionMatrix(3.0f, 3.0f, 3.0f, 4.0f, 0.0f, 5.0f),PositionMatrix());
-	m_ItemManager->BuildRenderItem("box2", RenderLayer::Opaque, "shapeGeo", "sphere", "stone",
+		PositionMatrix(3.0f, 3.0f, 3.0f,7.0f, 0.0f, 15.0f),PositionMatrix());
+	m_ItemManager->BuildRenderItem("sphere", RenderLayer::Opaque, "shapeGeo", "sphere", "stone",
 		PositionMatrix(3.0f, 3.0f, 3.0f, 7.0f, 0.0f, 5.0f),PositionMatrix());
-	m_ItemManager->BuildRenderItem("box3", RenderLayer::AlphaTested, "shapeGeo", "box", "wirefence",
-		PositionMatrix(3.0f, 3.0f, 3.0f,4.0f, 0.0f, 0.0f),PositionMatrix());
-	m_ItemManager->BuildRenderItem("cow", RenderLayer::Opaque,"loadGeo", "cow", "cow",
-		PositionMatrix(4.0f, 4.0f, 4.0f, 11.0f, 0.0f, 0.0f),PositionMatrix());
+	m_ItemManager->BuildRenderItem("cow", RenderLayer::Opaque, "loadGeo", "cow", "cow",
+		PositionMatrix(4.0f, 4.0f, 4.0f, 11.0f), PositionMatrix());
+	//这里旋转针对材质
+	m_ItemManager->BuildRenderItem("flareBox", RenderLayer::TexRotate, "shapeGeo", "box", "flare",
+		PositionMatrix(3.0f, 3.0f, 3.0f, 10.0f, 0.0f, -5.0f), PositionMatrix());
+	m_ItemManager->BuildRenderItem("wirefenceBox", RenderLayer::AlphaTested, "shapeGeo", "box", "wirefence",
+		PositionMatrix(3.0f, 3.0f, 3.0f,10.0f, 0.0f, -10.0f),PositionMatrix());
 
-	m_ItemManager->BuildRenderItem("mirror", RenderLayer::Opaque, "shapeGeo", "grid", "ice",
-		PositionMatrix(1.0f, 1.0f, 1.0f, 5.0f, -3.0f, 0.0f,0.5),PositionMatrix());
+
+	m_ItemManager->BuildRenderItem("mirror", RenderLayer::Mirror, "shapeGeo", "grid", "ice",
+		PositionMatrix(1.0f, 1.0f, 1.0f, 5.0f, -3.0f, 0.0f,-0.5),PositionMatrix());
 
 	m_ItemManager->BuildRenderItem("cowReflection", RenderLayer::Reflection, "loadGeo", "cow", "cow",
-		PositionMatrix(4.0f, 4.0f, 4.0f, 11.0f, 0.0f, 0.0f), PositionMatrix());
+		PositionMatrix(4.0f, 4.0f, 4.0f, -1.0f), PositionMatrix());
+	m_ItemManager->BuildRenderItem("grassReflection", RenderLayer::Reflection, "shapeGeo", "sphere", "grass",
+		PositionMatrix(3.0f, 3.0f, 3.0f, 3.0f, 0.0f, 15.0f), PositionMatrix());
+	m_ItemManager->BuildRenderItem("sphereReflection", RenderLayer::Reflection, "shapeGeo", "sphere", "stone",
+		PositionMatrix(3.0f, 3.0f, 3.0f, 3.0f, 0.0f, 5.0f), PositionMatrix());
+	m_ItemManager->BuildRenderItem("flareBoxR", RenderLayer::Reflection, "shapeGeo", "sphere", "flare",
+		PositionMatrix(3.0f, 3.0f, 3.0f, 0.0f, 0.0f, -5.0f), PositionMatrix());
+	m_ItemManager->BuildRenderItem("wirefenceBoxR", RenderLayer::AlphaTestedAndRefection, "shapeGeo", "box", "wirefence",
+		PositionMatrix(3.0f, 3.0f, 3.0f, 0.0f, 0.0f, -10.0f), PositionMatrix());
+
+	m_ItemManager->AddRenderItemInLayer("mirror", RenderLayer::Transparent);
 }
 
 void DefaultScene::DrawRenderItems(ID3D12GraphicsCommandList* cmdList, RenderLayer name)
@@ -710,7 +766,7 @@ FXMMATRIX DefaultScene::PositionMatrix(float scaleX,float scaleY,float scaleZ,
 	XMMATRIX Rotate = XMMatrixRotationZ(rotationZ * MathHelper::Pi);
 	XMMATRIX Scale = XMMatrixScaling(scaleX, scaleY, scaleZ);
 	XMMATRIX Offset = XMMatrixTranslation(translateX, translateY, translateZ);
-	XMMATRIX World = Rotate * Scale * Offset;
+	XMMATRIX World = Scale*Rotate * Offset;
 	return World;
 }
 

@@ -19,6 +19,7 @@ enum  class  RenderLayer : int
     Wireframe,
     Mirror,
     Reflection,
+    AlphaTestedAndRefection,
     Count,
 };
 
@@ -70,6 +71,7 @@ public:
    void UpdateCBs(FrameResource* currentFrameResource);
    void UpdateObjectCBs(UploadBuffer<ObjectConstants>* cb);
    
+   void AddRenderItemInLayer(std::string itemName, RenderLayer renderLayer);
    int ItemsSize() { return mRitems.size(); }
 
    Material* GetMaterial(std::string name) { return mMaterialManager->GetMaterial(name); }

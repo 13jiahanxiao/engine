@@ -23,6 +23,13 @@ RenderItemManager::~RenderItemManager()
 
 }
 
+void RenderItemManager::AddRenderItemInLayer(std::string itemName, RenderLayer renderLayer)
+{
+	auto item = mRitems[itemName].get();
+	if(item)
+		mRitemLayer[(int)renderLayer].push_back(item);
+}
+
 //每个要渲染的物体指定属性
 void RenderItemManager::BuildRenderItem(std::string itemName, RenderLayer renderLayer,
 	std::string geoName, std::string argName, std::string materialName,

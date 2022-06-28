@@ -30,7 +30,7 @@ D3D12_GRAPHICS_PIPELINE_STATE_DESC  PsoContainer::GetOpaquePsoDesc()
 	opaquePsoDesc.SampleDesc.Count = m4xMsaaState ? 4 : 1;
 	opaquePsoDesc.SampleDesc.Quality = m4xMsaaState ? (m4xMsaaQuality - 1) : 0;
 	opaquePsoDesc.DSVFormat = mDepthStencilFormat;
-	opaquePsoDesc.RasterizerState.CullMode = D3D12_CULL_MODE_NONE;
+	opaquePsoDesc.RasterizerState.CullMode = D3D12_CULL_MODE_BACK;
 	return opaquePsoDesc;
 }
 
