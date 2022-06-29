@@ -10,6 +10,7 @@ public:
 	GeometryManager(Device* device, ID3D12GraphicsCommandList* cmdList);
 	~GeometryManager();
 	void CreateMesh(std::string name,std::vector<Vertex> vertices, std::vector<std::uint16_t> indices);
+	void CreateGeoMesh(std::string name, std::vector<GeoVertex> vertices, std::vector<std::uint16_t> indices);
 	void CreateSubMesh(std::string name, std::string subName, UINT IndexCount, UINT StartIndexLocation, INT BaseVertexLocation);
 	void CreateMeshVertexUpload(std::string name, UINT vbSize, std::vector<std::uint16_t> indices);
 	MeshGeometry* GetGeo(std::string name) { return m_Geometries[name].get(); }

@@ -15,7 +15,7 @@ D3D12_GRAPHICS_PIPELINE_STATE_DESC  PsoContainer::GetOpaquePsoDesc()
 {
 	D3D12_GRAPHICS_PIPELINE_STATE_DESC  opaquePsoDesc;
 	ZeroMemory(&opaquePsoDesc, sizeof(D3D12_GRAPHICS_PIPELINE_STATE_DESC));
-	opaquePsoDesc.InputLayout = mShaders->GetInputLayout();
+	opaquePsoDesc.InputLayout = GetVerInputLayout();
 	opaquePsoDesc.pRootSignature = mRootSign.Get();
 	opaquePsoDesc.VS = mShaders->GetShaderBYTE("standardVS");
 	opaquePsoDesc.PS = mShaders->GetShaderBYTE("opaquePS");
@@ -97,11 +97,24 @@ void PsoContainer::BuildShadersAndInputLayout()
 	mShaders->LoadShader("opaquePS", L"Resources\\Shaders\\Default.hlsl", defines, "PS", "ps_5_1");
 	mShaders->LoadShader("alphaTestedPS", L"Resources\\Shaders\\Default.hlsl", alphaTestDefines, "PS", "ps_5_1");
 
-	mShaders->SetInputLayout(
+	mShaders->LoadShader("treeSpriteVS", L"Resources\\Shaders\\TreeSprite.hlsl",nullptr, "VS", "vs_5_1");
+	mShaders->LoadShader("treeSpriteGS", L"Resources\\Shaders\\TreeSprite.hlsl", nullptr, "GS", "gs_5_1");
+	mShaders->LoadShader("treeSpritePS", L"Resources\\Shaders\\TreeSprite.hlsl", alphaTestDefines, "PS", "ps_5_1");
+
+	mShaders->SetVerInputLayout
+	(
 		{
 			{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
 			{ "NORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 12, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
 			{ "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 24, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
+		}
+	);
+
+	mShaders->SetGeoInputLayout
+	(
+		{
+			{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
+			{ "SIZE", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 12, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
 		}
 	);
 }
@@ -109,4 +122,13 @@ void PsoContainer::BuildShadersAndInputLayout()
 D3D12_SHADER_BYTECODE PsoContainer::SetShader(std::string name)
 {
 	return mShaders->GetShaderBYTE(name);
+}
+
+D3D12_INPUT_LAYOUT_DESC PsoContainer::GetVerInputLayout()
+{
+	return mShaders->GetVerInputLayout();;
+}
+D3D12_INPUT_LAYOUT_DESC PsoContainer::GetGeoInputLayout()
+{
+	return mShaders->GetGeoInputLayout();
 }

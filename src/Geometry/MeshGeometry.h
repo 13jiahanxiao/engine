@@ -19,6 +19,8 @@ public:
 	~MeshGeometry();
 
 	void InitVertex(Device* device, ID3D12GraphicsCommandList* cmdList, std::vector<Vertex> vertices, UINT vbSize);
+	void InitGeoVertex(Device* device, ID3D12GraphicsCommandList* cmdList, std::vector<GeoVertex> vertices, UINT vbSize);
+
 	void InitIndex(Device* device, ID3D12GraphicsCommandList* cmdList, std::vector<std::uint16_t> indices, UINT ibSize);
 
 	D3D12_VERTEX_BUFFER_VIEW VertexBufferView()const;

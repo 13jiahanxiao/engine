@@ -20,6 +20,7 @@ enum  class  RenderLayer : int
     Mirror,
     Reflection,
     AlphaTestedAndRefection,
+    BillBoardTree,
     Count,
 };
 
@@ -59,7 +60,7 @@ public:
    //‰÷»æœÓ
    void BuildRenderItem(std::string itemName, RenderLayer renderLayer,
        std::string geoName, std::string argName, std::string materialName,
-       DirectX::XMMATRIX world, DirectX::XMMATRIX texTransform);
+       DirectX::XMMATRIX world, DirectX::XMMATRIX texTransform, D3D_PRIMITIVE_TOPOLOGY topo= D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
    void DrawRenderItems(UINT objCBByteSize, D3D12_GPU_VIRTUAL_ADDRESS objCBGPUAddress,
        ID3D12GraphicsCommandList* cmdList, RenderLayer name);

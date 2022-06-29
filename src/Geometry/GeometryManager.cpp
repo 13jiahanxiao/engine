@@ -43,3 +43,14 @@ void GeometryManager::LoadMesh(std::string fileName, std::string geoName,std::st
 	CreateMesh(geoName, lo.m_Vertices, lo.m_Indices);
 	CreateSubMesh(geoName, subName, (UINT)lo.m_Indices.size(), 0, 0);
 }
+
+
+void GeometryManager::CreateGeoMesh(std::string name, std::vector<GeoVertex> vertices, std::vector<std::uint16_t> indices)
+{
+	const UINT vbByteSize = (UINT)vertices.size() * sizeof(Vertex);
+	const UINT ibByteSize = (UINT)indices.size() * sizeof(std::uint16_t);
+	auto geo = std::make_unique<MeshGeometry>(name, vbByteSize, ibByteSize);
+	geo->InitGeoVertex(m_Device, m_CmdList, vertices, vbByteSize);
+	geo->InitIndex(m_Device, m_CmdList, indices, ibByteSize);
+	m_Geometries[name] = std::move(geo);
+}

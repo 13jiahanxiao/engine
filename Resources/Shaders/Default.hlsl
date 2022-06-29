@@ -30,7 +30,7 @@ struct MaterialData
 };
 
 //srv×ÊÔ´
-Texture2D    gDiffuseMap[11] : register(t0);
+Texture2D    gDiffuseMap[13] : register(t0);
 
 StructuredBuffer<MaterialData> gMaterialData : register(t0, space1);
 

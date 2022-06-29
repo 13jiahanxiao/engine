@@ -3,7 +3,6 @@
 #include "../Resources/FrameResource.h"
 
 const int gNumFrameResources = 3;
-using namespace DirectX;
 DefaultScene::DefaultScene(HINSTANCE hInstance)
 	: D3DScene(hInstance)
 {
@@ -106,6 +105,9 @@ void DefaultScene::DrawItems()
 
 	mCommandList->SetPipelineState(mPsoContainer->GetPsoByRenderLayer(RenderLayer::TexRotate));
 	DrawRenderItems(mCommandList.Get(), RenderLayer::TexRotate);
+
+	mCommandList->SetPipelineState(mPsoContainer->GetPsoByRenderLayer(RenderLayer::BillBoardTree));
+	DrawRenderItems(mCommandList.Get(), RenderLayer::BillBoardTree);
 
 	mCommandList->OMSetStencilRef(1);
 	mCommandList->SetPipelineState(mPsoContainer->GetPsoByRenderLayer(RenderLayer::Mirror));
@@ -511,12 +513,41 @@ void DefaultScene::BuildSkullGeometry()
 	m_ItemManager->GetMeshManager()->CreateMesh("skullGeo", vertices, indices);
 	m_ItemManager->GetMeshManager()->CreateSubMesh("skullGeo", "skull", (UINT)indices.size(), 0, 0);
 }
+void DefaultScene::BillTreeGeometry()
+{
+	static const int treeCount = 16;
+	std::vector<GeoVertex>vertices;
+	std::vector<std::uint16_t>indices;
+	vertices.resize(treeCount);
+	indices.resize(treeCount);
+	for (UINT i = 0; i < treeCount; ++i) 
+	{
+		float x = MathHelper::RandF(-45.0f, 45.0f);
+		float z = MathHelper::RandF(-45.0f, 45.0f);
+		float y = GetHillsHeight(x, z);
+
+		// Move tree slightly above land height.
+		y += 8.0f;
+
+		vertices[i].Pos = XMFLOAT3(x, y, z);
+		vertices[i].Size = XMFLOAT2(20.0f, 20.0f);
+		indices[i] = i;
+	}
+
+	const UINT vbByteSize = (UINT)vertices.size() * sizeof(GeoVertex);
+	const UINT ibByteSize = (UINT)indices.size() * sizeof(std::uint16_t);
+
+	m_ItemManager->GetMeshManager()->CreateGeoMesh("treeSpritesGeo", vertices, indices);
+	m_ItemManager->GetMeshManager()->CreateSubMesh("treeSpritesGeo", "points", (UINT)indices.size(), 0, 0);
+}
+
 void DefaultScene::BuildGeometrys()
 {
 	WavesGeometry();
 	LandGeometry();
 	ShapeGeometry();
 	BuildSkullGeometry();
+	BillTreeGeometry();
 	m_ItemManager->GetMeshManager()->LoadMesh("Resources/Models/cow.obj", "loadGeo", "cow");
 }
 #pragma endregion
@@ -581,7 +612,7 @@ void DefaultScene::BuildRootSignature()
 {
 	//11个srv
 	CD3DX12_DESCRIPTOR_RANGE texTable;
-	texTable.Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 11, 0,0);
+	texTable.Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 13, 0,0);
 
 	// 根参数表
 	CD3DX12_ROOT_PARAMETER slotRootParameter[4];
@@ -708,45 +739,60 @@ void DefaultScene::BuildPSOs()
 	alphatextAndReflect.PS = mPsoContainer->SetShader("alphaTestedPS");
 	alphatextAndReflect.RasterizerState.CullMode = D3D12_CULL_MODE_NONE;
 	mPsoContainer->AddPsoContainer(alphaTestedPsoDesc, RenderLayer::AlphaTestedAndRefection);
+
+	D3D12_GRAPHICS_PIPELINE_STATE_DESC treeSpritePsoDesc = mPsoContainer->GetOpaquePsoDesc();
+	treeSpritePsoDesc.InputLayout = mPsoContainer->GetGeoInputLayout();
+	treeSpritePsoDesc.VS = mPsoContainer->SetShader("treeSpriteVS");
+	treeSpritePsoDesc.GS = mPsoContainer->SetShader("treeSpriteGS");
+	treeSpritePsoDesc.PS = mPsoContainer->SetShader("treeSpritePS");
+	treeSpritePsoDesc.PrimitiveTopologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_POINT;
+	treeSpritePsoDesc.RasterizerState.CullMode = D3D12_CULL_MODE_NONE;
+
+	mPsoContainer->AddPsoContainer(treeSpritePsoDesc, RenderLayer::BillBoardTree);
+
+
 }
 
 void DefaultScene::BuildRenderItems()
 {
 	//水
-	m_ItemManager->BuildRenderItem("water", RenderLayer::Opaque, "waterGeo", "grid", "water",
-		PositionMatrix(0.5f,0.5f,0.5f,0.0f,-8.0f),PositionMatrix(5.0f, 5.0f));
+	m_ItemManager->BuildRenderItem("water", RenderLayer::Transparent, "waterGeo", "grid", "water",
+		PositionMatrix(),PositionMatrix(5.0f, 5.0f, 1.0f));
 	m_WavesRitem= m_ItemManager->GetRenderItem("water");
 	//草地
 	m_ItemManager->BuildRenderItem("grid", RenderLayer::Opaque,  "landGeo", "grid", "grass",
-		PositionMatrix(0.5f, 0.5f, 0.5f, 0.0f,- 8.0f),	PositionMatrix(5.0f, 5.0f));
+		PositionMatrix(),	PositionMatrix(5.0f, 5.0f, 1.0f));
 	m_ItemManager->BuildRenderItem("grass", RenderLayer::Opaque, "shapeGeo", "sphere", "grass",
-		PositionMatrix(3.0f, 3.0f, 3.0f,7.0f, 0.0f, 15.0f),PositionMatrix());
+		PositionMatrix(3.0f, 3.0f, 3.0f,7.0f, 8.0f, 15.0f),PositionMatrix());
 	m_ItemManager->BuildRenderItem("sphere", RenderLayer::Opaque, "shapeGeo", "sphere", "stone",
-		PositionMatrix(3.0f, 3.0f, 3.0f, 7.0f, 0.0f, 5.0f),PositionMatrix());
+		PositionMatrix(3.0f, 3.0f, 3.0f, 7.0f, 8.0f, 5.0f),PositionMatrix());
 	m_ItemManager->BuildRenderItem("cow", RenderLayer::Opaque, "loadGeo", "cow", "cow",
-		PositionMatrix(4.0f, 4.0f, 4.0f, 11.0f), PositionMatrix());
+		PositionMatrix(4.0f, 4.0f, 4.0f, 11.0f,8.0f), PositionMatrix());
 	//这里旋转针对材质
 	m_ItemManager->BuildRenderItem("flareBox", RenderLayer::TexRotate, "shapeGeo", "box", "flare",
-		PositionMatrix(3.0f, 3.0f, 3.0f, 10.0f, 0.0f, -5.0f), PositionMatrix());
+		PositionMatrix(3.0f, 3.0f, 3.0f, 10.0f, 8.0f, -5.0f), PositionMatrix());
 	m_ItemManager->BuildRenderItem("wirefenceBox", RenderLayer::AlphaTested, "shapeGeo", "box", "wirefence",
-		PositionMatrix(3.0f, 3.0f, 3.0f,10.0f, 0.0f, -10.0f),PositionMatrix());
+		PositionMatrix(3.0f, 3.0f, 3.0f,10.0f, 8.0f, -10.0f),PositionMatrix());
 
 
 	m_ItemManager->BuildRenderItem("mirror", RenderLayer::Mirror, "shapeGeo", "grid", "ice",
-		PositionMatrix(1.0f, 1.0f, 1.0f, 5.0f, -3.0f, 0.0f,-0.5),PositionMatrix());
+		PositionMatrix(1.0f, 1.0f, 1.0f, 5.0f, 8.0f, 0.0f,-0.5),PositionMatrix());
 
 	m_ItemManager->BuildRenderItem("cowReflection", RenderLayer::Reflection, "loadGeo", "cow", "cow",
-		PositionMatrix(4.0f, 4.0f, 4.0f, -1.0f), PositionMatrix());
+		PositionMatrix(4.0f, 4.0f, 4.0f, -1.0f, 8.0f), PositionMatrix());
 	m_ItemManager->BuildRenderItem("grassReflection", RenderLayer::Reflection, "shapeGeo", "sphere", "grass",
-		PositionMatrix(3.0f, 3.0f, 3.0f, 3.0f, 0.0f, 15.0f), PositionMatrix());
+		PositionMatrix(3.0f, 3.0f, 3.0f, 3.0f, 8.0f, 15.0f), PositionMatrix());
 	m_ItemManager->BuildRenderItem("sphereReflection", RenderLayer::Reflection, "shapeGeo", "sphere", "stone",
-		PositionMatrix(3.0f, 3.0f, 3.0f, 3.0f, 0.0f, 5.0f), PositionMatrix());
+		PositionMatrix(3.0f, 3.0f, 3.0f, 3.0f, 8.0f, 5.0f), PositionMatrix());
 	m_ItemManager->BuildRenderItem("flareBoxR", RenderLayer::Reflection, "shapeGeo", "sphere", "flare",
-		PositionMatrix(3.0f, 3.0f, 3.0f, 0.0f, 0.0f, -5.0f), PositionMatrix());
+		PositionMatrix(3.0f, 3.0f, 3.0f, 0.0f, 8.0f, -5.0f), PositionMatrix());
 	m_ItemManager->BuildRenderItem("wirefenceBoxR", RenderLayer::AlphaTestedAndRefection, "shapeGeo", "box", "wirefence",
-		PositionMatrix(3.0f, 3.0f, 3.0f, 0.0f, 0.0f, -10.0f), PositionMatrix());
+		PositionMatrix(3.0f, 3.0f, 3.0f, 0.0f, 8.0f, -10.0f), PositionMatrix());
 
 	m_ItemManager->AddRenderItemInLayer("mirror", RenderLayer::Transparent);
+
+	m_ItemManager->BuildRenderItem("treeSprites", RenderLayer::BillBoardTree, "treeSpritesGeo", "points", "treeTex",
+		PositionMatrix(), PositionMatrix(), D3D11_PRIMITIVE_TOPOLOGY_POINTLIST);
 }
 
 void DefaultScene::DrawRenderItems(ID3D12GraphicsCommandList* cmdList, RenderLayer name)
@@ -763,9 +809,9 @@ FXMMATRIX DefaultScene::PositionMatrix(float scaleX,float scaleY,float scaleZ,
 	float  translateX,float translateY ,float translateZ ,
 	float rotationZ)
 {
-	XMMATRIX Rotate = XMMatrixRotationZ(rotationZ * MathHelper::Pi);
-	XMMATRIX Scale = XMMatrixScaling(scaleX, scaleY, scaleZ);
-	XMMATRIX Offset = XMMatrixTranslation(translateX, translateY, translateZ);
+	XMMATRIX Rotate = DirectX::XMMatrixRotationZ(rotationZ * MathHelper::Pi);
+	XMMATRIX Scale = DirectX::XMMatrixScaling(scaleX, scaleY, scaleZ);
+	XMMATRIX Offset = DirectX::XMMatrixTranslation(translateX, translateY, translateZ);
 	XMMATRIX World = Scale*Rotate * Offset;
 	return World;
 }

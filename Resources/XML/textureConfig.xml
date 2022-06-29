@@ -12,4 +12,5 @@
 	<Item name="cow" address="Resources/Textures/cow_dx.dds" index="9"/>
 	<Item name="crate" address="Resources/Textures/rock.dds" index="10"/>
 	<Item name="ice" address="Resources/Textures/ice.dds" index="11"/>
+  <Item name="tree" address="Resources/Textures/treeArray2.dds" index="12"/>
 </texture>

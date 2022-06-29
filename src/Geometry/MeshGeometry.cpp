@@ -20,6 +20,14 @@ MeshGeometry::~MeshGeometry()
 {
 }
 
+void MeshGeometry::InitGeoVertex(Device* device, ID3D12GraphicsCommandList* cmdList, std::vector<GeoVertex> vertices, UINT vbSize)
+{
+	ThrowIfFailed(D3DCreateBlob(vbSize, &m_VertexBufferCPU));
+	CopyMemory(m_VertexBufferCPU->GetBufferPointer(), vertices.data(), vbSize);
+
+	m_VertexBufferGPU = d3dUtil::CreateDefaultBuffer(device->GetDevice(), cmdList, vertices.data(), vbSize, m_VertexBufferUploader);
+}
+
 void MeshGeometry::InitVertex(Device* device, ID3D12GraphicsCommandList* cmdList, std::vector<Vertex> vertices, UINT vbSize)
 {
 	ThrowIfFailed(D3DCreateBlob(vbSize, &m_VertexBufferCPU));

@@ -33,7 +33,7 @@ void RenderItemManager::AddRenderItemInLayer(std::string itemName, RenderLayer r
 //每个要渲染的物体指定属性
 void RenderItemManager::BuildRenderItem(std::string itemName, RenderLayer renderLayer,
 	std::string geoName, std::string argName, std::string materialName,
-	DirectX::XMMATRIX world, DirectX::XMMATRIX texTransform)
+	DirectX::XMMATRIX world, DirectX::XMMATRIX texTransform, D3D_PRIMITIVE_TOPOLOGY topo)
 {
 	auto Ritem = std::make_unique<RenderItem>();
 	//检查名字重复 todo
@@ -44,7 +44,7 @@ void RenderItemManager::BuildRenderItem(std::string itemName, RenderLayer render
 	mObjectCBIndex++;
 	Ritem->Geo = mGeometryManager->GetGeo(geoName);
 	Ritem->Mat = GetMaterial(materialName);
-	Ritem->PrimitiveType = D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
+	Ritem->PrimitiveType = topo;
 	Ritem->IndexCount = Ritem->Geo->GetSubMesh(argName).IndexCount;
 	Ritem->StartIndexLocation = Ritem->Geo->GetSubMesh(argName).StartIndexLocation;
 	Ritem->BaseVertexLocation = Ritem->Geo->GetSubMesh(argName).BaseVertexLocation;

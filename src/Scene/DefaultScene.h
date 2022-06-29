@@ -47,6 +47,7 @@ private:
     void LandGeometry();
 	void WavesGeometry();
     void ShapeGeometry();
+    void BillTreeGeometry();
     //π‹œﬂ≈‰÷√
     void BuildPSOs();
 

@@ -25,15 +25,24 @@ public:
 
 	D3D12_SHADER_BYTECODE GetShaderBYTE(std::string name);
 
-	void SetInputLayout(std::vector<D3D12_INPUT_ELEMENT_DESC> inputLayout) 
+	void SetVerInputLayout(std::vector<D3D12_INPUT_ELEMENT_DESC> inputLayout) 
 	{
-		m_InputLayout = inputLayout;
+		mVerInputLayout = inputLayout;
 	}
-	D3D12_INPUT_LAYOUT_DESC GetInputLayout()
+	void SetGeoInputLayout(std::vector<D3D12_INPUT_ELEMENT_DESC> inputLayout)
 	{
-		return { m_InputLayout.data(),(UINT)m_InputLayout.size() };
+		mGeoInputLayout = inputLayout;
+	}
+	D3D12_INPUT_LAYOUT_DESC GetVerInputLayout()
+	{
+		return { mVerInputLayout.data(),(UINT)mVerInputLayout.size() };
+	}
+	D3D12_INPUT_LAYOUT_DESC GetGeoInputLayout()
+	{
+		return { mGeoInputLayout.data(),(UINT)mGeoInputLayout.size() };
 	}
 private:
-	std::unordered_map<std::string, Microsoft::WRL::ComPtr<ID3DBlob>> m_Shaders;
-	std::vector<D3D12_INPUT_ELEMENT_DESC> m_InputLayout;
+	std::unordered_map<std::string, Microsoft::WRL::ComPtr<ID3DBlob>> mShaders;
+	std::vector<D3D12_INPUT_ELEMENT_DESC> mVerInputLayout;
+	std::vector<D3D12_INPUT_ELEMENT_DESC> mGeoInputLayout;
 };

@@ -48,6 +48,12 @@ struct Vertex
     DirectX::XMFLOAT3 Normal;
     DirectX::XMFLOAT2 TexC;
 };
+
+struct GeoVertex
+{
+    DirectX::XMFLOAT3 Pos;
+    DirectX::XMFLOAT2 Size;
+};
   
 struct FrameResource
 {

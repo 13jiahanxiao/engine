@@ -44,7 +44,7 @@ void ShaderCompile::LoadShader(const std::string name,
 	const std::string& entrypoint,
 	const std::string& target)
 {
-	m_Shaders[name] = CompileShader(filename, defines, entrypoint, target);
+	mShaders[name] = CompileShader(filename, defines, entrypoint, target);
 }
 
 
@@ -52,7 +52,7 @@ D3D12_SHADER_BYTECODE ShaderCompile::GetShaderBYTE(std::string name)
 {
 	return
 	{
-		reinterpret_cast<BYTE*>(m_Shaders[name]->GetBufferPointer()),
-		m_Shaders[name]->GetBufferSize()
+		reinterpret_cast<BYTE*>(mShaders[name]->GetBufferPointer()),
+		mShaders[name]->GetBufferSize()
 	};
 }

@@ -21,6 +21,8 @@ public:
 	}
 	void BuildShadersAndInputLayout();
 	D3D12_SHADER_BYTECODE SetShader(std::string name);
+	D3D12_INPUT_LAYOUT_DESC GetVerInputLayout();
+	D3D12_INPUT_LAYOUT_DESC GetGeoInputLayout();
 private:
 	Device* mDevice;
 	ComPtr<ID3D12RootSignature> mRootSign;
