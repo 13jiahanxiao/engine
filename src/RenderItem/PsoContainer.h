@@ -9,7 +9,10 @@ public:
 	~PsoContainer();
 	D3D12_GRAPHICS_PIPELINE_STATE_DESC  GetOpaquePsoDesc();
 	D3D12_DEPTH_STENCIL_DESC  GetStencilDefault();
+	D3D12_RENDER_TARGET_BLEND_DESC  GetTransparencyBlendDefault();
 	void AddPsoContainer(D3D12_GRAPHICS_PIPELINE_STATE_DESC desc, RenderLayer index);
+	void AddComputePsoContainer(D3D12_COMPUTE_PIPELINE_STATE_DESC desc, RenderLayer index);
+
 	std::unordered_map<RenderLayer, ComPtr<ID3D12PipelineState>> GetPsoMap() { return mPsos; }
 	ID3D12PipelineState* GetPsoByRenderLayer(RenderLayer index)
 	{
@@ -26,6 +29,7 @@ public:
 private:
 	Device* mDevice;
 	ComPtr<ID3D12RootSignature> mRootSign;
+
 	//Œﬁ–Ú”≥…‰π‹¿Ì
 	std::unordered_map<RenderLayer, ComPtr<ID3D12PipelineState>> mPsos;
 

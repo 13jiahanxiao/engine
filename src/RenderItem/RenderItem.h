@@ -21,6 +21,8 @@ enum  class  RenderLayer : int
     Reflection,
     AlphaTestedAndRefection,
     BillBoardTree,
+    VertBlur,
+    HorzBlur,
     Count,
 };
 
@@ -81,6 +83,8 @@ public:
    GeometryManager* GetMeshManager() {return mGeometryManager.get();}
 
    int GetMaterilalsNum() { return  mMaterialManager->MaterilalsSize(); }
+
+   DescriptorHeap* GetDescriptorHeap() { return mTextureHeap.get(); }
 private:
     Device* mDevice;
 

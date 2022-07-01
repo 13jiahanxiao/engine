@@ -6,7 +6,7 @@ RenderItemManager::RenderItemManager(Device* device, ID3D12GraphicsCommandList* 
 	mTextureManager= std::make_unique<TextureManager>();
 	mTextureManager->LoadTextureXML();
 
-	mTextureHeap = std::make_unique<DescriptorHeap>(mDevice, D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV, mTextureManager->GetTextureNum(), true);
+	mTextureHeap = std::make_unique<DescriptorHeap>(mDevice, D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV, mTextureManager->GetTextureNum()+4, true);
 
 	mGeometryManager = std::make_unique<GeometryManager>(mDevice, cmdList);
 

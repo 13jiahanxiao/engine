@@ -23,8 +23,16 @@ bool DefaultScene::Initialize()
 
 	m_SunLight.SetLight(1.25f * XM_PI, XM_PIDIV4, 1.0f, { 1.0f, 1.0f, 0.9f }, 0);
 
+	mBlurFilter = std::make_unique<BlurFilter>(m_Device->GetDevice(),
+		mClientWidth, mClientHeight, DXGI_FORMAT_R8G8B8A8_UNORM);
+
 	BuildRootSignature();
+	BuildPostProcessRootSignature();
 	mPsoContainer = std::make_unique<PsoContainer>(m_Device.get(), mRootSignature);
+	mBlurFilter->BuildDescriptors(
+		CD3DX12_CPU_DESCRIPTOR_HANDLE(m_ItemManager->GetDescriptorHeap()->GetCPUDescriptorHandleForHeapStart(), 13, mCbvSrvUavDescriptorSize),
+		CD3DX12_GPU_DESCRIPTOR_HANDLE(m_ItemManager->GetDescriptorHeap()->GetGPUDescriptorHandleForHeapStart(), 13, mCbvSrvUavDescriptorSize),
+		mCbvSrvUavDescriptorSize);
 	BuildGeometrys();
 	BuildRenderItems();
 	BuildFrameResources();
@@ -70,6 +78,15 @@ void DefaultScene::Draw(const GameTimer& gt)
 	//mCommandList->SetGraphicsRootDescriptorTable(1, passCbvHandle);
 
 	DrawItems();
+
+	mBlurFilter->Execute(mCommandList.Get(), mPostProcessRootSignature.Get(),mPsoContainer->GetPsoByRenderLayer(RenderLayer::HorzBlur), 
+		mPsoContainer->GetPsoByRenderLayer(RenderLayer::VertBlur), CurrentBackBuffer(), 4);
+
+	// Prepare to copy blurred output to the back buffer.
+	mCommandList->ResourceBarrier(1, rvalue_to_lvalue(CD3DX12_RESOURCE_BARRIER::Transition(CurrentBackBuffer(),
+		D3D12_RESOURCE_STATE_COPY_SOURCE, D3D12_RESOURCE_STATE_COPY_DEST)));
+
+	mCommandList->CopyResource(CurrentBackBuffer(), mBlurFilter->Output());
 
 	mCommandList->ResourceBarrier(1, rvalue_to_lvalue(CD3DX12_RESOURCE_BARRIER::Transition(CurrentBackBuffer(),
 		D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PRESENT)));
@@ -135,6 +152,11 @@ void DefaultScene::OnResize()
 	D3DScene::OnResize();
 
 	m_Camera.SetLens(0.25f * MathHelper::Pi, AspectRatio(), 1.0f, 1000.0f);
+
+	if (mBlurFilter != nullptr)
+	{
+		mBlurFilter->OnResize(mClientWidth, mClientHeight);
+	}
 }
 
 void DefaultScene::Update(const GameTimer& gt)
@@ -658,6 +680,46 @@ void DefaultScene::BuildRootSignature()
 		IID_PPV_ARGS(&mRootSignature)));
 }
 
+void DefaultScene::BuildPostProcessRootSignature()
+{
+	CD3DX12_DESCRIPTOR_RANGE srvTable;
+	srvTable.Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1, 0);
+
+	CD3DX12_DESCRIPTOR_RANGE uavTable;
+	uavTable.Init(D3D12_DESCRIPTOR_RANGE_TYPE_UAV, 1, 0);
+
+	// Root parameter can be a table, root descriptor or root constants.
+	CD3DX12_ROOT_PARAMETER slotRootParameter[3];
+
+	// Perfomance TIP: Order from most frequent to least frequent.
+	slotRootParameter[0].InitAsConstants(12, 0);
+	slotRootParameter[1].InitAsDescriptorTable(1, &srvTable);
+	slotRootParameter[2].InitAsDescriptorTable(1, &uavTable);
+
+	// A root signature is an array of root parameters.
+	CD3DX12_ROOT_SIGNATURE_DESC rootSigDesc(3, slotRootParameter,
+		0, nullptr,
+		D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT);
+
+	// create a root signature with a single slot which points to a descriptor range consisting of a single constant buffer
+	ComPtr<ID3DBlob> serializedRootSig = nullptr;
+	ComPtr<ID3DBlob> errorBlob = nullptr;
+	HRESULT hr = D3D12SerializeRootSignature(&rootSigDesc, D3D_ROOT_SIGNATURE_VERSION_1,
+		serializedRootSig.GetAddressOf(), errorBlob.GetAddressOf());
+
+	if (errorBlob != nullptr)
+	{
+		::OutputDebugStringA((char*)errorBlob->GetBufferPointer());
+	}
+	ThrowIfFailed(hr);
+
+	ThrowIfFailed(m_Device->GetDevice()->CreateRootSignature(
+		0,
+		serializedRootSig->GetBufferPointer(),
+		serializedRootSig->GetBufferSize(),
+		IID_PPV_ARGS(mPostProcessRootSignature.GetAddressOf())));
+}
+
 //cpu gpu之间通信的围栏点
 void DefaultScene::BuildFrameResources()
 {
@@ -687,18 +749,7 @@ void DefaultScene::BuildPSOs()
 	//透明海水混合
 	D3D12_GRAPHICS_PIPELINE_STATE_DESC transparentPsoDesc = mPsoContainer->GetOpaquePsoDesc();
 
-	D3D12_RENDER_TARGET_BLEND_DESC transparencyBlendDesc;
-	transparencyBlendDesc.BlendEnable = true;//混合模式
-	transparencyBlendDesc.LogicOpEnable = false;//逻辑模式 ，和混合模式只能启用一个
-	transparencyBlendDesc.SrcBlend = D3D12_BLEND_SRC_ALPHA;
-	transparencyBlendDesc.DestBlend = D3D12_BLEND_INV_SRC_ALPHA;
-	transparencyBlendDesc.BlendOp = D3D12_BLEND_OP_ADD;
-	transparencyBlendDesc.SrcBlendAlpha = D3D12_BLEND_ONE;
-	transparencyBlendDesc.DestBlendAlpha = D3D12_BLEND_ZERO;
-	transparencyBlendDesc.BlendOpAlpha = D3D12_BLEND_OP_ADD;
-	transparencyBlendDesc.LogicOp = D3D12_LOGIC_OP_NOOP;
-	transparencyBlendDesc.RenderTargetWriteMask = D3D12_COLOR_WRITE_ENABLE_ALL;
-	transparentPsoDesc.BlendState.RenderTarget[0] = transparencyBlendDesc;
+	transparentPsoDesc.BlendState.RenderTarget[0] = mPsoContainer->GetTransparencyBlendDefault();
 
 	mPsoContainer->AddPsoContainer(transparentPsoDesc,RenderLayer::Transparent);
 
@@ -750,7 +801,17 @@ void DefaultScene::BuildPSOs()
 
 	mPsoContainer->AddPsoContainer(treeSpritePsoDesc, RenderLayer::BillBoardTree);
 
+	D3D12_COMPUTE_PIPELINE_STATE_DESC horzBlurPSO = {};
+	horzBlurPSO.pRootSignature = mPostProcessRootSignature.Get();
+	horzBlurPSO.CS = mPsoContainer->SetShader("horzBlurCS");
+	horzBlurPSO.Flags = D3D12_PIPELINE_STATE_FLAG_NONE;
+	mPsoContainer->AddComputePsoContainer(horzBlurPSO, RenderLayer::HorzBlur);
 
+	D3D12_COMPUTE_PIPELINE_STATE_DESC vertBlurPSO = {};
+	vertBlurPSO.pRootSignature = mPostProcessRootSignature.Get();
+	vertBlurPSO.CS = mPsoContainer->SetShader("vertBlurCS");
+	vertBlurPSO.Flags = D3D12_PIPELINE_STATE_FLAG_NONE;
+	mPsoContainer->AddComputePsoContainer(vertBlurPSO, RenderLayer::VertBlur);
 }
 
 void DefaultScene::BuildRenderItems()

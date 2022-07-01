@@ -34,6 +34,22 @@ D3D12_GRAPHICS_PIPELINE_STATE_DESC  PsoContainer::GetOpaquePsoDesc()
 	return opaquePsoDesc;
 }
 
+D3D12_RENDER_TARGET_BLEND_DESC  PsoContainer::GetTransparencyBlendDefault()
+{
+	D3D12_RENDER_TARGET_BLEND_DESC transparencyBlendDesc;
+	transparencyBlendDesc.BlendEnable = true;//混合模式
+	transparencyBlendDesc.LogicOpEnable = false;//逻辑模式 ，和混合模式只能启用一个
+	transparencyBlendDesc.SrcBlend = D3D12_BLEND_SRC_ALPHA;
+	transparencyBlendDesc.DestBlend = D3D12_BLEND_INV_SRC_ALPHA;
+	transparencyBlendDesc.BlendOp = D3D12_BLEND_OP_ADD;
+	transparencyBlendDesc.SrcBlendAlpha = D3D12_BLEND_ONE;
+	transparencyBlendDesc.DestBlendAlpha = D3D12_BLEND_ZERO;
+	transparencyBlendDesc.BlendOpAlpha = D3D12_BLEND_OP_ADD;
+	transparencyBlendDesc.LogicOp = D3D12_LOGIC_OP_NOOP;
+	transparencyBlendDesc.RenderTargetWriteMask = D3D12_COLOR_WRITE_ENABLE_ALL;
+	return transparencyBlendDesc;
+}
+
 D3D12_DEPTH_STENCIL_DESC   PsoContainer::GetStencilDefault()
 {
 	D3D12_DEPTH_STENCIL_DESC mirrorDSS;
@@ -73,6 +89,11 @@ void PsoContainer::AddPsoContainer(D3D12_GRAPHICS_PIPELINE_STATE_DESC desc,Rende
 	ThrowIfFailed(mDevice->GetDevice()->CreateGraphicsPipelineState(&desc, IID_PPV_ARGS(&mPsos[index])));
 }
 
+void PsoContainer::AddComputePsoContainer(D3D12_COMPUTE_PIPELINE_STATE_DESC desc, RenderLayer index)
+{
+	ThrowIfFailed(mDevice->GetDevice()->CreateComputePipelineState(&desc, IID_PPV_ARGS(&mPsos[index])));
+}
+
 void PsoContainer::BuildShadersAndInputLayout()
 {
 	const D3D_SHADER_MACRO rotate[] =
@@ -100,6 +121,9 @@ void PsoContainer::BuildShadersAndInputLayout()
 	mShaders->LoadShader("treeSpriteVS", L"Resources\\Shaders\\TreeSprite.hlsl",nullptr, "VS", "vs_5_1");
 	mShaders->LoadShader("treeSpriteGS", L"Resources\\Shaders\\TreeSprite.hlsl", nullptr, "GS", "gs_5_1");
 	mShaders->LoadShader("treeSpritePS", L"Resources\\Shaders\\TreeSprite.hlsl", alphaTestDefines, "PS", "ps_5_1");
+
+	mShaders->LoadShader("horzBlurCS", L"Resources\\Shaders\\Blur.hlsl", nullptr, "HorzBlurCS", "cs_5_1");
+	mShaders->LoadShader("vertBlurCS", L"Resources\\Shaders\\Blur.hlsl", nullptr, "VertBlurCS", "cs_5_1");
 
 	mShaders->SetVerInputLayout
 	(

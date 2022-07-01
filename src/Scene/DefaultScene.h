@@ -5,8 +5,8 @@
 #include"../Resources/DescriptorHeap.h"
 #include"../Material/Materials.h"
 #include"../Geometry/GeometryManager.h"
+#include"../PostProcess/BlurFilter.h"
 
-const int textureHeapNum = 11;
 using Microsoft::WRL::ComPtr;
 using namespace DirectX;
 using namespace DirectX::PackedVector;
@@ -40,7 +40,7 @@ private:
     void DrawItems();
 
     void BuildRootSignature();
-
+    void BuildPostProcessRootSignature();
     //¼¸ºÎ
     void BuildSkullGeometry();
     void BuildGeometrys();
@@ -83,4 +83,7 @@ private:
     bool mIsWireframe = false;
      
     DirectionLight m_SunLight;
+
+    std::unique_ptr<BlurFilter> mBlurFilter;
+    ComPtr<ID3D12RootSignature> mPostProcessRootSignature = nullptr;
 };
