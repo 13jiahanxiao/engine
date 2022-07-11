@@ -2,20 +2,15 @@
 
 RenderItemManager::RenderItemManager(Device* device, ID3D12GraphicsCommandList* cmdList): mDevice(device)
 {
-	//加载资源
-	mTextureManager= std::make_unique<TextureManager>();
-	mTextureManager->LoadTextureXML();
-
-	mTextureHeap = std::make_unique<DescriptorHeap>(mDevice, D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV, mTextureManager->GetTextureNum()+4, true);
-
 	mGeometryManager = std::make_unique<GeometryManager>(mDevice, cmdList);
 
-	//创建描述符
-	mTextureManager->CreateDDSTexture(mDevice, cmdList);
-	mTextureManager->BuildTextureHeap(mTextureHeap.get());
-
 	mMaterialManager = std::make_unique<MaterialManager>(gNumFrameResources);
-	mMaterialManager->LoadMaterialXML();
+	
+}
+
+void RenderItemManager::Init()
+{
+	mMaterialManager->Init();
 }
 
 RenderItemManager::~RenderItemManager() 
@@ -55,19 +50,6 @@ void RenderItemManager::BuildRenderItem(std::string itemName, RenderLayer render
 
 	//std::move 会把左值变成右值，防止内存的赋值操作，转移后原对象为空
 	mRitems[Ritem->Name] = std::move(Ritem);
-}
-
-void RenderItemManager::SetDescriptorHeaps(ID3D12GraphicsCommandList* cmdList)
-{
-	//指针数组 每个指针指向ID3D12DescriptorHeap
-	ID3D12DescriptorHeap* descriptorHeaps[] = { mTextureHeap->GetHeap() };
-	int x = _countof(descriptorHeaps);
-	cmdList->SetDescriptorHeaps(_countof(descriptorHeaps), descriptorHeaps);
-}
-
-void RenderItemManager::SetRootDescriptorTable(ID3D12GraphicsCommandList* cmdList)
-{
-	cmdList->SetGraphicsRootDescriptorTable(3, mTextureHeap->GetHeap()->GetGPUDescriptorHandleForHeapStart());
 }
 
 void RenderItemManager::DrawRenderItems(UINT objCBByteSize , D3D12_GPU_VIRTUAL_ADDRESS objCBGPUAddress, 

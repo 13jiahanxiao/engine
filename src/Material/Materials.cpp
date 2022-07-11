@@ -52,6 +52,9 @@ Material::~Material()
 {
 
 }
+
+
+
 MaterialManager::MaterialManager(int FrameNum):mFrameNum(FrameNum)
 {
 
@@ -59,6 +62,11 @@ MaterialManager::MaterialManager(int FrameNum):mFrameNum(FrameNum)
 MaterialManager::~MaterialManager() 
 {
 
+}
+
+void MaterialManager::Init()
+{
+	LoadMaterialXML();
 }
 
 void MaterialManager::BuildMaterial(std::string materialName, int srvIndex, DirectX::XMFLOAT4 diffuseAlbedo, DirectX::XMFLOAT3 fresnelR0, float roughness)

@@ -66,10 +66,6 @@ public:
 
    void DrawRenderItems(UINT objCBByteSize, D3D12_GPU_VIRTUAL_ADDRESS objCBGPUAddress,
        ID3D12GraphicsCommandList* cmdList, RenderLayer name);
-
-   //绑定描述符到list
-   void SetDescriptorHeaps(ID3D12GraphicsCommandList* cmdList);
-   void SetRootDescriptorTable(ID3D12GraphicsCommandList* cmdList);
    //更新缓冲区
    void UpdateCBs(FrameResource* currentFrameResource);
    void UpdateObjectCBs(UploadBuffer<ObjectConstants>* cb);
@@ -84,15 +80,11 @@ public:
 
    int GetMaterilalsNum() { return  mMaterialManager->MaterilalsSize(); }
 
-   DescriptorHeap* GetDescriptorHeap() { return mTextureHeap.get(); }
+   void Init();
 private:
     Device* mDevice;
 
     std::unique_ptr <MaterialManager> mMaterialManager;
-
-    std::unique_ptr <TextureManager> mTextureManager;
-    //绑定贴图资源的heap
-    std::unique_ptr<DescriptorHeap> mTextureHeap;
 
     std::unordered_map<std::string, std::unique_ptr<RenderItem>> mRitems;
 

@@ -7,9 +7,15 @@ using namespace  tinyxml2;
 TextureManager::TextureManager()
 {
 }
+
 TextureManager::~TextureManager()
 {
 
+}
+
+void TextureManager::Init() 
+{
+	LoadTextureXML();
 }
 
 void TextureManager::LoadTextureFormXML(std::string name, std::string fileName, int index)

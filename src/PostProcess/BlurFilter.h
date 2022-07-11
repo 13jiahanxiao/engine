@@ -15,9 +15,7 @@ public:
 	/// The width and height should match the dimensions of the input texture to blur.
 	/// Recreate when the screen is resized. 
 	///</summary>
-	BlurFilter(ID3D12Device* device,
-		UINT width, UINT height,
-		DXGI_FORMAT format);
+	BlurFilter(ID3D12Device* device,UINT width, UINT height,DXGI_FORMAT format);
 
 	BlurFilter(const BlurFilter& rhs) = delete;
 	BlurFilter& operator=(const BlurFilter& rhs) = delete;
@@ -25,10 +23,7 @@ public:
 
 	ID3D12Resource* Output();
 
-	void BuildDescriptors(
-		CD3DX12_CPU_DESCRIPTOR_HANDLE hCpuDescriptor,
-		CD3DX12_GPU_DESCRIPTOR_HANDLE hGpuDescriptor,
-		UINT descriptorSize);
+	void BuildDescriptors(CD3DX12_CPU_DESCRIPTOR_HANDLE hCpuDescriptor,CD3DX12_GPU_DESCRIPTOR_HANDLE hGpuDescriptor,UINT descriptorSize);
 
 	void OnResize(UINT newWidth, UINT newHeight);
 
@@ -71,7 +66,7 @@ private:
 	CD3DX12_GPU_DESCRIPTOR_HANDLE mBlur1GpuSrv;
 	CD3DX12_GPU_DESCRIPTOR_HANDLE mBlur1GpuUav;
 
-	// Two for ping-ponging the textures.
+	// 分开处理纵向和横向的模糊
 	Microsoft::WRL::ComPtr<ID3D12Resource> mBlurMap0 = nullptr;
 	Microsoft::WRL::ComPtr<ID3D12Resource> mBlurMap1 = nullptr;
 };

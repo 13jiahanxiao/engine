@@ -364,9 +364,13 @@ void D3DScene::OnResize()
 
 	ThrowIfFailed(mCommandList.Get()->Reset(mDirectCmdListAlloc.Get(), nullptr));
 
-	m_Camera.SetPosition(0.0f, 2.0f, -15.0f);
+	mCamera.SetPosition(0.0f, 2.0f, -15.0f);
 	 
-	m_ItemManager = std::make_unique<RenderItemManager>(m_Device.get(), mCommandList.Get());
+	mItemManager = std::make_unique<RenderItemManager>(m_Device.get(), mCommandList.Get());
+
+	mTextureManager = std::make_unique<TextureManager>();
+
+	mPostProcess = std::make_unique<PostProcess>(m_Device.get(), mCbvSrvUavDescriptorSize);
 }
 
 void D3DScene::FlushCommandQueue()

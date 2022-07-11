@@ -23,6 +23,7 @@ class TextureManager
 public:
 	TextureManager();
 	~TextureManager();
+	void Init();
 	//从xml读取配置的texture地址
 	void LoadTextureFormXML(std::string name, std::string fileName, int index);
 	void LoadTextureXML();

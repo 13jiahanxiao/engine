@@ -88,6 +88,8 @@ public:
 	MaterialManager(int FrameNum);
 	~MaterialManager();
 
+	void Init();
+
 	void BuildMaterial(std::string materialName, int srvIndex, DirectX::XMFLOAT4 diffuseAlbedo, DirectX::XMFLOAT3 fresnelR0, float roughness);
 	//从xml读取配置的texture地址
 	void LoadMaterialXML();

@@ -46,8 +46,7 @@ void HorzBlurCS(int3 groupThreadID : SV_GroupThreadID,
 	// due to the blur radius.
 	//
 	
-	// This thread group runs N threads.  To get the extra 2*BlurRadius pixels, 
-	// have 2*BlurRadius threads sample an extra pixel.
+	//模糊操作需要找寻一个像素周围的像素，把边缘外围扩充模糊半径，用最边缘像素颜色填充
 	if(groupThreadID.x < gBlurRadius)
 	{
 		// Clamp out of bound samples that occur at image borders.

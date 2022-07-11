@@ -4,9 +4,7 @@
 
 #include "BlurFilter.h"
 
-BlurFilter::BlurFilter(ID3D12Device* device,
-	UINT width, UINT height,
-	DXGI_FORMAT format)
+BlurFilter::BlurFilter(ID3D12Device* device,UINT width, UINT height,DXGI_FORMAT format)
 {
 	md3dDevice = device;
 

@@ -10,6 +10,7 @@
 #include"../RenderItem/RenderItem.h"
 #include"../Utility/ShaderCompile.h"
 #include"../RenderItem/PsoContainer.h"
+#include"../PostProcess/PostProcess.h"
 #if defined(DEBUG) || defined(_DEBUG)
 #define _CRTDBG_MAP_ALLOC
 #include <crtdbg.h>
@@ -128,11 +129,13 @@ protected:
 
     ComPtr<ID3D12RootSignature> mRootSignature = nullptr;
 
-    std::unique_ptr<RenderItemManager> m_ItemManager;
-
+    //网格和材质
+    std::unique_ptr<RenderItemManager> mItemManager;
+    //纹理资源管理
+    std::unique_ptr <TextureManager> mTextureManager;
     std::unique_ptr<PsoContainer> mPsoContainer;
-
-    Camera m_Camera;
+    std::unique_ptr<PostProcess> mPostProcess;
+    Camera mCamera;
 
     POINT mLastMousePos;
 };
