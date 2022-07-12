@@ -38,9 +38,6 @@ private:
     void AnimateMaterials(const GameTimer& gt);
 
     void DrawItems();
-
-    void BuildRootSignature();
-    void BuildPostProcessRootSignature();
     //几何
     void BuildSkullGeometry();
     void BuildGeometrys();
@@ -58,8 +55,7 @@ private:
     void BuildRenderItems();
     void DrawRenderItems(ID3D12GraphicsCommandList* cmdList, RenderLayer name);
     void DrawItemByPsoLayer(RenderLayer renderLayer);
-    //列举采样器模式
-    std::array<const CD3DX12_STATIC_SAMPLER_DESC, 6> GetStaticSamplers();
+
     //将缩放和旋转指定到一个矩阵
     FXMMATRIX PositionMatrix(float scaleX = 1.0f, float scaleY = 1.0f, float scaleZ = 1.0f,
         float  translateX = 0.0f, float translateY = 0.0f, float translateZ = 0.0f,
@@ -83,8 +79,6 @@ private:
     bool mIsWireframe = false;
      
     DirectionLight m_SunLight;
-
-    ComPtr<ID3D12RootSignature> mPostProcessRootSignature = nullptr;
     //绑定贴图资源的heap
     std::unique_ptr<DescriptorHeap> mTextureHeap;
 };

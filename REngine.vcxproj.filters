@@ -102,6 +102,9 @@
     <ClCompile Include="src\PostProcess\PostProcess.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="src\Resources\RootSignature.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Animation\AnimationHelper.h">
@@ -204,6 +207,9 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="src\PostProcess\PostProcess.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Resources\RootSignature.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

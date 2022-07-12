@@ -22,6 +22,15 @@ public:
 	void InitBlurFilter(UINT width, UINT height, DXGI_FORMAT format);
 
 	void OnResize();
+
+	void Execute(ID3D12GraphicsCommandList* cmdList,
+		ID3D12RootSignature* rootSig,
+		ID3D12PipelineState* horzBlurPSO,
+		ID3D12PipelineState* vertBlurPSO,
+		ID3D12Resource* input,
+		int blurCount);
+
+	ID3D12Resource* BlurFilterOutput();
 private:
 	Device* mDevice;
 	DescriptorHeap* mDescriptorHeap;

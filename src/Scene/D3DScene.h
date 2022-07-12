@@ -11,6 +11,7 @@
 #include"../Utility/ShaderCompile.h"
 #include"../RenderItem/PsoContainer.h"
 #include"../PostProcess/PostProcess.h"
+#include"../Resources/RootSignature.h"
 #if defined(DEBUG) || defined(_DEBUG)
 #define _CRTDBG_MAP_ALLOC
 #include <crtdbg.h>
@@ -127,14 +128,13 @@ protected:
     int mClientHeight ;
     std::wstring mMainWndCaption ;
 
-    ComPtr<ID3D12RootSignature> mRootSignature = nullptr;
-
     //网格和材质
     std::unique_ptr<RenderItemManager> mItemManager;
     //纹理资源管理
     std::unique_ptr <TextureManager> mTextureManager;
     std::unique_ptr<PsoContainer> mPsoContainer;
     std::unique_ptr<PostProcess> mPostProcess;
+    std::unique_ptr<RootSignature> mRootsignature;
     Camera mCamera;
 
     POINT mLastMousePos;

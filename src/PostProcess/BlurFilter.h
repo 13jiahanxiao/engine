@@ -6,6 +6,7 @@
 
 #pragma once
 
+#include"../Resources/DescriptorHeap.h"
 #include "../Utility/d3dUtil.h"
 
 class BlurFilter
@@ -23,7 +24,7 @@ public:
 
 	ID3D12Resource* Output();
 
-	void BuildDescriptors(CD3DX12_CPU_DESCRIPTOR_HANDLE hCpuDescriptor,CD3DX12_GPU_DESCRIPTOR_HANDLE hGpuDescriptor,UINT descriptorSize);
+	void BuildDescriptors(DescriptorHeap* heap, UINT mNowHeapSize);
 
 	void OnResize(UINT newWidth, UINT newHeight);
 
@@ -48,23 +49,25 @@ private:
 
 	const int MaxBlurRadius = 5;
 
-	ID3D12Device* md3dDevice = nullptr;
+	ID3D12Device* mDevice = nullptr;
+	DescriptorHeap* mDescHeap = nullptr;
+
 
 	UINT mWidth = 0;
 	UINT mHeight = 0;
 	DXGI_FORMAT mFormat = DXGI_FORMAT_R8G8B8A8_UNORM;
 
-	CD3DX12_CPU_DESCRIPTOR_HANDLE mBlur0CpuSrv;
-	CD3DX12_CPU_DESCRIPTOR_HANDLE mBlur0CpuUav;
+	UINT mBlur0CpuSrv;
+	UINT mBlur0CpuUav;
 
-	CD3DX12_CPU_DESCRIPTOR_HANDLE mBlur1CpuSrv;
-	CD3DX12_CPU_DESCRIPTOR_HANDLE mBlur1CpuUav;
+	UINT mBlur1CpuSrv;
+	UINT mBlur1CpuUav;
 
-	CD3DX12_GPU_DESCRIPTOR_HANDLE mBlur0GpuSrv;
-	CD3DX12_GPU_DESCRIPTOR_HANDLE mBlur0GpuUav;
+	UINT mBlur0GpuSrv;
+	UINT mBlur0GpuUav;
 
-	CD3DX12_GPU_DESCRIPTOR_HANDLE mBlur1GpuSrv;
-	CD3DX12_GPU_DESCRIPTOR_HANDLE mBlur1GpuUav;
+	UINT mBlur1GpuSrv;
+	UINT mBlur1GpuUav;
 
 	// 分开处理纵向和横向的模糊
 	Microsoft::WRL::ComPtr<ID3D12Resource> mBlurMap0 = nullptr;

@@ -22,6 +22,7 @@
     <ClCompile Include="src\Animation\AnimationHelper.cpp" />
     <ClCompile Include="src\PostProcess\BlurFilter.cpp" />
     <ClCompile Include="src\PostProcess\PostProcess.cpp" />
+    <ClCompile Include="src\Resources\RootSignature.cpp" />
     <ClCompile Include="src\Scene\D3DScene.cpp" />
     <ClCompile Include="src\Scene\DefaultScene.cpp" />
     <ClCompile Include="src\Components\Camera.cpp" />
@@ -53,6 +54,7 @@
     <ClInclude Include="src\Animation\AnimationHelper.h" />
     <ClInclude Include="src\PostProcess\BlurFilter.h" />
     <ClInclude Include="src\PostProcess\PostProcess.h" />
+    <ClInclude Include="src\Resources\RootSignature.h" />
     <ClInclude Include="src\Scene\D3DScene.h" />
     <ClInclude Include="src\Scene\DefaultScene.h" />
     <ClInclude Include="src\Base\Singleton.h" />
