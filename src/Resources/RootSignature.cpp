@@ -60,28 +60,30 @@ RootSignature::RootSignature(Device* device) :mDevice(device)
 
 }
 
-void RootSignature::Init() 
+void RootSignature::Init(UINT textureNum)
 {
-	InitRootSignature();
+	InitRootSignature(textureNum);
 	InitPostProcess();
 }
 
-void RootSignature::InitRootSignature() 
+void RootSignature::InitRootSignature(UINT textureNum) 
 {
-	//11个srv
-	CD3DX12_DESCRIPTOR_RANGE texTable;
-	texTable.Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 13, 0, 0);
 
+	CD3DX12_DESCRIPTOR_RANGE texTableSky;
+	texTableSky.Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1, 0, 0);
+	//13个srv
+	CD3DX12_DESCRIPTOR_RANGE texTable;
+	texTable.Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, textureNum, 1, 0);
 	// 根参数表
-	CD3DX12_ROOT_PARAMETER slotRootParameter[4];
+	CD3DX12_ROOT_PARAMETER slotRootParameter[5];
 	//space0 b0
 	slotRootParameter[0].InitAsConstantBufferView(0);
 	//space0 b1
 	slotRootParameter[1].InitAsConstantBufferView(1);
 	//space1 t0
 	slotRootParameter[2].InitAsShaderResourceView(0, 1);
-	slotRootParameter[3].InitAsDescriptorTable(1, &texTable, D3D12_SHADER_VISIBILITY_PIXEL);
-
+	slotRootParameter[3].InitAsDescriptorTable(1, &texTableSky, D3D12_SHADER_VISIBILITY_PIXEL);
+	slotRootParameter[4].InitAsDescriptorTable(1, &texTable, D3D12_SHADER_VISIBILITY_PIXEL);
 	//// Create a single descriptor table of CBVs.
 	//CD3DX12_DESCRIPTOR_RANGE cbvTable;
 	////类型,描述符数量,寄存器编号
@@ -93,7 +95,7 @@ void RootSignature::InitRootSignature()
 
 	auto staticSamplers = GetStaticSamplers();
 	// A root signature is an array of root parameters.
-	CD3DX12_ROOT_SIGNATURE_DESC rootSigDesc(4, slotRootParameter,
+	CD3DX12_ROOT_SIGNATURE_DESC rootSigDesc(5, slotRootParameter,
 		(UINT)staticSamplers.size(), staticSamplers.data(),
 		D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT);
 

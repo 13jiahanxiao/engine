@@ -23,6 +23,7 @@ enum  class  RenderLayer : int
     BillBoardTree,
     VertBlur,
     HorzBlur,
+    Sky,
     Count,
 };
 

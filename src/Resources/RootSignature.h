@@ -7,9 +7,9 @@ public:
 	RootSignature(Device* device);
 	~RootSignature() = default;
 
-	void Init();
+	void Init(UINT textureNum);
 
-	void InitRootSignature();
+	void InitRootSignature(UINT textureNum);
 	void InitPostProcess();
 	Microsoft::WRL::ComPtr<ID3D12RootSignature> GetRootSign() {return mRootSignature;}
 	Microsoft::WRL::ComPtr<ID3D12RootSignature> GetPostProcessRootSign() { return mPostProcessRootSignature; }

@@ -16,6 +16,8 @@ struct Texture
 	Microsoft::WRL::ComPtr<ID3D12Resource> UploadHeap = nullptr;
 
 	int heapIndex = 0;
+
+	D3D12_SRV_DIMENSION Dimension = D3D12_SRV_DIMENSION_TEXTURE2D;
 };
 
 class TextureManager
@@ -25,7 +27,7 @@ public:
 	~TextureManager();
 	void Init();
 	//从xml读取配置的texture地址
-	void LoadTextureFormXML(std::string name, std::string fileName, int index);
+	void LoadTextureFormXML(std::string name, std::string fileName, int index, int dimension);
 	void LoadTextureXML();
 	//构建描述符堆
 	void BuildTextureHeap(DescriptorHeap* heap);

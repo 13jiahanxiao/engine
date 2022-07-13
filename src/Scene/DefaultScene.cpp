@@ -24,8 +24,6 @@ bool DefaultScene::Initialize()
 
 	m_SunLight.SetLight(1.25f * XM_PI, XM_PIDIV4, 1.0f, { 1.0f, 1.0f, 0.9f }, 0);
 
-	//加载资源
-
 	mItemManager->Init();
 	mTextureManager->Init();
 	//要使用什么效果，提前分配好空间
@@ -36,11 +34,11 @@ bool DefaultScene::Initialize()
 	mTextureManager->CreateDDSTexture(m_Device.get(), mCommandList.Get());
 	mTextureManager->BuildTextureHeap(mTextureHeap.get());
 
-	mRootsignature->Init();
+	mRootsignature->Init(mTextureManager->GetTextureNum()-1);
 
 	mPostProcess->SetDescriptorHeapAndOffset(mTextureHeap.get(), mTextureManager->GetTextureNum());
 
-	mPostProcess->InitBlurFilter(mClientWidth, mClientHeight, DXGI_FORMAT_R8G8B8A8_UNORM);
+	mPostProcess->InitBlurFilter(mClientWidth/2, mClientHeight, DXGI_FORMAT_R8G8B8A8_UNORM);
 
 	mPsoContainer = std::make_unique<PsoContainer>(m_Device.get(), mRootsignature->GetRootSign());
 	BuildGeometrys();
@@ -92,7 +90,7 @@ void DefaultScene::Draw(const GameTimer& gt)
 	DrawItems();
 
 	mPostProcess->Execute(mCommandList.Get(), mRootsignature->GetPostProcessRootSign().Get(), mPsoContainer->GetPsoByRenderLayer(RenderLayer::HorzBlur),
-		mPsoContainer->GetPsoByRenderLayer(RenderLayer::VertBlur), CurrentBackBuffer(), 4);
+		mPsoContainer->GetPsoByRenderLayer(RenderLayer::VertBlur), CurrentBackBuffer(), 20);
 
 	// Prepare to copy blurred output to the back buffer.
 	mCommandList->ResourceBarrier(1, rvalue_to_lvalue(CD3DX12_RESOURCE_BARRIER::Transition(CurrentBackBuffer(),
@@ -124,7 +122,11 @@ void DefaultScene::DrawItems()
 	auto matBuffer = mCurrFrameResource->MaterialBuffer->GetResource();
 	mCommandList->SetGraphicsRootShaderResourceView(2, matBuffer->GetGPUVirtualAddress());
 
-	mCommandList->SetGraphicsRootDescriptorTable(3, mTextureHeap->GetHeap()->GetGPUDescriptorHandleForHeapStart());
+	CD3DX12_GPU_DESCRIPTOR_HANDLE skyTexDescriptor(mTextureHeap->GetHeap()->GetGPUDescriptorHandleForHeapStart());
+	skyTexDescriptor.Offset(13, mCbvSrvDescriptorSize);
+	mCommandList->SetGraphicsRootDescriptorTable(3, skyTexDescriptor);
+
+	mCommandList->SetGraphicsRootDescriptorTable(4, mTextureHeap->GetHeap()->GetGPUDescriptorHandleForHeapStart());
 
 	DrawItemByPsoLayer(RenderLayer::Opaque);
 	DrawItemByPsoLayer(RenderLayer::AlphaTested);
@@ -146,6 +148,8 @@ void DefaultScene::DrawItems()
 
 	//做混合
 	DrawItemByPsoLayer(RenderLayer::Transparent);
+
+	DrawItemByPsoLayer(RenderLayer::Sky);
 }
 
 void DefaultScene::OnResize()
@@ -655,6 +659,13 @@ void DefaultScene::BuildPSOs()
 
 	mPsoContainer->AddPsoContainer(treeSpritePsoDesc, RenderLayer::BillBoardTree);
 
+	D3D12_GRAPHICS_PIPELINE_STATE_DESC skyPsoDesc = mPsoContainer->GetOpaquePsoDesc();
+	skyPsoDesc.RasterizerState.CullMode = D3D12_CULL_MODE_NONE;
+	skyPsoDesc.DepthStencilState.DepthFunc = D3D12_COMPARISON_FUNC_LESS_EQUAL;
+	skyPsoDesc.VS = mPsoContainer->SetShader("skyVS");
+	skyPsoDesc.PS = mPsoContainer->SetShader("skyPS");
+	mPsoContainer->AddPsoContainer(skyPsoDesc, RenderLayer::Sky);
+
 	D3D12_COMPUTE_PIPELINE_STATE_DESC horzBlurPSO = {};
 	horzBlurPSO.pRootSignature = mRootsignature->GetPostProcessRootSign().Get();
 	horzBlurPSO.CS = mPsoContainer->SetShader("horzBlurCS");
@@ -708,6 +719,9 @@ void DefaultScene::BuildRenderItems()
 
 	mItemManager->BuildRenderItem("treeSprites", RenderLayer::BillBoardTree, "treeSpritesGeo", "points", "treeTex",
 		PositionMatrix(), PositionMatrix(), D3D11_PRIMITIVE_TOPOLOGY_POINTLIST);
+
+	mItemManager->BuildRenderItem("skyBox", RenderLayer::Sky, "shapeGeo", "sphere", "skyBox",
+		PositionMatrix(5000.0f, 5000.0f, 5000.0f), PositionMatrix());
 }
 
 void DefaultScene::DrawRenderItems(ID3D12GraphicsCommandList* cmdList, RenderLayer name)

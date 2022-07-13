@@ -18,12 +18,13 @@ void TextureManager::Init()
 	LoadTextureXML();
 }
 
-void TextureManager::LoadTextureFormXML(std::string name, std::string fileName, int index)
+void TextureManager::LoadTextureFormXML(std::string name, std::string fileName, int index,int dimension)
 {
 	auto Tex = std::make_unique<Texture>();
 	Tex->Name = name;
 	Tex->Filename = d3dUtil::String2Wstring(fileName);
 	Tex->heapIndex = index;
+	Tex->Dimension = (D3D12_SRV_DIMENSION)dimension;
 	m_Textures[Tex->Name] = std::move(Tex);
 }
 
@@ -45,7 +46,9 @@ void TextureManager::LoadTextureXML()
 			std::string address(sztext);
 			sztext = item->Attribute("index");
 			int index = atoi(sztext);
-			LoadTextureFormXML(name, address, index);
+			sztext = item->Attribute("dimension");
+			int dimension = atoi(sztext);
+			LoadTextureFormXML(name, address, index,dimension);
 			item = item->NextSiblingElement("Item");
 		}
 	}
@@ -72,7 +75,7 @@ void TextureManager::BuildTextureHeap(DescriptorHeap* heap)
 
 		srvDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
 		srvDesc.Format = tex->GetDesc().Format;
-		srvDesc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D;
+		srvDesc.ViewDimension = m_Textures[v->Name]->Dimension;
 		srvDesc.Texture2D.MostDetailedMip = 0;
 		srvDesc.Texture2D.MipLevels = tex->GetDesc().MipLevels;
 		srvDesc.Texture2D.ResourceMinLODClamp = 0.0f;

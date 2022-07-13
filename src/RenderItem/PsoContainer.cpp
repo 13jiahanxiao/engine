@@ -125,6 +125,9 @@ void PsoContainer::BuildShadersAndInputLayout()
 	mShaders->LoadShader("horzBlurCS", L"Resources\\Shaders\\Blur.hlsl", nullptr, "HorzBlurCS", "cs_5_1");
 	mShaders->LoadShader("vertBlurCS", L"Resources\\Shaders\\Blur.hlsl", nullptr, "VertBlurCS", "cs_5_1");
 
+	mShaders->LoadShader("skyVS", L"Resources\\Shaders\\Sky.hlsl", nullptr, "VS", "vs_5_1");
+	mShaders->LoadShader("skyPS", L"Resources\\Shaders\\Sky.hlsl", nullptr, "PS", "ps_5_1");
+
 	mShaders->SetVerInputLayout
 	(
 		{

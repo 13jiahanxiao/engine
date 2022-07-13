@@ -1,16 +1,34 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <texture>
-    <Item name="grassTex" address="Resources/Textures/grass.dds" index="0"/>
-	<Item name="waterTex" address="Resources/Textures/water1.dds" index="1"/>
-	<Item name="crateTex" address="Resources/Textures/WoodCrate01.dds" index="2"/>
-	<Item name="bricksTex" address="Resources/Textures/bricks.dds" index="3"/>
-	<Item name="stoneTex" address="Resources/Textures/stone.dds" index="4"/>
-	<Item name="tileTex" address="Resources/Textures/tile.dds" index="5"/>
-	<Item name="wirefenceTex" address="Resources/Textures/WireFence.dds" index="6"/>
-	<Item name="flare" address="Resources/Textures/flare.dds" index="7"/>
-	<Item name="flarealpha" address="Resources/Textures/flarealpha.dds" index="8"/>
-	<Item name="cow" address="Resources/Textures/cow_dx.dds" index="9"/>
-	<Item name="crate" address="Resources/Textures/rock.dds" index="10"/>
-	<Item name="ice" address="Resources/Textures/ice.dds" index="11"/>
-  <Item name="tree" address="Resources/Textures/treeArray2.dds" index="12"/>
+    <Item name="grassTex" address="Resources/Textures/grass.dds" index="0" dimension="4"/>
+	<Item name="waterTex" address="Resources/Textures/water1.dds" index="1" dimension="4"/>
+	<Item name="crateTex" address="Resources/Textures/WoodCrate01.dds" index="2" dimension="4"/>
+	<Item name="bricksTex" address="Resources/Textures/bricks.dds" index="3" dimension="4"/>
+	<Item name="stoneTex" address="Resources/Textures/stone.dds" index="4" dimension="4"/>
+	<Item name="tileTex" address="Resources/Textures/tile.dds" index="5" dimension="4"/>
+	<Item name="wirefenceTex" address="Resources/Textures/WireFence.dds" index="6" dimension="4"/>
+	<Item name="flare" address="Resources/Textures/flare.dds" index="7" dimension="4"/>
+	<Item name="flarealpha" address="Resources/Textures/flarealpha.dds" index="8" dimension="4"/>
+	<Item name="cow" address="Resources/Textures/cow_dx.dds" index="9" dimension="4"/>
+	<Item name="crate" address="Resources/Textures/rock.dds" index="10" dimension="4"/>
+	<Item name="ice" address="Resources/Textures/ice.dds" index="11" dimension="4"/>
+  <Item name="tree" address="Resources/Textures/treeArray2.dds" index="12" dimension="4"/>
+  <Item name="skyBox" address="Resources/Textures/grasscube1024.dds" index="13" dimension="9"/>
 </texture>
+
+
+<!--enum D3D12_SRV_DIMENSION
+{
+D3D12_SRV_DIMENSION_UNKNOWN	= 0,
+D3D12_SRV_DIMENSION_BUFFER	= 1,
+D3D12_SRV_DIMENSION_TEXTURE1D	= 2,
+D3D12_SRV_DIMENSION_TEXTURE1DARRAY	= 3,
+D3D12_SRV_DIMENSION_TEXTURE2D	= 4,
+D3D12_SRV_DIMENSION_TEXTURE2DARRAY	= 5,
+D3D12_SRV_DIMENSION_TEXTURE2DMS	= 6,
+D3D12_SRV_DIMENSION_TEXTURE2DMSARRAY	= 7,
+D3D12_SRV_DIMENSION_TEXTURE3D	= 8,
+D3D12_SRV_DIMENSION_TEXTURECUBE	= 9,
+D3D12_SRV_DIMENSION_TEXTURECUBEARRAY	= 10,
+D3D12_SRV_DIMENSION_RAYTRACING_ACCELERATION_STRUCTURE	= 11
+} 	D3D12_SRV_DIMENSION;-->
