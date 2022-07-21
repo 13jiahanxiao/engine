@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <texture>
-    <Item name="grassTex" address="Resources/Textures/grass.dds" index="0" dimension="4"/>
+  <Item name="grassTex" address="Resources/Textures/grass.dds" index="0" dimension="4"/>
 	<Item name="waterTex" address="Resources/Textures/water1.dds" index="1" dimension="4"/>
 	<Item name="crateTex" address="Resources/Textures/WoodCrate01.dds" index="2" dimension="4"/>
 	<Item name="bricksTex" address="Resources/Textures/bricks.dds" index="3" dimension="4"/>

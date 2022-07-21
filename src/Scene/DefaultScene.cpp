@@ -69,8 +69,9 @@ void DefaultScene::Draw(const GameTimer& gt)
 	mCommandList->ResourceBarrier(1, rvalue_to_lvalue(CD3DX12_RESOURCE_BARRIER::Transition(CurrentBackBuffer(),
 		D3D12_RESOURCE_STATE_PRESENT, D3D12_RESOURCE_STATE_RENDER_TARGET)));
 
-	//用雾效果颜色填充场景
-	mCommandList->ClearRenderTargetView(CurrentBackBufferView(), (float*)&mMainPassCB.FogColor, 0, nullptr);
+	////用雾效果颜色填充场景
+	//mCommandList->ClearRenderTargetView(CurrentBackBufferView(), (float*)&mMainPassCB.FogColor, 0, nullptr);
+	mCommandList->ClearRenderTargetView(CurrentBackBufferView(), Colors::LightSteelBlue, 0, nullptr);
 	mCommandList->ClearDepthStencilView(DepthStencilView(), D3D12_CLEAR_FLAG_DEPTH | D3D12_CLEAR_FLAG_STENCIL, 1.0f, 0, 0, nullptr);
 	mCommandList->OMSetRenderTargets(1, rvalue_to_lvalue(CurrentBackBufferView()), true, rvalue_to_lvalue(DepthStencilView()));
 
@@ -89,14 +90,14 @@ void DefaultScene::Draw(const GameTimer& gt)
 
 	DrawItems();
 
-	mPostProcess->Execute(mCommandList.Get(), mRootsignature->GetPostProcessRootSign().Get(), mPsoContainer->GetPsoByRenderLayer(RenderLayer::HorzBlur),
-		mPsoContainer->GetPsoByRenderLayer(RenderLayer::VertBlur), CurrentBackBuffer(), 20);
+	//mPostProcess->Execute(mCommandList.Get(), mRootsignature->GetPostProcessRootSign().Get(), mPsoContainer->GetPsoByRenderLayer(RenderLayer::HorzBlur),
+	//	mPsoContainer->GetPsoByRenderLayer(RenderLayer::VertBlur), CurrentBackBuffer(), 20);
 
-	// Prepare to copy blurred output to the back buffer.
-	mCommandList->ResourceBarrier(1, rvalue_to_lvalue(CD3DX12_RESOURCE_BARRIER::Transition(CurrentBackBuffer(),
-		D3D12_RESOURCE_STATE_COPY_SOURCE, D3D12_RESOURCE_STATE_COPY_DEST)));
+	//// Prepare to copy blurred output to the back buffer.
+	//mCommandList->ResourceBarrier(1, rvalue_to_lvalue(CD3DX12_RESOURCE_BARRIER::Transition(CurrentBackBuffer(),
+	//	D3D12_RESOURCE_STATE_COPY_SOURCE, D3D12_RESOURCE_STATE_COPY_DEST)));
 
-	mCommandList->CopyResource(CurrentBackBuffer(), mPostProcess->BlurFilterOutput());
+	//mCommandList->CopyResource(CurrentBackBuffer(), mPostProcess->BlurFilterOutput());
 
 	mCommandList->ResourceBarrier(1, rvalue_to_lvalue(CD3DX12_RESOURCE_BARRIER::Transition(CurrentBackBuffer(),
 		D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PRESENT)));
@@ -123,7 +124,7 @@ void DefaultScene::DrawItems()
 	mCommandList->SetGraphicsRootShaderResourceView(2, matBuffer->GetGPUVirtualAddress());
 
 	CD3DX12_GPU_DESCRIPTOR_HANDLE skyTexDescriptor(mTextureHeap->GetHeap()->GetGPUDescriptorHandleForHeapStart());
-	skyTexDescriptor.Offset(13, mCbvSrvDescriptorSize);
+	skyTexDescriptor.Offset(13, mCbvSrvUavDescriptorSize);
 	mCommandList->SetGraphicsRootDescriptorTable(3, skyTexDescriptor);
 
 	mCommandList->SetGraphicsRootDescriptorTable(4, mTextureHeap->GetHeap()->GetGPUDescriptorHandleForHeapStart());
@@ -146,10 +147,12 @@ void DefaultScene::DrawItems()
 	mCommandList->SetGraphicsRootConstantBufferView(1, passCB->GetGPUVirtualAddress());
 	mCommandList->OMSetStencilRef(0);
 
+
 	//做混合
 	DrawItemByPsoLayer(RenderLayer::Transparent);
-
 	DrawItemByPsoLayer(RenderLayer::Sky);
+
+
 }
 
 void DefaultScene::OnResize()
@@ -660,7 +663,7 @@ void DefaultScene::BuildPSOs()
 	mPsoContainer->AddPsoContainer(treeSpritePsoDesc, RenderLayer::BillBoardTree);
 
 	D3D12_GRAPHICS_PIPELINE_STATE_DESC skyPsoDesc = mPsoContainer->GetOpaquePsoDesc();
-	skyPsoDesc.RasterizerState.CullMode = D3D12_CULL_MODE_NONE;
+	skyPsoDesc.RasterizerState.CullMode = D3D12_CULL_MODE_FRONT;
 	skyPsoDesc.DepthStencilState.DepthFunc = D3D12_COMPARISON_FUNC_LESS_EQUAL;
 	skyPsoDesc.VS = mPsoContainer->SetShader("skyVS");
 	skyPsoDesc.PS = mPsoContainer->SetShader("skyPS");
@@ -721,7 +724,7 @@ void DefaultScene::BuildRenderItems()
 		PositionMatrix(), PositionMatrix(), D3D11_PRIMITIVE_TOPOLOGY_POINTLIST);
 
 	mItemManager->BuildRenderItem("skyBox", RenderLayer::Sky, "shapeGeo", "sphere", "skyBox",
-		PositionMatrix(5000.0f, 5000.0f, 5000.0f), PositionMatrix());
+		PositionMatrix(5.0f, 5.0f, 5.0f), PositionMatrix());
 }
 
 void DefaultScene::DrawRenderItems(ID3D12GraphicsCommandList* cmdList, RenderLayer name)

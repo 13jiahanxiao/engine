@@ -70,10 +70,10 @@ void RootSignature::InitRootSignature(UINT textureNum)
 {
 
 	CD3DX12_DESCRIPTOR_RANGE texTableSky;
-	texTableSky.Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1, 0, 0);
+	texTableSky.Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1, 0);
 	//13个srv
 	CD3DX12_DESCRIPTOR_RANGE texTable;
-	texTable.Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, textureNum, 1, 0);
+	texTable.Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, textureNum+1, 1);
 	// 根参数表
 	CD3DX12_ROOT_PARAMETER slotRootParameter[5];
 	//space0 b0
