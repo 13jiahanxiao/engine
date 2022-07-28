@@ -1,0 +1,34 @@
+{
+  "RenderItem": [
+    {
+      "itemName": "water",
+      "renderLayer": 1,
+      "geoName": "waterGeo",
+      "argName": "grid",
+      "materialName": "water",
+      "world": "1.0f,1.0f,1.0f,0.0f,0.0f,0.0f,0.0f",
+      "texTransform": "5.0f, 5.0f, 1.0f,0.0f,0.0f,0.0f,0.0f",
+      "topology": 4
+    },
+    {
+      "itemName": "grid",
+      "renderLayer": 0,
+      "geoName": "landGeo",
+      "argName": "grid",
+      "materialName": "grass",
+      "world": "1.0f,1.0f,1.0f,0.0f,0.0f,0.0f,0.0f",
+      "texTransform": "5.0f, 5.0f, 1.0f,0.0f,0.0f,0.0f,0.0f",
+      "topology": 4
+    },
+    {
+      "itemName": "grass",
+      "renderLayer": 0,
+      "geoName": "shapeGeo",
+      "argName": "sphere",
+      "materialName": "grass",
+      "world": "3.0f, 3.0f, 3.0f,7.0f, 8.0f,5.0f,0.0f",
+      "texTransform": "1.0f,1.0f,1.0f,0.0f,0.0f,0.0f,0.0f",
+      "topology": 4
+    }
+  ]
+}

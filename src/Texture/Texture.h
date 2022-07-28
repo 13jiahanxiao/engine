@@ -27,8 +27,8 @@ public:
 	~TextureManager();
 	void Init();
 	//从xml读取配置的texture地址
-	void LoadTextureFormXML(std::string name, std::string fileName, int index, int dimension);
-	void LoadTextureXML();
+	void LoadTextureFormJson(std::string name, std::string fileName, int index, int dimension);
+	void LoadTextureJson();
 	//构建描述符堆
 	void BuildTextureHeap(DescriptorHeap* heap);
 	//创建描述符

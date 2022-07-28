@@ -60,6 +60,10 @@ public:
     //初始化texture的管理
     RenderItemManager(Device* device,ID3D12GraphicsCommandList* cmdList);
     ~RenderItemManager();
+
+    void Init();
+
+    void LoadRenderItemFromJson();
    //渲染项
    void BuildRenderItem(std::string itemName, RenderLayer renderLayer,
        std::string geoName, std::string argName, std::string materialName,
@@ -80,8 +84,6 @@ public:
    GeometryManager* GetMeshManager() {return mGeometryManager.get();}
 
    int GetMaterilalsNum() { return  mMaterialManager->MaterilalsSize(); }
-
-   void Init();
 private:
     Device* mDevice;
 

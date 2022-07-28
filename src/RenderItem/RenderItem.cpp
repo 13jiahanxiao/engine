@@ -1,4 +1,18 @@
 #include"RenderItem.h"
+#include"nlohmann/json.hpp"
+#include<DirectXMath.h>
+using json = nlohmann::json;
+
+DirectX::FXMMATRIX PositionMatrix(float scaleX, float scaleY, float scaleZ,
+	float  translateX, float translateY, float translateZ,
+	float rotationZ)
+{
+	DirectX::XMMATRIX Rotate = DirectX::XMMatrixRotationZ(rotationZ * MathHelper::Pi);
+	DirectX::XMMATRIX Scale = DirectX::XMMatrixScaling(scaleX, scaleY, scaleZ);
+	DirectX::XMMATRIX Offset = DirectX::XMMatrixTranslation(translateX, translateY, translateZ);
+	DirectX::XMMATRIX World = Scale * Rotate * Offset;
+	return World;
+}
 
 RenderItemManager::RenderItemManager(Device* device, ID3D12GraphicsCommandList* cmdList): mDevice(device)
 {
@@ -11,6 +25,36 @@ RenderItemManager::RenderItemManager(Device* device, ID3D12GraphicsCommandList* 
 void RenderItemManager::Init()
 {
 	mMaterialManager->Init();
+}
+
+void RenderItemManager::LoadRenderItemFromJson()
+{
+	std::ifstream f("Resources\\Json\\RenderItems.json");
+	json data = json::parse(f);
+	json mData = data["RenderItem"];
+	for (int i = 0; i < mData.size(); i++)
+	{
+		std::string itemName = mData[i].at("itemName");
+		int renderLayer = mData[i].at("renderLayer");
+		std::string geoName = mData[i].at("geoName");
+		std::string argName = mData[i].at("argName");
+		std::string materialName = mData[i].at("materialName");
+
+		std::string temp = mData[i].at("world");
+		std::vector<std::string> svert;
+		Split(temp, svert, ",");
+		DirectX::FXMMATRIX world= PositionMatrix(atof(svert[0].c_str()), atof(svert[1].c_str()), atof(svert[2].c_str()), 
+			atof(svert[3].c_str()),atof(svert[4].c_str()),atof(svert[5].c_str()),atof(svert[6].c_str()));
+		svert.clear();
+
+		temp = mData[i].at("texTransform");
+		Split(temp, svert, ",");
+		DirectX::FXMMATRIX tex= PositionMatrix(atof(svert[0].c_str()), atof(svert[1].c_str()), atof(svert[2].c_str()),
+			atof(svert[3].c_str()), atof(svert[4].c_str()), atof(svert[5].c_str()), atof(svert[6].c_str()));
+
+		int topology = mData[i].at("topology");
+		BuildRenderItem(itemName, (RenderLayer)renderLayer, geoName, argName, materialName, world, tex, (D3D_PRIMITIVE_TOPOLOGY)topology);
+	}
 }
 
 RenderItemManager::~RenderItemManager() 

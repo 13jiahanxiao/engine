@@ -1,0 +1,89 @@
+{
+  "Address": "Resources\\Textures\\",
+  "TextureConfig": [
+    {
+      "name": "grassTex",
+      "fileName": "grass.dds",
+      "index": 0,
+      "dimension": 4
+    },
+    {
+      "name": "waterTex",
+      "fileName": "water1.dds",
+      "index": 1,
+      "dimension": 4
+    },
+    {
+      "name": "crateTex",
+      "fileName": "WoodCrate01.dds",
+      "index": 2,
+      "dimension": 4
+    },
+    {
+      "name": "bricksTex",
+      "fileName": "bricks.dds",
+      "index": 3,
+      "dimension": 4
+    },
+    {
+      "name": "stoneTex",
+      "fileName": "stone.dds",
+      "index": 4,
+      "dimension": 4
+    },
+    {
+      "name": "tileTex",
+      "fileName": "tile.dds",
+      "index": 5,
+      "dimension": 4
+    },
+    {
+      "name": "wirefenceTex",
+      "fileName": "WireFence.dds",
+      "index": 6,
+      "dimension": 4
+    },
+    {
+      "name": "flare",
+      "fileName": "flare.dds",
+      "index": 7,
+      "dimension": 4
+    },
+    {
+      "name": "flarealpha",
+      "fileName": "flarealpha.dds",
+      "index": 8,
+      "dimension": 4
+    },
+    {
+      "name": "cow",
+      "fileName": "cow_dx.dds",
+      "index": 9,
+      "dimension": 4
+    },
+    {
+      "name": "crate",
+      "fileName": "rock.dds",
+      "index": 10,
+      "dimension": 4
+    },
+    {
+      "name": "ice",
+      "fileName": "ice.dds",
+      "index": 11,
+      "dimension": 4
+    },
+    {
+      "name": "tree",
+      "fileName": "treeArray2.dds",
+      "index": 12,
+      "dimension": 4
+    },
+    {
+      "name": "skyBox",
+      "fileName": "grasscube1024.dds",
+      "index": 13,
+      "dimension": 9
+    }
+  ]
+}

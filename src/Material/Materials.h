@@ -2,13 +2,10 @@
 
 #include"../Utility/MathHelper.h"
 #include"../Resources/UploadBuffer.h"
-#include"../Tools/tinyxml2.h"
 #include <DirectXMath.h>
 #include<string>
 #include<unordered_map> 
 #include<memory>
-
-using namespace  tinyxml2;
 
 struct MaterialData
 {
@@ -92,7 +89,7 @@ public:
 
 	void BuildMaterial(std::string materialName, int srvIndex, DirectX::XMFLOAT4 diffuseAlbedo, DirectX::XMFLOAT3 fresnelR0, float roughness);
 	//从xml读取配置的texture地址
-	void LoadMaterialXML();
+	void LoadMaterialFormJson();
 
 	int MaterilalsSize() { return mMaterials.size(); }
 	void UpdateMaterialCBs(UploadBuffer<MaterialData>* cb);

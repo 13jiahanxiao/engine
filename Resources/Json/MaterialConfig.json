@@ -1,0 +1,102 @@
+{
+  "MaterialConfig": [
+    {
+      "name": "grass",
+      "srvIndex": 0,
+      "diffuseAlbedo": "0.2f, 0.6f, 0.2f, 1.0f",
+      "fresnelR0": "0.01f, 0.01f, 0.01f",
+      "roughness": 0
+    },
+    {
+      "name": "water",
+      "srvIndex": 1,
+      "diffuseAlbedo": "1.0f, 1.0f, 1.0f, 0.5f",
+      "fresnelR0": "0.1f, 0.1f, 0.1f",
+      "roughness": 0
+    },
+    {
+      "name": "crate",
+      "srvIndex": 2,
+      "diffuseAlbedo": "1.0f, 1.0f, 1.0f, 1.0f",
+      "fresnelR0": "0.1f, 0.1f, 0.1f",
+      "roughness": 0.25
+    },
+    {
+      "name": "bricks",
+      "srvIndex": 3,
+      "diffuseAlbedo": "1.0f, 1.0f, 1.0f, 1.0f",
+      "fresnelR0": "0.02f, 0.02f, 0.02f",
+      "roughness": 0.1
+    },
+    {
+      "name": "stone",
+      "srvIndex": 4,
+      "diffuseAlbedo": "1.0f, 1.0f, 1.0f, 1.0f",
+      "fresnelR0": "0.05f, 0.05f, 0.05f",
+      "roughness": 0.3
+    },
+    {
+      "name": "tile",
+      "srvIndex": 5,
+      "diffuseAlbedo": "1.0f, 1.0f, 1.0f, 1.0f",
+      "fresnelR0": "0.02f, 0.02f, 0.02f",
+      "roughness": 0.3
+    },
+    {
+      "name": "wirefence",
+      "srvIndex": 6,
+      "diffuseAlbedo": "1.0f, 1.0f, 1.0f, 1.0f",
+      "fresnelR0": "0.1f, 0.1f, 0.1f",
+      "roughness": 0.25
+    },
+    {
+      "name": "flare",
+      "srvIndex": 7,
+      "diffuseAlbedo": "1.0f, 1.0f, 1.0f, 1.0f",
+      "fresnelR0": "0.1f, 0.1f, 0.1f",
+      "roughness": 0.25
+    },
+    {
+      "name": "flarealpha",
+      "srvIndex": 8,
+      "diffuseAlbedo": "1.0f, 1.0f, 1.0f, 1.0f",
+      "fresnelR0": "0.1f, 0.1f, 0.1f",
+      "roughness": 0.25
+    },
+    {
+      "name": "cow",
+      "srvIndex": 9,
+      "diffuseAlbedo": "1.0f, 1.0f, 1.0f, 1.0f",
+      "fresnelR0": "0.05f, 0.05f, 0.05",
+      "roughness": 0.25
+    },
+    {
+      "name": "rock",
+      "srvIndex": 10,
+      "diffuseAlbedo": "1.0f, 1.0f, 1.0f, 1.0f",
+      "fresnelR0": "0.05f, 0.05f, 0.05",
+      "roughness": 0.25
+    },
+    {
+      "name": "ice",
+      "srvIndex": 11,
+      "diffuseAlbedo": "1.0f, 1.0f, 1.0f,  0.3f",
+      "fresnelR0": "0.1f, 0.1f, 0.1f",
+      "roughness": 0.5
+    },
+    {
+      "name": "treeTex",
+      "srvIndex": 12,
+      "diffuseAlbedo": "1.0f, 1.0f, 1.0f, 1.0f",
+      "fresnelR0": "0.01f, 0.01f, 0.01f",
+      "roughness": 0.125
+    },
+    {
+      "name": "skyBox",
+      "srvIndex": 13,
+      "diffuseAlbedo": "1.0f, 1.0f, 1.0f, 1.0f",
+      "fresnelR0": "0.05f, 0.05f, 0.05f",
+      "roughness": 0.1
+    }
+  ]
+}

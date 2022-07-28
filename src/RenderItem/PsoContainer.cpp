@@ -150,7 +150,6 @@ D3D12_SHADER_BYTECODE PsoContainer::SetShader(std::string name)
 {
 	return mShaders->GetShaderBYTE(name);
 }
-
 D3D12_INPUT_LAYOUT_DESC PsoContainer::GetVerInputLayout()
 {
 	return mShaders->GetVerInputLayout();;

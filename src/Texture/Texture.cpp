@@ -2,7 +2,8 @@
 #include"../Resources/DescriptorHeap.h"
 #include"../Tools/tinyxml2.h"
 #include"../Utility/d3dUtil.h"
-using namespace  tinyxml2;
+#include"nlohmann/json.hpp"
+using json = nlohmann::json;
 
 TextureManager::TextureManager()
 {
@@ -15,10 +16,10 @@ TextureManager::~TextureManager()
 
 void TextureManager::Init() 
 {
-	LoadTextureXML();
+	LoadTextureJson();
 }
 
-void TextureManager::LoadTextureFormXML(std::string name, std::string fileName, int index,int dimension)
+void TextureManager::LoadTextureFormJson(std::string name, std::string fileName, int index,int dimension)
 {
 	auto Tex = std::make_unique<Texture>();
 	Tex->Name = name;
@@ -28,29 +29,19 @@ void TextureManager::LoadTextureFormXML(std::string name, std::string fileName, 
 	m_Textures[Tex->Name] = std::move(Tex);
 }
 
-void TextureManager::LoadTextureXML()
+void TextureManager::LoadTextureJson()
 {
-	tinyxml2::XMLDocument doc;
-	doc.LoadFile("Resources\\XML\\textureConfig.xml");
-
-	XMLElement* textureHanlde = doc.FirstChildElement("texture");
-	if (textureHanlde)
+	std::ifstream f("Resources\\Json\\TextureConfig.json");
+	json data = json::parse(f);
+	std::string address = data.at("Address");
+	for (int i = 0; i < data["TextureConfig"].size(); i++)
 	{
-		XMLElement* item = textureHanlde->FirstChildElement("Item");
-		const char* sztext = NULL;
-		while (item)
-		{
-			sztext = item->Attribute("name");
-			std::string name(sztext);
-			sztext = item->Attribute("address");
-			std::string address(sztext);
-			sztext = item->Attribute("index");
-			int index = atoi(sztext);
-			sztext = item->Attribute("dimension");
-			int dimension = atoi(sztext);
-			LoadTextureFormXML(name, address, index,dimension);
-			item = item->NextSiblingElement("Item");
-		}
+		std::string name = data["TextureConfig"][i].at("name");
+		std::string fileName = address;
+		fileName += data["TextureConfig"][i].at("fileName");
+		int index = data["TextureConfig"][i].at("index");
+		int dimension = data["TextureConfig"][i].at("dimension");
+		LoadTextureFormJson(name, fileName, index, dimension);
 	}
 }
 

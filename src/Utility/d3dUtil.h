@@ -63,6 +63,40 @@ inline std::wstring AnsiToWString(const std::string& str)
     return std::wstring(buffer);
 }
 
+inline void Split(const std::string& in, std::vector<std::string>& out, std::string token)
+{
+    out.clear();
+    std::string temp;
+    for (int i = 0; i < int(in.size()); i++)
+    {
+        std::string test = in.substr(i, token.size());
+
+        if (test == token)
+        {
+            if (!temp.empty())
+            {
+                out.push_back(temp);
+                temp.clear();
+                i += (int)token.size() - 1;
+            }
+            else
+            {
+                out.push_back("");
+            }
+        }
+        else if (i + token.size() >= in.size())
+        {
+            temp += in.substr(i, token.size());
+            out.push_back(temp);
+            break;
+        }
+        else
+        {
+            temp += in[i];
+        }
+    }
+}
+
 /*
 #if defined(_DEBUG)
     #ifndef Assert

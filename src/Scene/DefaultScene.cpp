@@ -119,7 +119,6 @@ void DefaultScene::DrawItems()
 {
 	auto passCB = mCurrFrameResource->PassCB->GetResource();
 	mCommandList->SetGraphicsRootConstantBufferView(1, passCB->GetGPUVirtualAddress());
-
 	auto matBuffer = mCurrFrameResource->MaterialBuffer->GetResource();
 	mCommandList->SetGraphicsRootShaderResourceView(2, matBuffer->GetGPUVirtualAddress());
 
@@ -684,15 +683,9 @@ void DefaultScene::BuildPSOs()
 
 void DefaultScene::BuildRenderItems()
 {
-	//Ë®
-	mItemManager->BuildRenderItem("water", RenderLayer::Transparent, "waterGeo", "grid", "water",
-		PositionMatrix(),PositionMatrix(5.0f, 5.0f, 1.0f));
+	mItemManager->LoadRenderItemFromJson();
 	m_WavesRitem= mItemManager->GetRenderItem("water");
-	//²ÝµØ
-	mItemManager->BuildRenderItem("grid", RenderLayer::Opaque,  "landGeo", "grid", "grass",
-		PositionMatrix(),	PositionMatrix(5.0f, 5.0f, 1.0f));
-	mItemManager->BuildRenderItem("grass", RenderLayer::Opaque, "shapeGeo", "sphere", "grass",
-		PositionMatrix(3.0f, 3.0f, 3.0f,7.0f, 8.0f, 15.0f),PositionMatrix());
+
 	mItemManager->BuildRenderItem("sphere", RenderLayer::Opaque, "shapeGeo", "sphere", "stone",
 		PositionMatrix(3.0f, 3.0f, 3.0f, 7.0f, 8.0f, 5.0f),PositionMatrix());
 	mItemManager->BuildRenderItem("cow", RenderLayer::Opaque, "loadGeo", "cow", "cow",
@@ -750,7 +743,7 @@ FXMMATRIX DefaultScene::PositionMatrix(float scaleX,float scaleY,float scaleZ,
 
 float DefaultScene::GetHillsHeight(float x, float z)const
 {
-	return 0.3f * (z * sinf(0.1f * x) + x * cosf(0.1f * z));
+	return 0.3f * (z * sinf(0.01f * x) + x * cosf(0.02f * z));
 }
 
 XMFLOAT3 DefaultScene::GetHillsNormal(float x, float z)const
