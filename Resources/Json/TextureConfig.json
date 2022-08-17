@@ -84,6 +84,36 @@
       "fileName": "grasscube1024.dds",
       "index": 13,
       "dimension": 9
+    },
+    {
+      "name": "ganyucloth",
+      "fileName": "cloth.dds",
+      "index": 14,
+      "dimension": 4
+    },
+    {
+      "name": "ganyuface",
+      "fileName": "face.dds",
+      "index": 15,
+      "dimension": 4
+    },
+    {
+      "name": "ganyumuscle",
+      "fileName": "muscle.dds",
+      "index": 16,
+      "dimension": 4
+    },
+    {
+      "name": "ganyuhair",
+      "fileName": "hair.dds",
+      "index": 17,
+      "dimension": 4
+    },
+    {
+      "name": "ganyuemo",
+      "fileName": "emo.dds",
+      "index": 18,
+      "dimension": 4
     }
   ]
 }

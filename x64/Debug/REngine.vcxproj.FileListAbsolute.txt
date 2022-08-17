@@ -1,1 +1,4 @@
 E:\ademo\REngine\x64\Debug\REngine.exe
+E:\ademo\REngine\x64\Debug\assimp-vc142-mtd.dll
+E:\REngine\x64\Debug\assimp-vc142-mtd.dll
+E:\REngine\x64\Debug\REngine.exe

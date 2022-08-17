@@ -20,7 +20,20 @@ void GeometryManager::CreateMesh(std::string name,std::vector<Vertex> vertices, 
 	m_Geometries[name] = std::move(geo);
 }
 
-void GeometryManager::CreateSubMesh(std::string name, std::string subName, UINT IndexCount, UINT StartIndexLocation, INT BaseVertexLocation) 
+void GeometryManager::CreateSubMesh(std::string name, std::vector<SubMesh> m_submesh)
+{
+	for (int i = 0; i < m_submesh.size(); i++) 
+	{
+		SubmeshGeometry sub;
+		sub.BaseVertexLocation = m_submesh[i].m_startVertex;
+		sub.IndexCount = m_submesh[i].m_indexSize;
+		sub.StartIndexLocation = m_submesh[i].m_startIndex;
+		sub.m_material= m_submesh[i].m_Texture["diffuse"];
+		m_Geometries[name]->AddSubMesh(m_submesh[i].m_name, sub);
+	}
+}
+
+void GeometryManager::CreateSubMesh(std::string name, std::string subName, UINT IndexCount, UINT StartIndexLocation, INT BaseVertexLocation)
 {
 	SubmeshGeometry sub;
 	sub.BaseVertexLocation = BaseVertexLocation;
@@ -39,9 +52,10 @@ void GeometryManager::CreateMeshVertexUpload(std::string name, UINT vbSize, std:
 
 void GeometryManager::LoadMesh(std::string fileName, std::string geoName,std::string subName)
 {
-	lo.LoadOBJ(fileName);
-	CreateMesh(geoName, lo.m_Vertices, lo.m_Indices);
-	CreateSubMesh(geoName, subName, (UINT)lo.m_Indices.size(), 0, 0);
+	LoadObjectByAssimp lo;
+	lo.LoadOBJ(subName,fileName);
+	CreateMesh(geoName, lo.m_vertices, lo.m_indices);
+	CreateSubMesh(geoName,lo.m_submesh);
 }
 
 

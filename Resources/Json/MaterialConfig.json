@@ -97,6 +97,41 @@
       "diffuseAlbedo": "1.0f, 1.0f, 1.0f, 1.0f",
       "fresnelR0": "0.05f, 0.05f, 0.05f",
       "roughness": 0.1
+    },
+    {
+      "name": "ganyucloth",
+      "srvIndex": 14,
+      "diffuseAlbedo": "1.0f, 1.0f, 1.0f, 1.0f",
+      "fresnelR0": "0.05f, 0.05f, 0.05",
+      "roughness": 0.25
+    },
+    {
+      "name": "ganyuface",
+      "srvIndex": 15,
+      "diffuseAlbedo": "1.0f, 1.0f, 1.0f, 1.0f",
+      "fresnelR0": "0.05f, 0.05f, 0.05",
+      "roughness": 0.25
+    },
+    {
+      "name": "ganyumuscle",
+      "srvIndex": 16,
+      "diffuseAlbedo": "1.0f, 1.0f, 1.0f, 1.0f",
+      "fresnelR0": "0.05f, 0.05f, 0.05",
+      "roughness": 0.25
+    },
+    {
+      "name": "ganyuhair",
+      "srvIndex": 17,
+      "diffuseAlbedo": "1.0f, 1.0f, 1.0f, 1.0f",
+      "fresnelR0": "0.05f, 0.05f, 0.05",
+      "roughness": 0.25
+    },
+    {
+      "name": "ganyuemo",
+      "srvIndex": 18,
+      "diffuseAlbedo": "1.0f, 1.0f, 1.0f, 1.0f",
+      "fresnelR0": "0.05f, 0.05f, 0.05",
+      "roughness": 0.25
     }
   ]
 }

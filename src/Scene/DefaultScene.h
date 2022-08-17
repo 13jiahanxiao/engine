@@ -56,10 +56,6 @@ private:
     void DrawRenderItems(ID3D12GraphicsCommandList* cmdList, RenderLayer name);
     void DrawItemByPsoLayer(RenderLayer renderLayer);
 
-    //将缩放和旋转指定到一个矩阵
-    FXMMATRIX PositionMatrix(float scaleX = 1.0f, float scaleY = 1.0f, float scaleZ = 1.0f,
-        float  translateX = 0.0f, float translateY = 0.0f, float translateZ = 0.0f,
-        float rotationZ = 0.0f);
 	float GetHillsHeight(float x, float z)const;
 	XMFLOAT3 GetHillsNormal(float x, float z)const;
 private:

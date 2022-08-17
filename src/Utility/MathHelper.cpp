@@ -79,3 +79,15 @@ XMVECTOR MathHelper::RandHemisphereUnitVec3(XMVECTOR n)
 		return XMVector3Normalize(v);
 	}
 }
+
+//大小*旋转*平移 
+FXMMATRIX MathHelper::PositionMatrix(float scaleX, float scaleY, float scaleZ,
+	float  translateX, float translateY, float translateZ,
+	float rotationZ)
+{
+	XMMATRIX Rotate = DirectX::XMMatrixRotationZ(rotationZ * MathHelper::Pi);
+	XMMATRIX Scale = DirectX::XMMatrixScaling(scaleX, scaleY, scaleZ);
+	XMMATRIX Offset = DirectX::XMMatrixTranslation(translateX, translateY, translateZ);
+	XMMATRIX World = Scale * Rotate * Offset;
+	return World;
+}

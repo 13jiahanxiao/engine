@@ -129,6 +129,7 @@ void DefaultScene::DrawItems()
 	mCommandList->SetGraphicsRootDescriptorTable(4, mTextureHeap->GetHeap()->GetGPUDescriptorHandleForHeapStart());
 
 	DrawItemByPsoLayer(RenderLayer::Opaque);
+	DrawItemByPsoLayer(RenderLayer::Wireframe);
 	DrawItemByPsoLayer(RenderLayer::AlphaTested);
 	DrawItemByPsoLayer(RenderLayer::TexRotate);
 	DrawItemByPsoLayer(RenderLayer::BillBoardTree);
@@ -575,6 +576,7 @@ void DefaultScene::BuildGeometrys()
 	ShapeGeometry();
 	BuildSkullGeometry();
 	BillTreeGeometry();
+	mItemManager->GetMeshManager()->LoadMesh("Resources/Models/ganyu/ganyu.pmx", "ganyu", "ganyu");
 	mItemManager->GetMeshManager()->LoadMesh("Resources/Models/cow.obj", "loadGeo", "cow");
 }
 #pragma endregion
@@ -685,39 +687,41 @@ void DefaultScene::BuildRenderItems()
 {
 	mItemManager->LoadRenderItemFromJson();
 	m_WavesRitem= mItemManager->GetRenderItem("water");
+	mItemManager->BuildAllSubRenderItem("ganyu", RenderLayer::Wireframe, "ganyu",
+		MathHelper::PositionMatrix(4.0f, 4.0f, 4.0f, 11.0f, 8.0f), MathHelper::PositionMatrix());
 
 	mItemManager->BuildRenderItem("sphere", RenderLayer::Opaque, "shapeGeo", "sphere", "stone",
-		PositionMatrix(3.0f, 3.0f, 3.0f, 7.0f, 8.0f, 5.0f),PositionMatrix());
+		MathHelper::PositionMatrix(3.0f, 3.0f, 3.0f, 7.0f, 8.0f, 5.0f),MathHelper::PositionMatrix());
 	mItemManager->BuildRenderItem("cow", RenderLayer::Opaque, "loadGeo", "cow", "cow",
-		PositionMatrix(4.0f, 4.0f, 4.0f, 11.0f,8.0f), PositionMatrix());
+		MathHelper::PositionMatrix(4.0f, 4.0f, 4.0f, 11.0f,8.0f), MathHelper::PositionMatrix());
 	//这里旋转针对材质
 	mItemManager->BuildRenderItem("flareBox", RenderLayer::TexRotate, "shapeGeo", "box", "flare",
-		PositionMatrix(3.0f, 3.0f, 3.0f, 10.0f, 8.0f, -5.0f), PositionMatrix());
+		MathHelper::PositionMatrix(3.0f, 3.0f, 3.0f, 10.0f, 8.0f, -5.0f), MathHelper::PositionMatrix());
 	mItemManager->BuildRenderItem("wirefenceBox", RenderLayer::AlphaTested, "shapeGeo", "box", "wirefence",
-		PositionMatrix(3.0f, 3.0f, 3.0f,10.0f, 8.0f, -10.0f),PositionMatrix());
+		MathHelper::PositionMatrix(3.0f, 3.0f, 3.0f,10.0f, 8.0f, -10.0f),MathHelper::PositionMatrix());
 
 
 	mItemManager->BuildRenderItem("mirror", RenderLayer::Mirror, "shapeGeo", "grid", "ice",
-		PositionMatrix(1.0f, 1.0f, 1.0f, 5.0f, 8.0f, 0.0f,-0.5),PositionMatrix());
+		MathHelper::PositionMatrix(1.0f, 1.0f, 1.0f, 5.0f, 8.0f, 0.0f,-0.5),MathHelper::PositionMatrix());
 
 	mItemManager->BuildRenderItem("cowReflection", RenderLayer::Reflection, "loadGeo", "cow", "cow",
-		PositionMatrix(4.0f, 4.0f, 4.0f, -1.0f, 8.0f), PositionMatrix());
+		MathHelper::PositionMatrix(4.0f, 4.0f, 4.0f, -1.0f, 8.0f), MathHelper::PositionMatrix());
 	mItemManager->BuildRenderItem("grassReflection", RenderLayer::Reflection, "shapeGeo", "sphere", "grass",
-		PositionMatrix(3.0f, 3.0f, 3.0f, 3.0f, 8.0f, 15.0f), PositionMatrix());
+		MathHelper::PositionMatrix(3.0f, 3.0f, 3.0f, 3.0f, 8.0f, 15.0f), MathHelper::PositionMatrix());
 	mItemManager->BuildRenderItem("sphereReflection", RenderLayer::Reflection, "shapeGeo", "sphere", "stone",
-		PositionMatrix(3.0f, 3.0f, 3.0f, 3.0f, 8.0f, 5.0f), PositionMatrix());
+		MathHelper::PositionMatrix(3.0f, 3.0f, 3.0f, 3.0f, 8.0f, 5.0f), MathHelper::PositionMatrix());
 	mItemManager->BuildRenderItem("flareBoxR", RenderLayer::Reflection, "shapeGeo", "sphere", "flare",
-		PositionMatrix(3.0f, 3.0f, 3.0f, 0.0f, 8.0f, -5.0f), PositionMatrix());
+		MathHelper::PositionMatrix(3.0f, 3.0f, 3.0f, 0.0f, 8.0f, -5.0f), MathHelper::PositionMatrix());
 	mItemManager->BuildRenderItem("wirefenceBoxR", RenderLayer::AlphaTestedAndRefection, "shapeGeo", "box", "wirefence",
-		PositionMatrix(3.0f, 3.0f, 3.0f, 0.0f, 8.0f, -10.0f), PositionMatrix());
+		MathHelper::PositionMatrix(3.0f, 3.0f, 3.0f, 0.0f, 8.0f, -10.0f), MathHelper::PositionMatrix());
 
 	mItemManager->AddRenderItemInLayer("mirror", RenderLayer::Transparent);
 
 	mItemManager->BuildRenderItem("treeSprites", RenderLayer::BillBoardTree, "treeSpritesGeo", "points", "treeTex",
-		PositionMatrix(), PositionMatrix(), D3D11_PRIMITIVE_TOPOLOGY_POINTLIST);
+		MathHelper::PositionMatrix(), MathHelper::PositionMatrix(), D3D11_PRIMITIVE_TOPOLOGY_POINTLIST);
 
 	mItemManager->BuildRenderItem("skyBox", RenderLayer::Sky, "shapeGeo", "sphere", "skyBox",
-		PositionMatrix(5.0f, 5.0f, 5.0f), PositionMatrix());
+		MathHelper::PositionMatrix(5.0f, 5.0f, 5.0f), MathHelper::PositionMatrix());
 }
 
 void DefaultScene::DrawRenderItems(ID3D12GraphicsCommandList* cmdList, RenderLayer name)
@@ -727,18 +731,6 @@ void DefaultScene::DrawRenderItems(ID3D12GraphicsCommandList* cmdList, RenderLay
 	auto objectCB = mCurrFrameResource->ObjectCB->GetResource();
 
 	mItemManager->DrawRenderItems(objCBByteSize, objectCB->GetGPUVirtualAddress(),cmdList, name);
-}
-
-//大小*旋转*平移 
-FXMMATRIX DefaultScene::PositionMatrix(float scaleX,float scaleY,float scaleZ, 
-	float  translateX,float translateY ,float translateZ ,
-	float rotationZ)
-{
-	XMMATRIX Rotate = DirectX::XMMatrixRotationZ(rotationZ * MathHelper::Pi);
-	XMMATRIX Scale = DirectX::XMMatrixScaling(scaleX, scaleY, scaleZ);
-	XMMATRIX Offset = DirectX::XMMatrixTranslation(translateX, translateY, translateZ);
-	XMMATRIX World = Scale*Rotate * Offset;
-	return World;
 }
 
 float DefaultScene::GetHillsHeight(float x, float z)const

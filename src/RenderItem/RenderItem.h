@@ -76,6 +76,10 @@ public:
    void UpdateObjectCBs(UploadBuffer<ObjectConstants>* cb);
    
    void AddRenderItemInLayer(std::string itemName, RenderLayer renderLayer);
+
+   void BuildAllSubRenderItem(std::string itemName, RenderLayer renderLayer, std::string geoName,
+       DirectX::XMMATRIX world, DirectX::XMMATRIX texTransform, D3D_PRIMITIVE_TOPOLOGY topo = D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
    int ItemsSize() { return mRitems.size(); }
 
    Material* GetMaterial(std::string name) { return mMaterialManager->GetMaterial(name); }

@@ -3,17 +3,6 @@
 #include<DirectXMath.h>
 using json = nlohmann::json;
 
-DirectX::FXMMATRIX PositionMatrix(float scaleX, float scaleY, float scaleZ,
-	float  translateX, float translateY, float translateZ,
-	float rotationZ)
-{
-	DirectX::XMMATRIX Rotate = DirectX::XMMatrixRotationZ(rotationZ * MathHelper::Pi);
-	DirectX::XMMATRIX Scale = DirectX::XMMatrixScaling(scaleX, scaleY, scaleZ);
-	DirectX::XMMATRIX Offset = DirectX::XMMatrixTranslation(translateX, translateY, translateZ);
-	DirectX::XMMATRIX World = Scale * Rotate * Offset;
-	return World;
-}
-
 RenderItemManager::RenderItemManager(Device* device, ID3D12GraphicsCommandList* cmdList): mDevice(device)
 {
 	mGeometryManager = std::make_unique<GeometryManager>(mDevice, cmdList);
@@ -43,13 +32,13 @@ void RenderItemManager::LoadRenderItemFromJson()
 		std::string temp = mData[i].at("world");
 		std::vector<std::string> svert;
 		Split(temp, svert, ",");
-		DirectX::FXMMATRIX world= PositionMatrix(atof(svert[0].c_str()), atof(svert[1].c_str()), atof(svert[2].c_str()), 
+		DirectX::FXMMATRIX world=  MathHelper::PositionMatrix(atof(svert[0].c_str()), atof(svert[1].c_str()), atof(svert[2].c_str()), 
 			atof(svert[3].c_str()),atof(svert[4].c_str()),atof(svert[5].c_str()),atof(svert[6].c_str()));
 		svert.clear();
 
 		temp = mData[i].at("texTransform");
 		Split(temp, svert, ",");
-		DirectX::FXMMATRIX tex= PositionMatrix(atof(svert[0].c_str()), atof(svert[1].c_str()), atof(svert[2].c_str()),
+		DirectX::FXMMATRIX tex= MathHelper::PositionMatrix(atof(svert[0].c_str()), atof(svert[1].c_str()), atof(svert[2].c_str()),
 			atof(svert[3].c_str()), atof(svert[4].c_str()), atof(svert[5].c_str()), atof(svert[6].c_str()));
 
 		int topology = mData[i].at("topology");
@@ -94,6 +83,23 @@ void RenderItemManager::BuildRenderItem(std::string itemName, RenderLayer render
 
 	//std::move 会把左值变成右值，防止内存的赋值操作，转移后原对象为空
 	mRitems[Ritem->Name] = std::move(Ritem);
+}
+
+void RenderItemManager::BuildAllSubRenderItem(std::string itemName, RenderLayer renderLayer, std::string geoName,
+	DirectX::XMMATRIX world, DirectX::XMMATRIX texTransform, D3D_PRIMITIVE_TOPOLOGY topo)
+{
+	auto geo=mGeometryManager->GetGeo(geoName);
+	auto pSub = geo->GetAllSubMesh();
+	auto it = pSub.begin();
+	int count = 0;
+	while (it != pSub.end()) 
+	{
+		count++;
+		std::string name = itemName;
+		name += std::to_string(count);
+		BuildRenderItem(name, renderLayer, geoName, it->first, it->second.m_material,world, texTransform, topo);
+		it++;
+	}
 }
 
 void RenderItemManager::DrawRenderItems(UINT objCBByteSize , D3D12_GPU_VIRTUAL_ADDRESS objCBGPUAddress, 

@@ -10,6 +10,7 @@ struct SubmeshGeometry
 	// Bounding box of the geometry defined by this submesh. 
 	// This is used in later chapters of the book.
 	DirectX::BoundingBox Bounds;
+	std::string m_material;
 };
 
 class MeshGeometry
@@ -31,7 +32,7 @@ public:
 
 	void AddSubMesh(std::string name, SubmeshGeometry sub) { m_DrawArgs[name] = sub; }
 	SubmeshGeometry  GetSubMesh(std::string name)  { return m_DrawArgs[name]; }
-
+	std::unordered_map<std::string, SubmeshGeometry>  GetAllSubMesh() { return m_DrawArgs; }
 	void SetVertexBufferGPU(ID3D12Resource* resource) { m_VertexBufferGPU = resource; }
 private:
 	std::string m_Name;

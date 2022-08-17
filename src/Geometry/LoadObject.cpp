@@ -3,11 +3,87 @@
 #include<string>
 #include<vector>
 #include <fstream>
+
+LoadObjectByAssimp::LoadObjectByAssimp()
+{
+	
+}
+LoadObjectByAssimp::~LoadObjectByAssimp()
+{
+}
+void LoadObjectByAssimp::LoadOBJ(std::string subName,std::string fileName)
+{
+	Assimp::Importer aiImporter;
+	const aiScene* pModel = aiImporter.ReadFile(fileName, aiProcess_Triangulate);
+	if (nullptr == pModel)
+	{
+		return;
+	}
+	m_vertices.clear();
+	m_indices.clear();
+	m_indiceSize = 0;
+	if (pModel->HasMeshes()) 
+	{
+		for (int num = 0; num < pModel->mNumMeshes; num++)
+		{
+			SubMesh pSub;
+			pSub.m_startIndex = m_indiceSize;
+			pSub.m_startVertex = m_indiceSize;
+			aiMesh* pMesh = pModel->mMeshes[num];
+			if (pMesh->HasFaces())
+			{
+				for (int i = 0; i < pMesh->mNumVertices; i++)
+				{
+					//已经根据面的顺序排好顶点顺序了
+					Vertex ver;
+					ver.Pos.x = pMesh->mVertices[i].x;
+					ver.Pos.y = pMesh->mVertices[i].y;
+					ver.Pos.z = pMesh->mVertices[i].z;
+					ver.TexC.x = pMesh->mTextureCoords[0][i].x;
+					ver.TexC.y = pMesh->mTextureCoords[0][i].y;
+					ver.Normal.x = pMesh->mNormals[i].x;
+					ver.Normal.y = pMesh->mNormals[i].y;
+					ver.Normal.z = pMesh->mNormals[i].z;
+					m_vertices.push_back(ver);
+					m_indices.push_back(m_indiceSize);
+					m_indiceSize++;
+				}
+			}
+			if (pMesh->mMaterialIndex >= 0)
+			{
+				if (pModel->HasMaterials()) 
+				{
+					aiMaterial* pMaterial = pModel->mMaterials[pMesh->mMaterialIndex];
+					aiString aistr;
+					std::string pTexName = subName;
+					pMaterial->GetTexture(aiTextureType_DIFFUSE, 0, &aistr);
+					std::string pTexPath = aistr.C_Str();
+					if (pTexPath.size() > 0) 
+					{
+						std::vector<std::string>svert1, svert2;
+						Split(pTexPath, svert1, "/");
+						Split(svert1[1], svert2, ".");
+						pTexName += svert2[0];
+						pSub.m_Texture["diffuse"] = pTexName;
+					}
+					//pMaterial->GetTexture(aiTextureType_SPECULAR, 0, &aistr);
+					//std::string texpath1 = aistr.C_Str();
+					//pMaterial->GetTexture(aiTextureType_AMBIENT, 0, &aistr);
+					//std::string texpath2 = aistr.C_Str();
+				}
+			}
+			pSub.m_indexSize = m_indiceSize;
+			pSub.m_name = pMesh->mName.C_Str();
+			m_submesh.push_back(pSub);
+		}
+	}
+}
+
+
 LoadObject::LoadObject()
 {
 	m_IndiceSize = 0;
 }
-
 LoadObject::~LoadObject()
 {
 }
@@ -44,7 +120,6 @@ void LoadObject::Split(const std::string& in, std::vector<std::string>& out, std
 		}
 	}
 }
-
 std::string LoadObject::Tail(const std::string& in)
 {
 	size_t token_start = in.find_first_not_of(" \t");
@@ -61,7 +136,6 @@ std::string LoadObject::Tail(const std::string& in)
 	}
 	return "";
 }
-
 std::string LoadObject::FirstToken(const std::string& in)
 {
 	if (!in.empty())
@@ -79,7 +153,6 @@ std::string LoadObject::FirstToken(const std::string& in)
 	}
 	return "";
 }
-
 template <class T>
 inline const T& LoadObject::GetElement(const std::vector<T>& elements, std::string& index)
 {
@@ -90,11 +163,11 @@ inline const T& LoadObject::GetElement(const std::vector<T>& elements, std::stri
 		idx--;
 	return elements[idx];
 }
-
 void LoadObject::IndicesCreate(std::string curline, std::vector <DirectX::XMFLOAT3> pos,
 std::vector <DirectX::XMFLOAT3> normals,
 std::vector <DirectX::XMFLOAT2> texC)
 {
+	//先把顶点数据设置好，然后将每个点的数据从0到n展开
 	std::vector<std::string> sface, svert;
 	Split(Tail(curline), sface, " ");
 	for (int i = 0; i < int(sface.size()); i++)
@@ -194,7 +267,6 @@ std::vector <DirectX::XMFLOAT2> texC)
 	//	}
 	//}
 }
-
 void LoadObject::LoadOBJ(std::string fileName)
 {
 	m_IndiceSize = 0;
