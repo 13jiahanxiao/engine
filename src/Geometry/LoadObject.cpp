@@ -14,7 +14,7 @@ LoadObjectByAssimp::~LoadObjectByAssimp()
 void LoadObjectByAssimp::LoadOBJ(std::string subName,std::string fileName)
 {
 	Assimp::Importer aiImporter;
-	const aiScene* pModel = aiImporter.ReadFile(fileName, aiProcess_Triangulate);
+	const aiScene* pModel = aiImporter.ReadFile(fileName, aiProcess_MakeLeftHanded);
 	if (nullptr == pModel)
 	{
 		return;
@@ -22,19 +22,20 @@ void LoadObjectByAssimp::LoadOBJ(std::string subName,std::string fileName)
 	m_vertices.clear();
 	m_indices.clear();
 	m_indiceSize = 0;
+	int pStartVertex = 0;
+	int pIndex = 0;
 	if (pModel->HasMeshes()) 
 	{
 		for (int num = 0; num < pModel->mNumMeshes; num++)
 		{
 			SubMesh pSub;
-			pSub.m_startIndex = m_indiceSize;
-			pSub.m_startVertex = m_indiceSize;
+			pSub.m_startIndex = pIndex;
+			pSub.m_startVertex = pStartVertex;
 			aiMesh* pMesh = pModel->mMeshes[num];
 			if (pMesh->HasFaces())
 			{
 				for (int i = 0; i < pMesh->mNumVertices; i++)
 				{
-					//已经根据面的顺序排好顶点顺序了
 					Vertex ver;
 					ver.Pos.x = pMesh->mVertices[i].x;
 					ver.Pos.y = pMesh->mVertices[i].y;
@@ -45,10 +46,17 @@ void LoadObjectByAssimp::LoadOBJ(std::string subName,std::string fileName)
 					ver.Normal.y = pMesh->mNormals[i].y;
 					ver.Normal.z = pMesh->mNormals[i].z;
 					m_vertices.push_back(ver);
-					m_indices.push_back(m_indiceSize);
-					m_indiceSize++;
+				}
+				pStartVertex += pMesh->mNumVertices;
+				for (int i = 0; i < pMesh->mNumFaces; i++)
+				{
+					aiFace face = pMesh->mFaces[i];
+					for (int j = 0; j < face.mNumIndices; j++)
+						m_indices.push_back(face.mIndices[j]);
 				}
 			}
+			pSub.m_indexSize = pMesh->mNumFaces *3;
+			pIndex += pSub.m_indexSize;
 			if (pMesh->mMaterialIndex >= 0)
 			{
 				if (pModel->HasMaterials()) 
@@ -72,7 +80,6 @@ void LoadObjectByAssimp::LoadOBJ(std::string subName,std::string fileName)
 					//std::string texpath2 = aistr.C_Str();
 				}
 			}
-			pSub.m_indexSize = m_indiceSize;
 			pSub.m_name = pMesh->mName.C_Str();
 			m_submesh.push_back(pSub);
 		}

@@ -1,110 +1,21 @@
-﻿  AnimationHelper.cpp
-  BlurFilter.cpp
-  PostProcess.cpp
-  RootSignature.cpp
-  D3DScene.cpp
-E:\REngine\src\Texture\Texture.h(37,22): warning C4267: “return”: 从“size_t”转换到“int”，可能丢失数据
-E:\REngine\src\Material\Materials.h(94,23): warning C4267: “return”: 从“size_t”转换到“int”，可能丢失数据
-E:\REngine\src\RenderItem\RenderItem.h(83,20): warning C4267: “return”: 从“size_t”转换到“int”，可能丢失数据
-  DefaultScene.cpp
-E:\REngine\src\Texture\Texture.h(37,22): warning C4267: “return”: 从“size_t”转换到“int”，可能丢失数据
-E:\REngine\src\Material\Materials.h(94,23): warning C4267: “return”: 从“size_t”转换到“int”，可能丢失数据
-E:\REngine\src\RenderItem\RenderItem.h(83,20): warning C4267: “return”: 从“size_t”转换到“int”，可能丢失数据
-  Camera.cpp
-  Device.cpp
-  GeometryGenerator.cpp
-  GeometryManager.cpp
-E:\REngine\src\Material\Materials.h(94,23): warning C4267: “return”: 从“size_t”转换到“int”，可能丢失数据
-  LoadObject.cpp
-E:\REngine\src\Material\Materials.h(94,23): warning C4267: “return”: 从“size_t”转换到“int”，可能丢失数据
-E:\REngine\src\Geometry\LoadObject.cpp(27,25): warning C4018: “<”: 有符号/无符号不匹配
-E:\REngine\src\Geometry\LoadObject.cpp(35,23): warning C4018: “<”: 有符号/无符号不匹配
-E:\REngine\src\Geometry\LoadObject.cpp(206,40): warning C4244: “参数”: 从“float”转换到“const unsigned __int64”，可能丢失数据
-E:\REngine\src\Geometry\LoadObject.cpp(207,40): warning C4244: “参数”: 从“float”转换到“const unsigned __int64”，可能丢失数据
-E:\REngine\src\Geometry\LoadObject.cpp(208,40): warning C4244: “参数”: 从“float”转换到“const unsigned __int64”，可能丢失数据
-E:\REngine\src\Geometry\LoadObject.cpp(215,40): warning C4244: “参数”: 从“float”转换到“const unsigned __int64”，可能丢失数据
-E:\REngine\src\Geometry\LoadObject.cpp(216,40): warning C4244: “参数”: 从“float”转换到“const unsigned __int64”，可能丢失数据
-E:\REngine\src\Geometry\LoadObject.cpp(217,40): warning C4244: “参数”: 从“float”转换到“const unsigned __int64”，可能丢失数据
-E:\REngine\src\Geometry\LoadObject.cpp(218,42): warning C4244: “参数”: 从“float”转换到“const unsigned __int64”，可能丢失数据
-E:\REngine\src\Geometry\LoadObject.cpp(219,42): warning C4244: “参数”: 从“float”转换到“const unsigned __int64”，可能丢失数据
-E:\REngine\src\Geometry\LoadObject.cpp(226,40): warning C4244: “参数”: 从“float”转换到“const unsigned __int64”，可能丢失数据
-E:\REngine\src\Geometry\LoadObject.cpp(227,40): warning C4244: “参数”: 从“float”转换到“const unsigned __int64”，可能丢失数据
-E:\REngine\src\Geometry\LoadObject.cpp(228,40): warning C4244: “参数”: 从“float”转换到“const unsigned __int64”，可能丢失数据
-E:\REngine\src\Geometry\LoadObject.cpp(229,47): warning C4244: “参数”: 从“float”转换到“const unsigned __int64”，可能丢失数据
-E:\REngine\src\Geometry\LoadObject.cpp(230,47): warning C4244: “参数”: 从“float”转换到“const unsigned __int64”，可能丢失数据
-E:\REngine\src\Geometry\LoadObject.cpp(231,47): warning C4244: “参数”: 从“float”转换到“const unsigned __int64”，可能丢失数据
-E:\REngine\src\Geometry\LoadObject.cpp(238,40): warning C4244: “参数”: 从“float”转换到“const unsigned __int64”，可能丢失数据
-E:\REngine\src\Geometry\LoadObject.cpp(239,40): warning C4244: “参数”: 从“float”转换到“const unsigned __int64”，可能丢失数据
-E:\REngine\src\Geometry\LoadObject.cpp(240,40): warning C4244: “参数”: 从“float”转换到“const unsigned __int64”，可能丢失数据
-E:\REngine\src\Geometry\LoadObject.cpp(241,42): warning C4244: “参数”: 从“float”转换到“const unsigned __int64”，可能丢失数据
-E:\REngine\src\Geometry\LoadObject.cpp(242,42): warning C4244: “参数”: 从“float”转换到“const unsigned __int64”，可能丢失数据
-E:\REngine\src\Geometry\LoadObject.cpp(243,47): warning C4244: “参数”: 从“float”转换到“const unsigned __int64”，可能丢失数据
-E:\REngine\src\Geometry\LoadObject.cpp(244,47): warning C4244: “参数”: 从“float”转换到“const unsigned __int64”，可能丢失数据
-E:\REngine\src\Geometry\LoadObject.cpp(245,47): warning C4244: “参数”: 从“float”转换到“const unsigned __int64”，可能丢失数据
-  MeshGeometry.cpp
-E:\REngine\src\Material\Materials.h(94,23): warning C4267: “return”: 从“size_t”转换到“int”，可能丢失数据
-  Light.cpp
-  MainApp.cpp
-E:\REngine\src\Texture\Texture.h(37,22): warning C4267: “return”: 从“size_t”转换到“int”，可能丢失数据
-E:\REngine\src\Material\Materials.h(94,23): warning C4267: “return”: 从“size_t”转换到“int”，可能丢失数据
-E:\REngine\src\RenderItem\RenderItem.h(83,20): warning C4267: “return”: 从“size_t”转换到“int”，可能丢失数据
-  Materials.cpp
-E:\REngine\src\Material\Materials.h(94,23): warning C4267: “return”: 从“size_t”转换到“int”，可能丢失数据
-E:\REngine\src\Material\Materials.cpp(60,19): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
-E:\REngine\src\Material\Materials.cpp(61,19): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
-E:\REngine\src\Material\Materials.cpp(62,19): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
-E:\REngine\src\Material\Materials.cpp(63,19): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
-E:\REngine\src\Material\Materials.cpp(69,19): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
-E:\REngine\src\Material\Materials.cpp(70,19): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
-E:\REngine\src\Material\Materials.cpp(71,19): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
-  PsoContainer.cpp
-E:\REngine\src\Material\Materials.h(94,23): warning C4267: “return”: 从“size_t”转换到“int”，可能丢失数据
-E:\REngine\src\Texture\Texture.h(37,22): warning C4267: “return”: 从“size_t”转换到“int”，可能丢失数据
-E:\REngine\src\RenderItem\RenderItem.h(83,20): warning C4267: “return”: 从“size_t”转换到“int”，可能丢失数据
-  RenderItem.cpp
-E:\REngine\src\Material\Materials.h(94,23): warning C4267: “return”: 从“size_t”转换到“int”，可能丢失数据
-E:\REngine\src\Texture\Texture.h(37,22): warning C4267: “return”: 从“size_t”转换到“int”，可能丢失数据
-E:\REngine\src\RenderItem\RenderItem.h(83,20): warning C4267: “return”: 从“size_t”转换到“int”，可能丢失数据
-E:\REngine\src\RenderItem\RenderItem.cpp(36,77): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
-E:\REngine\src\RenderItem\RenderItem.cpp(36,54): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
-E:\REngine\src\RenderItem\RenderItem.cpp(36,31): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
-E:\REngine\src\RenderItem\RenderItem.cpp(36,8): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
-E:\REngine\src\RenderItem\RenderItem.cpp(35,109): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
-E:\REngine\src\RenderItem\RenderItem.cpp(35,85): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
-E:\REngine\src\RenderItem\RenderItem.cpp(35,61): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
-E:\REngine\src\RenderItem\RenderItem.cpp(42,80): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
-E:\REngine\src\RenderItem\RenderItem.cpp(42,56): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
-E:\REngine\src\RenderItem\RenderItem.cpp(42,32): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
-E:\REngine\src\RenderItem\RenderItem.cpp(42,8): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
-E:\REngine\src\RenderItem\RenderItem.cpp(41,106): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
-E:\REngine\src\RenderItem\RenderItem.cpp(41,82): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
-E:\REngine\src\RenderItem\RenderItem.cpp(41,58): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
-  Buffer.cpp
-  DefaultBuffer.cpp
-  DescriptorHeap.cpp
-E:\REngine\src\Resources\DescriptorHeap.cpp(8,26): warning C4244: “=”: 从“uint64”转换到“UINT”，可能丢失数据
-E:\REngine\src\Resources\DescriptorHeap.cpp(14,23): warning C4267: “=”: 从“size_t”转换到“_Ty”，可能丢失数据
-          with
-          [
-              _Ty=uint
-          ]
-  正在生成代码...
-  正在编译...
-  FrameResource.cpp
-E:\REngine\src\Material\Materials.h(94,23): warning C4267: “return”: 从“size_t”转换到“int”，可能丢失数据
-  DDSTextureLoader.cpp
-  Texture.cpp
-E:\REngine\src\Texture\Texture.h(37,22): warning C4267: “return”: 从“size_t”转换到“int”，可能丢失数据
-  GameTimer.cpp
-  tinyxml2.cpp
-  d3dUtil.cpp
-E:\REngine\src\Utility\d3dUtil.cpp(103,78): warning C4267: “参数”: 从“size_t”转换到“int”，可能丢失数据
-E:\REngine\src\Utility\d3dUtil.cpp(106,72): warning C4267: “参数”: 从“size_t”转换到“int”，可能丢失数据
-  MathHelper.cpp
-  ReflectableStruct.cpp
-  ShaderCompile.cpp
-  Wave.cpp
-  正在生成代码...
+﻿  RenderItem.cpp
+E:\ademo\REngine\src\Material\Materials.h(94,23): warning C4267: “return”: 从“size_t”转换到“int”，可能丢失数据
+E:\ademo\REngine\src\Texture\Texture.h(37,22): warning C4267: “return”: 从“size_t”转换到“int”，可能丢失数据
+E:\ademo\REngine\src\RenderItem\RenderItem.h(83,20): warning C4267: “return”: 从“size_t”转换到“int”，可能丢失数据
+E:\ademo\REngine\src\RenderItem\RenderItem.cpp(36,77): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
+E:\ademo\REngine\src\RenderItem\RenderItem.cpp(36,54): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
+E:\ademo\REngine\src\RenderItem\RenderItem.cpp(36,31): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
+E:\ademo\REngine\src\RenderItem\RenderItem.cpp(36,8): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
+E:\ademo\REngine\src\RenderItem\RenderItem.cpp(35,109): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
+E:\ademo\REngine\src\RenderItem\RenderItem.cpp(35,85): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
+E:\ademo\REngine\src\RenderItem\RenderItem.cpp(35,61): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
+E:\ademo\REngine\src\RenderItem\RenderItem.cpp(42,80): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
+E:\ademo\REngine\src\RenderItem\RenderItem.cpp(42,56): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
+E:\ademo\REngine\src\RenderItem\RenderItem.cpp(42,32): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
+E:\ademo\REngine\src\RenderItem\RenderItem.cpp(42,8): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
+E:\ademo\REngine\src\RenderItem\RenderItem.cpp(41,106): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
+E:\ademo\REngine\src\RenderItem\RenderItem.cpp(41,82): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
+E:\ademo\REngine\src\RenderItem\RenderItem.cpp(41,58): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
 LINK : warning LNK4075: 忽略“/INCREMENTAL”(由于“/LTCG”规范)
   LINK : 已指定 /LTCG，但不需要生成代码；从链接命令行中移除 /LTCG 以提高链接器性能
-  REngine.vcxproj -> E:\REngine\x64\Debug\REngine.exe
+  REngine.vcxproj -> E:\ademo\REngine\x64\Debug\REngine.exe

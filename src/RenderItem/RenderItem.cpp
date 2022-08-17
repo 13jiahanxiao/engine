@@ -91,6 +91,11 @@ void RenderItemManager::BuildAllSubRenderItem(std::string itemName, RenderLayer 
 	auto geo=mGeometryManager->GetGeo(geoName);
 	auto pSub = geo->GetAllSubMesh();
 	auto it = pSub.begin();
+	//it = pSub.find("eyewhite");
+	//if (it != pSub.end()) 
+	//{
+	//	BuildRenderItem(itemName, renderLayer, geoName, it->first, it->second.m_material, world, texTransform, topo);
+	//}
 	int count = 0;
 	while (it != pSub.end()) 
 	{

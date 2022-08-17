@@ -596,6 +596,7 @@ void DefaultScene::BuildFrameResources()
 void DefaultScene::BuildPSOs()
 {
 	D3D12_GRAPHICS_PIPELINE_STATE_DESC  opaquePsoDesc = mPsoContainer->GetOpaquePsoDesc();
+	opaquePsoDesc.RasterizerState.CullMode =D3D12_CULL_MODE_NONE;
 	mPsoContainer->AddPsoContainer(opaquePsoDesc,RenderLayer::Opaque);
 
 	//纹理旋转融合指定单独shader
@@ -687,8 +688,8 @@ void DefaultScene::BuildRenderItems()
 {
 	mItemManager->LoadRenderItemFromJson();
 	m_WavesRitem= mItemManager->GetRenderItem("water");
-	mItemManager->BuildAllSubRenderItem("ganyu", RenderLayer::Wireframe, "ganyu",
-		MathHelper::PositionMatrix(4.0f, 4.0f, 4.0f, 11.0f, 8.0f), MathHelper::PositionMatrix());
+	mItemManager->BuildAllSubRenderItem("ganyu", RenderLayer::Opaque, "ganyu",
+		MathHelper::PositionMatrix(0.25f, 0.25f,0.25f, 11.0f, 8.0f), MathHelper::PositionMatrix());
 
 	mItemManager->BuildRenderItem("sphere", RenderLayer::Opaque, "shapeGeo", "sphere", "stone",
 		MathHelper::PositionMatrix(3.0f, 3.0f, 3.0f, 7.0f, 8.0f, 5.0f),MathHelper::PositionMatrix());
