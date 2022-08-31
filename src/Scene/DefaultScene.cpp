@@ -31,10 +31,10 @@ bool DefaultScene::Initialize()
 	mTextureHeap = std::make_unique<DescriptorHeap>(m_Device.get(), D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV,
 		mTextureManager->GetTextureNum() + mPostProcess->GetHeapSize(), true);
 	//创建描述符
-	mTextureManager->CreateDDSTexture(m_Device.get(), mCommandList.Get());
+	mTextureManager->CreateTexture(m_Device.get(), mCommandList.Get());
 	mTextureManager->BuildTextureHeap(mTextureHeap.get());
 
-	mRootsignature->Init(mTextureManager->GetTextureNum()-1);
+	mRootsignature->Init(mTextureManager->GetTextureNum());
 
 	mPostProcess->SetDescriptorHeapAndOffset(mTextureHeap.get(), mTextureManager->GetTextureNum());
 
@@ -122,35 +122,29 @@ void DefaultScene::DrawItems()
 	auto matBuffer = mCurrFrameResource->MaterialBuffer->GetResource();
 	mCommandList->SetGraphicsRootShaderResourceView(2, matBuffer->GetGPUVirtualAddress());
 
-	CD3DX12_GPU_DESCRIPTOR_HANDLE skyTexDescriptor(mTextureHeap->GetHeap()->GetGPUDescriptorHandleForHeapStart());
-	skyTexDescriptor.Offset(13, mCbvSrvUavDescriptorSize);
-	mCommandList->SetGraphicsRootDescriptorTable(3, skyTexDescriptor);
+	//CD3DX12_GPU_DESCRIPTOR_HANDLE skyTexDescriptor(mTextureHeap->GetHeap()->GetGPUDescriptorHandleForHeapStart());
+	//skyTexDescriptor.Offset(13, mCbvSrvUavDescriptorSize);
+	//mCommandList->SetGraphicsRootDescriptorTable(3, skyTexDescriptor);
 
 	mCommandList->SetGraphicsRootDescriptorTable(4, mTextureHeap->GetHeap()->GetGPUDescriptorHandleForHeapStart());
 
 	DrawItemByPsoLayer(RenderLayer::Opaque);
-	DrawItemByPsoLayer(RenderLayer::Wireframe);
-	DrawItemByPsoLayer(RenderLayer::AlphaTested);
-	DrawItemByPsoLayer(RenderLayer::TexRotate);
-	DrawItemByPsoLayer(RenderLayer::BillBoardTree);
-
-	mCommandList->OMSetStencilRef(1);
-	DrawItemByPsoLayer(RenderLayer::Mirror);
-
-	//2个pass要在frame体现出来
-	UINT passCBByteSize = d3dUtil::CalcConstantBufferByteSize(sizeof(PassConstants));
-	mCommandList->SetGraphicsRootConstantBufferView(1, passCB->GetGPUVirtualAddress() + 1 * passCBByteSize);
-	DrawItemByPsoLayer(RenderLayer::Reflection);
-
-	DrawItemByPsoLayer(RenderLayer::AlphaTestedAndRefection);
-
-	mCommandList->SetGraphicsRootConstantBufferView(1, passCB->GetGPUVirtualAddress());
-	mCommandList->OMSetStencilRef(0);
-
-
-	//做混合
-	DrawItemByPsoLayer(RenderLayer::Transparent);
-	DrawItemByPsoLayer(RenderLayer::Sky);
+	//DrawItemByPsoLayer(RenderLayer::Wireframe);
+	//DrawItemByPsoLayer(RenderLayer::AlphaTested);
+	//DrawItemByPsoLayer(RenderLayer::TexRotate);
+	//DrawItemByPsoLayer(RenderLayer::BillBoardTree);
+	//mCommandList->OMSetStencilRef(1);
+	//DrawItemByPsoLayer(RenderLayer::Mirror);
+	////2个pass要在frame体现出来
+	//UINT passCBByteSize = d3dUtil::CalcConstantBufferByteSize(sizeof(PassConstants));
+	//mCommandList->SetGraphicsRootConstantBufferView(1, passCB->GetGPUVirtualAddress() + 1 * passCBByteSize);
+	//DrawItemByPsoLayer(RenderLayer::Reflection);
+	//DrawItemByPsoLayer(RenderLayer::AlphaTestedAndRefection);
+	//mCommandList->SetGraphicsRootConstantBufferView(1, passCB->GetGPUVirtualAddress());
+	//mCommandList->OMSetStencilRef(0);
+	////做混合
+	//DrawItemByPsoLayer(RenderLayer::Transparent);
+	//DrawItemByPsoLayer(RenderLayer::Sky);
 
 
 }
@@ -182,11 +176,11 @@ void DefaultScene::Update(const GameTimer& gt)
 		WaitForSingleObject(eventHandle, INFINITE);
 		CloseHandle(eventHandle);
 	}
-	AnimateMaterials(gt);
+	//AnimateMaterials(gt);
 	mItemManager->UpdateCBs(mCurrFrameResource);
 	UpdateMainPassCB(gt);
 	UpdateReflectPassCB(gt);
-	UpdateWaves(gt);
+	//UpdateWaves(gt);
 }
 
 #pragma region update具体实现
@@ -581,7 +575,6 @@ void DefaultScene::BuildGeometrys()
 }
 #pragma endregion
 
-
 //cpu gpu之间通信的围栏点
 void DefaultScene::BuildFrameResources()
 {
@@ -599,77 +592,12 @@ void DefaultScene::BuildPSOs()
 	opaquePsoDesc.RasterizerState.CullMode =D3D12_CULL_MODE_NONE;
 	mPsoContainer->AddPsoContainer(opaquePsoDesc,RenderLayer::Opaque);
 
-	//纹理旋转融合指定单独shader
-	D3D12_GRAPHICS_PIPELINE_STATE_DESC texRotatePsoDesc= mPsoContainer->GetOpaquePsoDesc();
-	texRotatePsoDesc.VS = mPsoContainer->SetShader("rotateVS");
-	mPsoContainer->AddPsoContainer(texRotatePsoDesc,RenderLayer::TexRotate);
-
-	//D3D12_GRAPHICS_PIPELINE_STATE_DESC  NoTextureDesc= opaquePsoDesc;
-	//NoTextureDesc.VS = m_Shaders->GetShaderBYTE("NoTextureVS");
-	//NoTextureDesc.PS = m_Shaders->GetShaderBYTE("NoTexturePS");
-	//ThrowIfFailed(m_Device->GetDevice()->CreateGraphicsPipelineState(&NoTextureDesc, IID_PPV_ARGS(&m_PSOs[RenderLayer::NoTexture])));
-
-	//透明海水混合
-	D3D12_GRAPHICS_PIPELINE_STATE_DESC transparentPsoDesc = mPsoContainer->GetOpaquePsoDesc();
-
-	transparentPsoDesc.BlendState.RenderTarget[0] = mPsoContainer->GetTransparencyBlendDefault();
-
-	mPsoContainer->AddPsoContainer(transparentPsoDesc,RenderLayer::Transparent);
-
-	//雾效果和alpha剔除
-	D3D12_GRAPHICS_PIPELINE_STATE_DESC alphaTestedPsoDesc = mPsoContainer->GetOpaquePsoDesc();
-	alphaTestedPsoDesc.PS = mPsoContainer->SetShader("alphaTestedPS");
-	alphaTestedPsoDesc.RasterizerState.CullMode = D3D12_CULL_MODE_NONE;
-	mPsoContainer->AddPsoContainer(alphaTestedPsoDesc,RenderLayer::AlphaTested);
-
-	//线框模式
-	D3D12_GRAPHICS_PIPELINE_STATE_DESC opaqueWireframePsoDesc = mPsoContainer->GetOpaquePsoDesc();
-	opaqueWireframePsoDesc.RasterizerState.FillMode = D3D12_FILL_MODE_WIREFRAME;
-	mPsoContainer->AddPsoContainer(opaqueWireframePsoDesc,RenderLayer::Wireframe);
-
-	//mirror
-	CD3DX12_BLEND_DESC mirrorBlendState(D3D12_DEFAULT);
-	mirrorBlendState.RenderTarget[0].RenderTargetWriteMask = 0;
-
-	D3D12_GRAPHICS_PIPELINE_STATE_DESC markMirrorsPsoDesc = mPsoContainer->GetOpaquePsoDesc();
-	markMirrorsPsoDesc.BlendState = mirrorBlendState;
-	markMirrorsPsoDesc.DepthStencilState = mPsoContainer->GetStencilDefault();
-	mPsoContainer->AddPsoContainer(markMirrorsPsoDesc, RenderLayer::Mirror);
-
-	//映射物体
-	D3D12_DEPTH_STENCIL_DESC reflectionsDSS = mPsoContainer->GetStencilDefault();
-	reflectionsDSS.DepthWriteMask = D3D12_DEPTH_WRITE_MASK_ALL;
-	reflectionsDSS.FrontFace.StencilPassOp = D3D12_STENCIL_OP_KEEP;
-	reflectionsDSS.FrontFace.StencilFunc = D3D12_COMPARISON_FUNC_EQUAL;
-	reflectionsDSS.BackFace.StencilPassOp = D3D12_STENCIL_OP_KEEP;
-	reflectionsDSS.BackFace.StencilFunc = D3D12_COMPARISON_FUNC_EQUAL;
-	D3D12_GRAPHICS_PIPELINE_STATE_DESC drawReflectionsPsoDesc = mPsoContainer->GetOpaquePsoDesc();
-	drawReflectionsPsoDesc.DepthStencilState = reflectionsDSS;
-	drawReflectionsPsoDesc.RasterizerState.CullMode = D3D12_CULL_MODE_FRONT;
-	drawReflectionsPsoDesc.RasterizerState.FrontCounterClockwise = true;
-	mPsoContainer->AddPsoContainer(drawReflectionsPsoDesc, RenderLayer::Reflection);
-
-	D3D12_GRAPHICS_PIPELINE_STATE_DESC alphatextAndReflect = drawReflectionsPsoDesc;
-	alphatextAndReflect.PS = mPsoContainer->SetShader("alphaTestedPS");
-	alphatextAndReflect.RasterizerState.CullMode = D3D12_CULL_MODE_NONE;
-	mPsoContainer->AddPsoContainer(alphaTestedPsoDesc, RenderLayer::AlphaTestedAndRefection);
-
-	D3D12_GRAPHICS_PIPELINE_STATE_DESC treeSpritePsoDesc = mPsoContainer->GetOpaquePsoDesc();
-	treeSpritePsoDesc.InputLayout = mPsoContainer->GetGeoInputLayout();
-	treeSpritePsoDesc.VS = mPsoContainer->SetShader("treeSpriteVS");
-	treeSpritePsoDesc.GS = mPsoContainer->SetShader("treeSpriteGS");
-	treeSpritePsoDesc.PS = mPsoContainer->SetShader("treeSpritePS");
-	treeSpritePsoDesc.PrimitiveTopologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_POINT;
-	treeSpritePsoDesc.RasterizerState.CullMode = D3D12_CULL_MODE_NONE;
-
-	mPsoContainer->AddPsoContainer(treeSpritePsoDesc, RenderLayer::BillBoardTree);
-
-	D3D12_GRAPHICS_PIPELINE_STATE_DESC skyPsoDesc = mPsoContainer->GetOpaquePsoDesc();
-	skyPsoDesc.RasterizerState.CullMode = D3D12_CULL_MODE_FRONT;
-	skyPsoDesc.DepthStencilState.DepthFunc = D3D12_COMPARISON_FUNC_LESS_EQUAL;
-	skyPsoDesc.VS = mPsoContainer->SetShader("skyVS");
-	skyPsoDesc.PS = mPsoContainer->SetShader("skyPS");
-	mPsoContainer->AddPsoContainer(skyPsoDesc, RenderLayer::Sky);
+	//D3D12_GRAPHICS_PIPELINE_STATE_DESC skyPsoDesc = mPsoContainer->GetOpaquePsoDesc();
+	//skyPsoDesc.RasterizerState.CullMode = D3D12_CULL_MODE_FRONT;
+	//skyPsoDesc.DepthStencilState.DepthFunc = D3D12_COMPARISON_FUNC_LESS_EQUAL;
+	//skyPsoDesc.VS = mPsoContainer->SetShader("skyVS");
+	//skyPsoDesc.PS = mPsoContainer->SetShader("skyPS");
+	//mPsoContainer->AddPsoContainer(skyPsoDesc, RenderLayer::Sky);
 
 	D3D12_COMPUTE_PIPELINE_STATE_DESC horzBlurPSO = {};
 	horzBlurPSO.pRootSignature = mRootsignature->GetPostProcessRootSign().Get();
@@ -686,43 +614,12 @@ void DefaultScene::BuildPSOs()
 
 void DefaultScene::BuildRenderItems()
 {
-	mItemManager->LoadRenderItemFromJson();
-	m_WavesRitem= mItemManager->GetRenderItem("water");
+	//mItemManager->LoadRenderItemFromJson();
 	mItemManager->BuildAllSubRenderItem("ganyu", RenderLayer::Opaque, "ganyu",
 		MathHelper::PositionMatrix(0.25f, 0.25f,0.25f, 11.0f, 8.0f), MathHelper::PositionMatrix());
 
-	mItemManager->BuildRenderItem("sphere", RenderLayer::Opaque, "shapeGeo", "sphere", "stone",
-		MathHelper::PositionMatrix(3.0f, 3.0f, 3.0f, 7.0f, 8.0f, 5.0f),MathHelper::PositionMatrix());
-	mItemManager->BuildRenderItem("cow", RenderLayer::Opaque, "loadGeo", "cow", "cow",
-		MathHelper::PositionMatrix(4.0f, 4.0f, 4.0f, 11.0f,8.0f), MathHelper::PositionMatrix());
-	//这里旋转针对材质
-	mItemManager->BuildRenderItem("flareBox", RenderLayer::TexRotate, "shapeGeo", "box", "flare",
-		MathHelper::PositionMatrix(3.0f, 3.0f, 3.0f, 10.0f, 8.0f, -5.0f), MathHelper::PositionMatrix());
-	mItemManager->BuildRenderItem("wirefenceBox", RenderLayer::AlphaTested, "shapeGeo", "box", "wirefence",
-		MathHelper::PositionMatrix(3.0f, 3.0f, 3.0f,10.0f, 8.0f, -10.0f),MathHelper::PositionMatrix());
-
-
-	mItemManager->BuildRenderItem("mirror", RenderLayer::Mirror, "shapeGeo", "grid", "ice",
-		MathHelper::PositionMatrix(1.0f, 1.0f, 1.0f, 5.0f, 8.0f, 0.0f,-0.5),MathHelper::PositionMatrix());
-
-	mItemManager->BuildRenderItem("cowReflection", RenderLayer::Reflection, "loadGeo", "cow", "cow",
-		MathHelper::PositionMatrix(4.0f, 4.0f, 4.0f, -1.0f, 8.0f), MathHelper::PositionMatrix());
-	mItemManager->BuildRenderItem("grassReflection", RenderLayer::Reflection, "shapeGeo", "sphere", "grass",
-		MathHelper::PositionMatrix(3.0f, 3.0f, 3.0f, 3.0f, 8.0f, 15.0f), MathHelper::PositionMatrix());
-	mItemManager->BuildRenderItem("sphereReflection", RenderLayer::Reflection, "shapeGeo", "sphere", "stone",
-		MathHelper::PositionMatrix(3.0f, 3.0f, 3.0f, 3.0f, 8.0f, 5.0f), MathHelper::PositionMatrix());
-	mItemManager->BuildRenderItem("flareBoxR", RenderLayer::Reflection, "shapeGeo", "sphere", "flare",
-		MathHelper::PositionMatrix(3.0f, 3.0f, 3.0f, 0.0f, 8.0f, -5.0f), MathHelper::PositionMatrix());
-	mItemManager->BuildRenderItem("wirefenceBoxR", RenderLayer::AlphaTestedAndRefection, "shapeGeo", "box", "wirefence",
-		MathHelper::PositionMatrix(3.0f, 3.0f, 3.0f, 0.0f, 8.0f, -10.0f), MathHelper::PositionMatrix());
-
-	mItemManager->AddRenderItemInLayer("mirror", RenderLayer::Transparent);
-
-	mItemManager->BuildRenderItem("treeSprites", RenderLayer::BillBoardTree, "treeSpritesGeo", "points", "treeTex",
-		MathHelper::PositionMatrix(), MathHelper::PositionMatrix(), D3D11_PRIMITIVE_TOPOLOGY_POINTLIST);
-
-	mItemManager->BuildRenderItem("skyBox", RenderLayer::Sky, "shapeGeo", "sphere", "skyBox",
-		MathHelper::PositionMatrix(5.0f, 5.0f, 5.0f), MathHelper::PositionMatrix());
+	//mItemManager->BuildRenderItem("skyBox", RenderLayer::Sky, "shapeGeo", "sphere", "skyBox",
+	//	MathHelper::PositionMatrix(5.0f, 5.0f, 5.0f), MathHelper::PositionMatrix());
 }
 
 void DefaultScene::DrawRenderItems(ID3D12GraphicsCommandList* cmdList, RenderLayer name)

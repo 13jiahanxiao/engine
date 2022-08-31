@@ -2,117 +2,33 @@
   "Address": "Resources\\Textures\\",
   "TextureConfig": [
     {
-      "name": "grassTex",
-      "fileName": "grass.dds",
+      "name": "ganyucloth",
+      "fileName": "cloth.png",
       "index": 0,
       "dimension": 4
     },
     {
-      "name": "waterTex",
-      "fileName": "water1.dds",
+      "name": "ganyuface",
+      "fileName": "face.png",
       "index": 1,
       "dimension": 4
     },
     {
-      "name": "crateTex",
-      "fileName": "WoodCrate01.dds",
+      "name": "ganyumuscle",
+      "fileName": "muscle.png",
       "index": 2,
       "dimension": 4
     },
     {
-      "name": "bricksTex",
-      "fileName": "bricks.dds",
+      "name": "ganyuhair",
+      "fileName": "hair.png",
       "index": 3,
       "dimension": 4
     },
     {
-      "name": "stoneTex",
-      "fileName": "stone.dds",
-      "index": 4,
-      "dimension": 4
-    },
-    {
-      "name": "tileTex",
-      "fileName": "tile.dds",
-      "index": 5,
-      "dimension": 4
-    },
-    {
-      "name": "wirefenceTex",
-      "fileName": "WireFence.dds",
-      "index": 6,
-      "dimension": 4
-    },
-    {
-      "name": "flare",
-      "fileName": "flare.dds",
-      "index": 7,
-      "dimension": 4
-    },
-    {
-      "name": "flarealpha",
-      "fileName": "flarealpha.dds",
-      "index": 8,
-      "dimension": 4
-    },
-    {
-      "name": "cow",
-      "fileName": "cow_dx.dds",
-      "index": 9,
-      "dimension": 4
-    },
-    {
-      "name": "crate",
-      "fileName": "rock.dds",
-      "index": 10,
-      "dimension": 4
-    },
-    {
-      "name": "ice",
-      "fileName": "ice.dds",
-      "index": 11,
-      "dimension": 4
-    },
-    {
-      "name": "tree",
-      "fileName": "treeArray2.dds",
-      "index": 12,
-      "dimension": 4
-    },
-    {
-      "name": "skyBox",
-      "fileName": "grasscube1024.dds",
-      "index": 13,
-      "dimension": 9
-    },
-    {
-      "name": "ganyucloth",
-      "fileName": "cloth.dds",
-      "index": 14,
-      "dimension": 4
-    },
-    {
-      "name": "ganyuface",
-      "fileName": "face.dds",
-      "index": 15,
-      "dimension": 4
-    },
-    {
-      "name": "ganyumuscle",
-      "fileName": "muscle.dds",
-      "index": 16,
-      "dimension": 4
-    },
-    {
-      "name": "ganyuhair",
-      "fileName": "hair.dds",
-      "index": 17,
-      "dimension": 4
-    },
-    {
       "name": "ganyuemo",
-      "fileName": "emo.dds",
-      "index": 18,
+      "fileName": "emo.png",
+      "index": 4,
       "dimension": 4
     }
   ]

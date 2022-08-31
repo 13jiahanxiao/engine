@@ -86,7 +86,7 @@ D3D12_DEPTH_STENCIL_DESC   PsoContainer::GetStencilDefault()
 
 void PsoContainer::AddPsoContainer(D3D12_GRAPHICS_PIPELINE_STATE_DESC desc,RenderLayer index) 
 {
-	ThrowIfFailed(mDevice->GetDevice()->CreateGraphicsPipelineState(&desc, IID_PPV_ARGS(&mPsos[index])));
+	mDevice->GetDevice()->CreateGraphicsPipelineState(&desc, IID_PPV_ARGS(&mPsos[index]));
 }
 
 void PsoContainer::AddComputePsoContainer(D3D12_COMPUTE_PIPELINE_STATE_DESC desc, RenderLayer index)

@@ -10,7 +10,7 @@ struct Texture
 {
 	std::string Name;
 
-	std::wstring Filename;
+	std::string Filename;
 
 	Microsoft::WRL::ComPtr<ID3D12Resource> Resource = nullptr;
 	Microsoft::WRL::ComPtr<ID3D12Resource> UploadHeap = nullptr;
@@ -32,8 +32,12 @@ public:
 	//构建描述符堆
 	void BuildTextureHeap(DescriptorHeap* heap);
 	//创建描述符
-	void CreateDDSTexture(Device* device, ID3D12GraphicsCommandList* cmdList);
-
+	void CreateTexture(Device* device, ID3D12GraphicsCommandList* cmdList);
+	void CreateTexture(ID3D12Device* device,
+		ID3D12GraphicsCommandList* cmdList,
+		std::string fileName,
+		_Out_ ComPtr<ID3D12Resource>& texture,
+		_Out_ ComPtr<ID3D12Resource>& textureUploadHeap);
 	int GetTextureNum() { return m_Textures.size(); }
 private:
 	std::unordered_map<std::string, std::unique_ptr<Texture>> m_Textures;

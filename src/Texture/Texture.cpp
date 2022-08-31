@@ -3,6 +3,8 @@
 #include"../Tools/tinyxml2.h"
 #include"../Utility/d3dUtil.h"
 #include"nlohmann/json.hpp"
+#include"../../ThirdParty/stb/stb_image.h"
+#include"../Utility/d3dx12.h"
 using json = nlohmann::json;
 
 TextureManager::TextureManager()
@@ -23,7 +25,7 @@ void TextureManager::LoadTextureFormJson(std::string name, std::string fileName,
 {
 	auto Tex = std::make_unique<Texture>();
 	Tex->Name = name;
-	Tex->Filename = d3dUtil::String2Wstring(fileName);
+	Tex->Filename = fileName;
 	Tex->heapIndex = index;
 	Tex->Dimension = (D3D12_SRV_DIMENSION)dimension;
 	m_Textures[Tex->Name] = std::move(Tex);
@@ -45,15 +47,13 @@ void TextureManager::LoadTextureJson()
 	}
 }
 
-void TextureManager::CreateDDSTexture(Device* device, ID3D12GraphicsCommandList* cmdList)
+void TextureManager::CreateTexture(Device* device, ID3D12GraphicsCommandList* cmdList)
 {
-	for (auto& [k, v] : m_Textures) 
+	for (auto& [k, v] : m_Textures)
 	{
-		ThrowIfFailed(DirectX::CreateDDSTextureFromFile12(device->GetDevice(), cmdList,
-			v->Filename.c_str(),
-			v->Resource, v->UploadHeap));
+		CreateTexture(device->GetDevice(), cmdList,v->Filename,
+			v->Resource, v->UploadHeap);
 	}
-	printf("创建图片资源完成\n");
 }
 
 void TextureManager::BuildTextureHeap(DescriptorHeap* heap)
@@ -84,4 +84,63 @@ void TextureManager::BuildTextureHeap(DescriptorHeap* heap)
 		heap->CreateSRV(tex.Get(), srvDesc, v->heapIndex);
 	}
 	printf("加载图片完成\n");
+}
+
+void TextureManager::CreateTexture( ID3D12Device* device,
+	 ID3D12GraphicsCommandList* cmdList,
+	 std::string fileName,
+	_Out_ ComPtr<ID3D12Resource>& texture,
+	_Out_ ComPtr<ID3D12Resource>& textureUploadHeap) 
+{
+	int texWidth, texHeight, texChannels;
+	stbi_uc* pixels = stbi_load(fileName.c_str(), &texWidth, &texHeight, &texChannels, STBI_rgb_alpha);
+	const UINT TexturePixelSize = 4;//由于是 rgb_alpha 所以是4通道
+
+	D3D12_RESOURCE_DESC textureDesc = {};
+	//暂定为1
+	textureDesc.MipLevels = 1;
+	textureDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+	textureDesc.Width = texWidth;
+	textureDesc.Height = texHeight;
+	textureDesc.Flags = D3D12_RESOURCE_FLAG_NONE;
+	textureDesc.DepthOrArraySize = 1;
+	textureDesc.SampleDesc.Count = 1;
+	textureDesc.SampleDesc.Quality = 0;
+	textureDesc.Dimension = D3D12_RESOURCE_DIMENSION_TEXTURE2D;
+
+	//创建szFileName：实际用的纹理资源   
+	device->CreateCommittedResource(
+		rvalue_to_lvalue(CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_DEFAULT)),
+		D3D12_HEAP_FLAG_NONE,
+		&textureDesc,
+		D3D12_RESOURCE_STATE_COPY_DEST,
+		nullptr,
+		IID_PPV_ARGS(texture.GetAddressOf()));
+
+	const UINT num2DSubresources = textureDesc.DepthOrArraySize * textureDesc.MipLevels;
+	//尺寸：
+	const UINT64 uploadBufferSize = GetRequiredIntermediateSize(texture.Get(), 0, num2DSubresources);
+
+	// Create the GPU upload buffer.
+	ThrowIfFailed(device->CreateCommittedResource(
+		rvalue_to_lvalue(CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD)),
+		D3D12_HEAP_FLAG_NONE,
+		rvalue_to_lvalue(CD3DX12_RESOURCE_DESC::Buffer(uploadBufferSize)),
+		D3D12_RESOURCE_STATE_GENERIC_READ,
+		nullptr,
+		IID_PPV_ARGS(textureUploadHeap.GetAddressOf())));
+
+
+	//将数据复制给中间资源，然后从中间资源复制给实际的资源
+	cmdList->ResourceBarrier(1, rvalue_to_lvalue(CD3DX12_RESOURCE_BARRIER::Transition(texture.Get(),
+		D3D12_RESOURCE_STATE_COMMON, D3D12_RESOURCE_STATE_COPY_DEST)));
+
+	D3D12_SUBRESOURCE_DATA textureData = {};
+	textureData.pData = pixels;
+	textureData.RowPitch = texWidth * TexturePixelSize;
+	textureData.SlicePitch = textureData.RowPitch * texHeight;
+	UpdateSubresources(cmdList, texture.Get(), textureUploadHeap.Get(), 0, 0, num2DSubresources, &textureData);
+
+	cmdList->ResourceBarrier(1, rvalue_to_lvalue(CD3DX12_RESOURCE_BARRIER::Transition(texture.Get(),
+		D3D12_RESOURCE_STATE_COPY_DEST, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE)));
 }

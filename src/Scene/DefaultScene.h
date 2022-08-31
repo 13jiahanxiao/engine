@@ -36,6 +36,9 @@ private:
 	void UpdateWaves(const GameTimer& gt);
     void UpdateLight(const GameTimer& gt);
     void AnimateMaterials(const GameTimer& gt);
+    void UpdateCBs(FrameResource* currentFrameResource);
+
+    void UpdateObjectCBs(UploadBuffer<ObjectConstants>* cb);
 
     void DrawItems();
     //¼¸ºÎ

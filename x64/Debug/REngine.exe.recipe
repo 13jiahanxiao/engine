@@ -2,7 +2,7 @@
 <Project>
   <ProjectOutputs>
     <ProjectOutput>
-      <FullPath>E:\ademo\REngine\x64\Debug\REngine.exe</FullPath>
+      <FullPath>E:\REngine\x64\Debug\REngine.exe</FullPath>
     </ProjectOutput>
   </ProjectOutputs>
   <ContentFiles />

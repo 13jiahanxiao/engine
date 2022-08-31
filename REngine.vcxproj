@@ -49,6 +49,7 @@
     <ClCompile Include="src\Utility\ReflectableStruct.cpp" />
     <ClCompile Include="src\Utility\ShaderCompile.cpp" />
     <ClCompile Include="src\Wave\Wave.cpp" />
+    <ClCompile Include="ThirdParty\stb\stb_image.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Animation\AnimationHelper.h" />
@@ -86,6 +87,7 @@
     <ClInclude Include="src\Utility\ReflactableStruct.h" />
     <ClInclude Include="src\Utility\ShaderCompile.h" />
     <ClInclude Include="src\Wave\Wave.h" />
+    <ClInclude Include="ThirdParty\stb\stb_image.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
