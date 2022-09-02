@@ -368,8 +368,6 @@ void D3DScene::OnResize()
 	 
 	mItemManager = std::make_unique<RenderItemManager>(m_Device.get(), mCommandList.Get());
 
-	mTextureManager = std::make_unique<TextureManager>();
-
 	mPostProcess = std::make_unique<PostProcess>(m_Device.get(), mCbvSrvUavDescriptorSize);
 
 	mRootsignature = std::make_unique<RootSignature>(m_Device.get());

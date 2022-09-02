@@ -36,7 +36,7 @@
     <ClCompile Include="src\Geometry\GeometryManager.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="src\Geometry\LoadObject.cpp">
+    <ClCompile Include="src\LoadAsset\LoadObject.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="src\Geometry\MeshGeometry.cpp">
@@ -63,10 +63,7 @@
     <ClCompile Include="src\Resources\FrameResource.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="src\Texture\DDSTextureLoader.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Texture\Texture.cpp">
+    <ClCompile Include="src\LoadAsset\DDSTextureLoader.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="src\Timer\GameTimer.cpp">
@@ -108,6 +105,9 @@
     <ClCompile Include="ThirdParty\stb\stb_image.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="src\LoadAsset\LoadAsset.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Animation\AnimationHelper.h">
@@ -131,7 +131,7 @@
     <ClInclude Include="src\Geometry\GeometryManager.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="src\Geometry\LoadObject.h">
+    <ClInclude Include="src\LoadAsset\LoadObject.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="src\Geometry\MeshGeometry.h">
@@ -167,10 +167,7 @@
     <ClInclude Include="src\Resources\UploadBuffer.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="src\Texture\DDSTextureLoader.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Texture\Texture.h">
+    <ClInclude Include="src\LoadAsset\DDSTextureLoader.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="src\Timer\GameTimer.h">
@@ -216,6 +213,9 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="ThirdParty\stb\stb_image.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\LoadAsset\LoadAsset.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

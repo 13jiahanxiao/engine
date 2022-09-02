@@ -1,6 +1,5 @@
 #include"GeometryManager.h"
-#include"LoadObject.h"
-
+using namespace REngine;
 GeometryManager::GeometryManager(Device* device, ID3D12GraphicsCommandList* cmdList):
 	m_Device(device),m_CmdList(cmdList)
 {
@@ -20,7 +19,7 @@ void GeometryManager::CreateMesh(std::string name,std::vector<Vertex> vertices, 
 	m_Geometries[name] = std::move(geo);
 }
 
-void GeometryManager::CreateSubMesh(std::string name, std::vector<SubMesh> m_submesh)
+void GeometryManager::CreateSubMesh(std::string name, std::vector<SubMeshData> m_submesh)
 {
 	for (int i = 0; i < m_submesh.size(); i++) 
 	{
@@ -50,12 +49,16 @@ void GeometryManager::CreateMeshVertexUpload(std::string name, UINT vbSize, std:
 	m_Geometries[name] = std::move(geo);
 }
 
-void GeometryManager::LoadMesh(std::string fileName, std::string geoName,std::string subName)
+void GeometryManager::LoadMesh(LoadAsset* LoadAssetManager)
 {
-	LoadObjectByAssimp lo;
-	lo.LoadOBJ(subName,fileName);
-	CreateMesh(geoName, lo.m_vertices, lo.m_indices);
-	CreateSubMesh(geoName,lo.m_submesh);
+	auto pMeshData = LoadAssetManager->GetAllMesh();
+	auto it = pMeshData.begin();
+	while (it!=pMeshData.end()) 
+	{
+		CreateMesh(it->m_name, it->m_vertices, it->m_indices);
+		CreateSubMesh(it->m_name, it->m_submesh);
+		it++;
+	}
 }
 
 

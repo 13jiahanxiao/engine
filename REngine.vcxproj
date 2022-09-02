@@ -20,6 +20,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Animation\AnimationHelper.cpp" />
+    <ClCompile Include="src\LoadAsset\LoadAsset.cpp" />
     <ClCompile Include="src\PostProcess\BlurFilter.cpp" />
     <ClCompile Include="src\PostProcess\PostProcess.cpp" />
     <ClCompile Include="src\Resources\RootSignature.cpp" />
@@ -29,7 +30,7 @@
     <ClCompile Include="src\DXRuntime\Device.cpp" />
     <ClCompile Include="src\Geometry\GeometryGenerator.cpp" />
     <ClCompile Include="src\Geometry\GeometryManager.cpp" />
-    <ClCompile Include="src\Geometry\LoadObject.cpp" />
+    <ClCompile Include="src\LoadAsset\LoadObject.cpp" />
     <ClCompile Include="src\Geometry\MeshGeometry.cpp" />
     <ClCompile Include="src\Light\Light.cpp" />
     <ClCompile Include="src\MainApp.cpp" />
@@ -40,8 +41,7 @@
     <ClCompile Include="src\Resources\DefaultBuffer.cpp" />
     <ClCompile Include="src\Resources\DescriptorHeap.cpp" />
     <ClCompile Include="src\Resources\FrameResource.cpp" />
-    <ClCompile Include="src\Texture\DDSTextureLoader.cpp" />
-    <ClCompile Include="src\Texture\Texture.cpp" />
+    <ClCompile Include="src\LoadAsset\DDSTextureLoader.cpp" />
     <ClCompile Include="src\Timer\GameTimer.cpp" />
     <ClCompile Include="src\Tools\tinyxml2.cpp" />
     <ClCompile Include="src\Utility\d3dUtil.cpp" />
@@ -53,6 +53,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Animation\AnimationHelper.h" />
+    <ClInclude Include="src\LoadAsset\LoadAsset.h" />
     <ClInclude Include="src\PostProcess\BlurFilter.h" />
     <ClInclude Include="src\PostProcess\PostProcess.h" />
     <ClInclude Include="src\Resources\RootSignature.h" />
@@ -63,7 +64,7 @@
     <ClInclude Include="src\DXRuntime\Device.h" />
     <ClInclude Include="src\Geometry\GeometryGenerator.h" />
     <ClInclude Include="src\Geometry\GeometryManager.h" />
-    <ClInclude Include="src\Geometry\LoadObject.h" />
+    <ClInclude Include="src\LoadAsset\LoadObject.h" />
     <ClInclude Include="src\Geometry\MeshGeometry.h" />
     <ClInclude Include="src\Light\Light.h" />
     <ClInclude Include="src\Material\Materials.h" />
@@ -76,8 +77,7 @@
     <ClInclude Include="src\Resources\FrameResource.h" />
     <ClInclude Include="src\Resources\Resource.h" />
     <ClInclude Include="src\Resources\UploadBuffer.h" />
-    <ClInclude Include="src\Texture\DDSTextureLoader.h" />
-    <ClInclude Include="src\Texture\Texture.h" />
+    <ClInclude Include="src\LoadAsset\DDSTextureLoader.h" />
     <ClInclude Include="src\Timer\GameTimer.h" />
     <ClInclude Include="src\Tools\tinyxml2.h" />
     <ClInclude Include="src\Utility\d3dUtil.h" />

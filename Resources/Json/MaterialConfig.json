@@ -1,35 +1,35 @@
 {
   "MaterialConfig": [
     {
-      "name": "ganyucloth",
+      "name": "Resources/Models/ganyu/tex/cloth.png",
       "srvIndex": 0,
       "diffuseAlbedo": "1.0f, 1.0f, 1.0f, 1.0f",
       "fresnelR0": "0.05f, 0.05f, 0.05",
       "roughness": 0.25
     },
     {
-      "name": "ganyuface",
+      "name": "Resources/Models/ganyu/tex/face.png",
       "srvIndex": 1,
       "diffuseAlbedo": "1.0f, 1.0f, 1.0f, 1.0f",
       "fresnelR0": "0.05f, 0.05f, 0.05",
       "roughness": 0.25
     },
     {
-      "name": "ganyumuscle",
+      "name": "Resources/Models/ganyu/tex/muscle.png",
       "srvIndex": 2,
       "diffuseAlbedo": "1.0f, 1.0f, 1.0f, 1.0f",
       "fresnelR0": "0.05f, 0.05f, 0.05",
       "roughness": 0.25
     },
     {
-      "name": "ganyuhair",
+      "name": "Resources/Models/ganyu/tex/hair.png",
       "srvIndex": 3,
       "diffuseAlbedo": "1.0f, 1.0f, 1.0f, 1.0f",
       "fresnelR0": "0.05f, 0.05f, 0.05",
       "roughness": 0.25
     },
     {
-      "name": "ganyuemo",
+      "name": "Resources/Models/ganyu/tex/emo.png",
       "srvIndex": 4,
       "diffuseAlbedo": "1.0f, 1.0f, 1.0f, 1.0f",
       "fresnelR0": "0.05f, 0.05f, 0.05",

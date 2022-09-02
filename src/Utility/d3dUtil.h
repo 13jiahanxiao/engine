@@ -27,7 +27,6 @@
 #include <cassert>
 #include <span>
 #include "d3dx12.h"
-#include "../Texture/DDSTextureLoader.h"
 #include "MathHelper.h"
 #include "Metalib.h"
 #include"../Base/Singleton.h"

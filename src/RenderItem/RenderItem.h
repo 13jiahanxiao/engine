@@ -1,6 +1,5 @@
 #pragma once
 #include"../Material/Materials.h"
-#include"../Texture/Texture.h"
 #include"../Resources/DescriptorHeap.h"
 #include"../Resources/FrameResource.h"
 #include"../Geometry/MeshGeometry.h"

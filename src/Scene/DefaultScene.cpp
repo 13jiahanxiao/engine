@@ -24,19 +24,20 @@ bool DefaultScene::Initialize()
 
 	m_SunLight.SetLight(1.25f * XM_PI, XM_PIDIV4, 1.0f, { 1.0f, 1.0f, 0.9f }, 0);
 
+	LoadAssetManager = std::make_unique<REngine::LoadAsset>();
+
 	mItemManager->Init();
-	mTextureManager->Init();
 	//要使用什么效果，提前分配好空间
 	mPostProcess->EffectBlurFilter();
 	mTextureHeap = std::make_unique<DescriptorHeap>(m_Device.get(), D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV,
-		mTextureManager->GetTextureNum() + mPostProcess->GetHeapSize(), true);
+		LoadAssetManager->GetTextureNum() + mPostProcess->GetHeapSize(), true);
 	//创建描述符
-	mTextureManager->CreateTexture(m_Device.get(), mCommandList.Get());
-	mTextureManager->BuildTextureHeap(mTextureHeap.get());
+	LoadAssetManager->CreateTexture(m_Device.get(), mCommandList.Get());
+	LoadAssetManager->BuildTextureHeap(mTextureHeap.get());
 
-	mRootsignature->Init(mTextureManager->GetTextureNum());
+	mRootsignature->Init(LoadAssetManager->GetTextureNum());
 
-	mPostProcess->SetDescriptorHeapAndOffset(mTextureHeap.get(), mTextureManager->GetTextureNum());
+	mPostProcess->SetDescriptorHeapAndOffset(mTextureHeap.get(), LoadAssetManager->GetTextureNum());
 
 	mPostProcess->InitBlurFilter(mClientWidth/2, mClientHeight, DXGI_FORMAT_R8G8B8A8_UNORM);
 
@@ -570,8 +571,8 @@ void DefaultScene::BuildGeometrys()
 	ShapeGeometry();
 	BuildSkullGeometry();
 	BillTreeGeometry();
-	mItemManager->GetMeshManager()->LoadMesh("Resources/Models/ganyu/ganyu.pmx", "ganyu", "ganyu");
-	mItemManager->GetMeshManager()->LoadMesh("Resources/Models/cow.obj", "loadGeo", "cow");
+	mItemManager->GetMeshManager()->LoadMesh(LoadAssetManager.get());
+	//mItemManager->GetMeshManager()->LoadMesh("Resources/Models/cow.obj", "loadGeo", "cow");
 }
 #pragma endregion
 

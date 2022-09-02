@@ -1,4 +1,5 @@
 #include "D3DScene.h"
+#include"../LoadAsset/LoadAsset.h"
 #include"../Geometry/MeshGeometry.h"
 #include "../Resources/FrameResource.h"
 #include	"../Wave/Wave.h"
@@ -80,4 +81,6 @@ private:
     DirectionLight m_SunLight;
     //绑定贴图资源的heap
     std::unique_ptr<DescriptorHeap> mTextureHeap;
+
+    std::unique_ptr<REngine::LoadAsset> LoadAssetManager;
 };

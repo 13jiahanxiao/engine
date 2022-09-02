@@ -6,7 +6,6 @@
 #include "../Timer/GameTimer.h"
 #include "../Utility/MathHelper.h"
 #include "../Components/Camera.h"
-#include"../Texture/Texture.h"
 #include"../RenderItem/RenderItem.h"
 #include"../Utility/ShaderCompile.h"
 #include"../RenderItem/PsoContainer.h"
@@ -128,7 +127,6 @@ protected:
     //网格和材质
     std::unique_ptr<RenderItemManager> mItemManager;
     //纹理资源管理
-    std::unique_ptr <TextureManager> mTextureManager;
     std::unique_ptr<PsoContainer> mPsoContainer;
     std::unique_ptr<PostProcess> mPostProcess;
     std::unique_ptr<RootSignature> mRootsignature;
