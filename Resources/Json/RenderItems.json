@@ -1,4 +1,27 @@
 {
+  "RenderItems": [
+    {
+      "itemName": "ganyu",
+      "renderLayer": 0,
+      "geoName": "ganyu",
+      "world": "0.25f, 0.25f,0.25f, 4.0f,0.0f,0.0f,0.0f",
+      "texTransform": "1.0f, 1.0f, 1.0f,0.0f,0.0f,0.0f,0.0f"
+    },
+    {
+      "itemName": "shennvpiguan",
+      "renderLayer": 0,
+      "geoName": "shennvpiguan",
+      "world": "0.25f, 0.25f,0.25f, 1.0f,0.0f,0.0f,0.0f",
+      "texTransform": "1.0f, 1.0f, 1.0f,0.0f,0.0f,0.0f,0.0f"
+    },
+    {
+      "itemName": "eula",
+      "renderLayer": 0,
+      "geoName": "eula",
+      "world": "0.25f, 0.25f,0.25f, -2.0f,0.0f,0.0f,0.0f",
+      "texTransform": "1.0f, 1.0f, 1.0f,0.0f,0.0f,0.0f,0.0f"
+    }
+  ],
   "RenderItem": [
     {
       "itemName": "water",

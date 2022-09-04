@@ -30,17 +30,14 @@ MaterialManager::~MaterialManager()
 
 }
 
-void MaterialManager::Init()
+void MaterialManager::CreateMaterial(std::string materialName, int srvIndex, DirectX::XMFLOAT4 diffuseAlbedo, DirectX::XMFLOAT3 fresnelR0, float roughness)
 {
-	LoadMaterialFormJson();
-}
-
-void MaterialManager::BuildMaterial(std::string materialName, int srvIndex, DirectX::XMFLOAT4 diffuseAlbedo, DirectX::XMFLOAT3 fresnelR0, float roughness)
-{
+	if (m_materials.find(materialName) != m_materials.end())
+		return;
 	auto mat = std::make_unique<Material>(materialName, mMaterialCBIndex, diffuseAlbedo, fresnelR0, roughness, mFrameNum);
 	mMaterialCBIndex++;
 	mat->SetTexture(srvIndex);
-	mMaterials[materialName] = std::move(mat);
+	m_materials[materialName] = std::move(mat);
 }
 
 void MaterialManager::LoadMaterialFormJson()
@@ -71,13 +68,13 @@ void MaterialManager::LoadMaterialFormJson()
 		fresnel.z = atof(svert[2].c_str());
 
 		float roughness = mData[i].at("roughness");
-		BuildMaterial(name, srvIndex, diffuse, fresnel, roughness);
+		CreateMaterial(name, srvIndex, diffuse, fresnel, roughness);
 	}
 }
 
 void MaterialManager::UpdateMaterialCBs(UploadBuffer<MaterialData>* cb)
 {
-	for (auto& e : mMaterials)
+	for (auto& e : m_materials)
 	{
 		Material* mat = e.second.get();
 		if (mat->GetNumFramesDirty() > 0)

@@ -27,7 +27,7 @@ void GeometryManager::CreateSubMesh(std::string name, std::vector<SubMeshData> m
 		sub.BaseVertexLocation = m_submesh[i].m_startVertex;
 		sub.IndexCount = m_submesh[i].m_indexSize;
 		sub.StartIndexLocation = m_submesh[i].m_startIndex;
-		sub.m_material= m_submesh[i].m_Texture["diffuse"];
+		sub.material = m_submesh[i].material;
 		m_Geometries[name]->AddSubMesh(m_submesh[i].m_name, sub);
 	}
 }

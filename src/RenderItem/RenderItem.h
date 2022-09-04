@@ -1,5 +1,6 @@
 #pragma once
 #include"../Material/Materials.h"
+#include"../LoadAsset/LoadAsset.h"
 #include"../Resources/DescriptorHeap.h"
 #include"../Resources/FrameResource.h"
 #include"../Geometry/MeshGeometry.h"
@@ -87,6 +88,8 @@ public:
    GeometryManager* GetMeshManager() {return mGeometryManager.get();}
 
    int GetMaterilalsNum() { return  mMaterialManager->MaterilalsSize(); }
+
+   void CreateMaterial(REngine::LoadAsset* LoadAssetManager);
 private:
     Device* mDevice;
 

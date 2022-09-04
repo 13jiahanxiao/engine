@@ -10,7 +10,7 @@ struct SubmeshGeometry
 	// Bounding box of the geometry defined by this submesh. 
 	// This is used in later chapters of the book.
 	DirectX::BoundingBox Bounds;
-	std::string m_material;
+	std::string material;
 };
 
 class MeshGeometry

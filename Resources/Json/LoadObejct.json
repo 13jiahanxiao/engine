@@ -1,0 +1,17 @@
+{
+  "Address": "Resources/Models/",
+  "ObjectConfig": [
+    {
+      "name": "ganyu",
+      "fileName": "ganyu/ganyu.pmx"
+    },
+    {
+      "name": "shennvpiguan",
+      "fileName": "shennvpiguan/shennvpiguan.pmx"
+    },
+    {
+      "name": "eula",
+      "fileName": "Eula/Eula_xiong.pmx"
+    }
+  ]
+}

@@ -85,18 +85,16 @@ public:
 	MaterialManager(int FrameNum);
 	~MaterialManager();
 
-	void Init();
-
-	void BuildMaterial(std::string materialName, int srvIndex, DirectX::XMFLOAT4 diffuseAlbedo, DirectX::XMFLOAT3 fresnelR0, float roughness);
+	void CreateMaterial(std::string materialName, int srvIndex, DirectX::XMFLOAT4 diffuseAlbedo, DirectX::XMFLOAT3 fresnelR0, float roughness);
 	//从xml读取配置的texture地址
 	void LoadMaterialFormJson();
 
-	int MaterilalsSize() { return mMaterials.size(); }
+	int MaterilalsSize() { return m_materials.size(); }
 	void UpdateMaterialCBs(UploadBuffer<MaterialData>* cb);
 
-	Material* GetMaterial(std::string name) { return mMaterials[name].get(); }
+	Material* GetMaterial(std::string name) { return m_materials[name].get(); }
 private:
-	std::unordered_map<std::string, std::unique_ptr<Material>> mMaterials;
+	std::unordered_map<std::string, std::unique_ptr<Material>> m_materials;
 	int mFrameNum = 0;
 	int mMaterialCBIndex = 0;
 };

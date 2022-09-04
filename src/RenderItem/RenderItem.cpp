@@ -2,48 +2,75 @@
 #include"nlohmann/json.hpp"
 #include<DirectXMath.h>
 using json = nlohmann::json;
-
+using namespace REngine;
 RenderItemManager::RenderItemManager(Device* device, ID3D12GraphicsCommandList* cmdList): mDevice(device)
 {
 	mGeometryManager = std::make_unique<GeometryManager>(mDevice, cmdList);
 
 	mMaterialManager = std::make_unique<MaterialManager>(gNumFrameResources);
-	
 }
 
-void RenderItemManager::Init()
+void RenderItemManager::CreateMaterial(REngine::LoadAsset* LoadAssetManager)
 {
-	mMaterialManager->Init();
+	auto pMaterials = LoadAssetManager->GetMaterials();
+	auto it = pMaterials.begin();
+	while (it != pMaterials.end())
+	{
+		mMaterialManager->CreateMaterial(it->first, it->second.DiffuseMapIndex, it->second.DiffuseAlbedo,
+			it->second.FresnelR0, it->second.Roughness);
+		it++;
+	}
 }
 
 void RenderItemManager::LoadRenderItemFromJson()
 {
 	std::ifstream f("Resources\\Json\\RenderItems.json");
 	json data = json::parse(f);
-	json mData = data["RenderItem"];
+	json mData = data["RenderItems"];
+	//加载读出的物体
 	for (int i = 0; i < mData.size(); i++)
 	{
 		std::string itemName = mData[i].at("itemName");
 		int renderLayer = mData[i].at("renderLayer");
 		std::string geoName = mData[i].at("geoName");
-		std::string argName = mData[i].at("argName");
-		std::string materialName = mData[i].at("materialName");
 
 		std::string temp = mData[i].at("world");
 		std::vector<std::string> svert;
 		Split(temp, svert, ",");
-		DirectX::FXMMATRIX world=  MathHelper::PositionMatrix(atof(svert[0].c_str()), atof(svert[1].c_str()), atof(svert[2].c_str()), 
-			atof(svert[3].c_str()),atof(svert[4].c_str()),atof(svert[5].c_str()),atof(svert[6].c_str()));
+		DirectX::FXMMATRIX world = MathHelper::PositionMatrix(atof(svert[0].c_str()), atof(svert[1].c_str()), atof(svert[2].c_str()),
+			atof(svert[3].c_str()), atof(svert[4].c_str()), atof(svert[5].c_str()), atof(svert[6].c_str()));
 		svert.clear();
 
 		temp = mData[i].at("texTransform");
 		Split(temp, svert, ",");
-		DirectX::FXMMATRIX tex= MathHelper::PositionMatrix(atof(svert[0].c_str()), atof(svert[1].c_str()), atof(svert[2].c_str()),
+		DirectX::FXMMATRIX tex = MathHelper::PositionMatrix(atof(svert[0].c_str()), atof(svert[1].c_str()), atof(svert[2].c_str()),
 			atof(svert[3].c_str()), atof(svert[4].c_str()), atof(svert[5].c_str()), atof(svert[6].c_str()));
-
-		int topology = mData[i].at("topology");
-		BuildRenderItem(itemName, (RenderLayer)renderLayer, geoName, argName, materialName, world, tex, (D3D_PRIMITIVE_TOPOLOGY)topology);
+		
+		BuildAllSubRenderItem(itemName, (RenderLayer)renderLayer, geoName,world, tex);
 	}
+
+	//单独构造物体
+	//json mData = data["RenderItem"];
+	//for (int i = 0; i < mData.size(); i++)
+	//{
+	//	std::string itemName = mData[i].at("itemName");
+	//	int renderLayer = mData[i].at("renderLayer");
+	//	std::string geoName = mData[i].at("geoName");
+	//	std::string argName = mData[i].at("argName");
+	//	std::string materialName = mData[i].at("materialName");
+	//	std::string temp = mData[i].at("world");
+	//	std::vector<std::string> svert;
+	//	Split(temp, svert, ",");
+	//	DirectX::FXMMATRIX world=  MathHelper::PositionMatrix(atof(svert[0].c_str()), atof(svert[1].c_str()), atof(svert[2].c_str()), 
+	//		atof(svert[3].c_str()),atof(svert[4].c_str()),atof(svert[5].c_str()),atof(svert[6].c_str()));
+	//	svert.clear();
+	//	temp = mData[i].at("texTransform");
+	//	Split(temp, svert, ",");
+	//	DirectX::FXMMATRIX tex= MathHelper::PositionMatrix(atof(svert[0].c_str()), atof(svert[1].c_str()), atof(svert[2].c_str()),
+	//		atof(svert[3].c_str()), atof(svert[4].c_str()), atof(svert[5].c_str()), atof(svert[6].c_str()));
+	//	int topology = mData[i].at("topology");
+	//	BuildRenderItem(itemName, (RenderLayer)renderLayer, geoName, argName, materialName, world, tex, (D3D_PRIMITIVE_TOPOLOGY)topology);
+	//}
 }
 
 RenderItemManager::~RenderItemManager() 
@@ -102,7 +129,7 @@ void RenderItemManager::BuildAllSubRenderItem(std::string itemName, RenderLayer 
 		count++;
 		std::string name = itemName;
 		name += std::to_string(count);
-		BuildRenderItem(name, renderLayer, geoName, it->first, it->second.m_material,world, texTransform, topo);
+		BuildRenderItem(name, renderLayer, geoName, it->first, it->second.material,world, texTransform, topo);
 		it++;
 	}
 }

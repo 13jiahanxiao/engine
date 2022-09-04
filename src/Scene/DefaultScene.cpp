@@ -26,7 +26,6 @@ bool DefaultScene::Initialize()
 
 	LoadAssetManager = std::make_unique<REngine::LoadAsset>();
 
-	mItemManager->Init();
 	//要使用什么效果，提前分配好空间
 	mPostProcess->EffectBlurFilter();
 	mTextureHeap = std::make_unique<DescriptorHeap>(m_Device.get(), D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV,
@@ -35,6 +34,7 @@ bool DefaultScene::Initialize()
 	LoadAssetManager->CreateTexture(m_Device.get(), mCommandList.Get());
 	LoadAssetManager->BuildTextureHeap(mTextureHeap.get());
 
+	mItemManager->CreateMaterial(LoadAssetManager.get());
 	mRootsignature->Init(LoadAssetManager->GetTextureNum());
 
 	mPostProcess->SetDescriptorHeapAndOffset(mTextureHeap.get(), LoadAssetManager->GetTextureNum());
@@ -615,9 +615,13 @@ void DefaultScene::BuildPSOs()
 
 void DefaultScene::BuildRenderItems()
 {
-	//mItemManager->LoadRenderItemFromJson();
-	mItemManager->BuildAllSubRenderItem("ganyu", RenderLayer::Opaque, "ganyu",
-		MathHelper::PositionMatrix(0.25f, 0.25f,0.25f, 11.0f, 8.0f), MathHelper::PositionMatrix());
+    mItemManager->LoadRenderItemFromJson();
+	//mItemManager->BuildAllSubRenderItem("ganyu", RenderLayer::Opaque, "ganyu",
+	//	MathHelper::PositionMatrix(0.25f, 0.25f,0.25f, 4.0f,), MathHelper::PositionMatrix());
+	//mItemManager->BuildAllSubRenderItem("shennvpiguan", RenderLayer::Opaque, "shennvpiguan",
+	//	MathHelper::PositionMatrix(0.25f, 0.25f, 0.25f, 1.0f,), MathHelper::PositionMatrix());
+	//mItemManager->BuildAllSubRenderItem("eula", RenderLayer::Opaque, "eula",
+	//	MathHelper::PositionMatrix(0.25f, 0.25f, 0.25f, -2.0f), MathHelper::PositionMatrix());
 
 	//mItemManager->BuildRenderItem("skyBox", RenderLayer::Sky, "shapeGeo", "sphere", "skyBox",
 	//	MathHelper::PositionMatrix(5.0f, 5.0f, 5.0f), MathHelper::PositionMatrix());

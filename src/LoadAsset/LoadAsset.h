@@ -6,6 +6,14 @@
 #include<unordered_map>
 namespace REngine 
 {
+	struct LoadMaterialData
+	{
+		DirectX::XMFLOAT4 DiffuseAlbedo = { 1.0f, 1.0f, 1.0f, 1.0f };
+		DirectX::XMFLOAT3 FresnelR0 = { 0.01f, 0.01f, 0.01f };
+		float Roughness = 0.25f;
+		UINT DiffuseMapIndex = 0;
+	};
+
 	struct Texture
 	{
 		std::string Name;
@@ -26,7 +34,8 @@ namespace REngine
 		int m_startIndex;
 		int m_indexSize;
 		//图片类型名，和图片名
-		std::unordered_map <std::string, std::string> m_Texture;
+		int m_indexHeap = -1;
+		std::string material;
 	};
 
 	struct MeshData
@@ -42,13 +51,15 @@ namespace REngine
 	public:
 		LoadAsset();
 		~LoadAsset();
+		void LoadObjectFromJson();
 		void ParseObjectData(std::string geoName, std::string fileName);
 		std::vector<MeshData> GetAllMesh() { return m_meshData; }
 
-		void Init();
-		//从xml读取配置的texture地址
-		void LoadTextureFormJson(std::string name, std::string fileName, int index, int dimension);
-		void LoadTextureJson();
+		std::unordered_map<std::string, LoadMaterialData> GetMaterials() {return m_materials;}
+		void SaveMaterialData(std::string name, int index);
+		
+		int SaveTextureData(std::string name, std::string fileName, int dimension=4);
+		void LoadTextureFromJson();
 		//构建描述符堆
 		void BuildTextureHeap(DescriptorHeap* heap);
 		//创建描述符
@@ -59,12 +70,13 @@ namespace REngine
 			std::string fileName,
 			_Out_ ComPtr<ID3D12Resource>& texture,
 			_Out_ ComPtr<ID3D12Resource>& textureUploadHeap);
-		int GetTextureNum() { return m_Textures.size(); }
-
+		int GetTextureNum() { return m_textures.size(); }
 	private:
 
 		std::vector<MeshData> m_meshData;
-		std::unordered_map<std::string, std::unique_ptr<Texture>> m_Textures;
+		std::unordered_map<std::string, std::unique_ptr<Texture>> m_textures;
+		std::unordered_map<std::string, LoadMaterialData> m_materials;
+		int m_nowTextureIndex;
 	};
 }
 

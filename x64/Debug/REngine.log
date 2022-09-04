@@ -1,38 +1,21 @@
-﻿  D3DScene.cpp
-E:\REngine\src\Material\Materials.h(94,23): warning C4267: “return”: 从“size_t”转换到“int”，可能丢失数据
-E:\REngine\src\LoadAsset\LoadAsset.h(62,23): warning C4267: “return”: 从“size_t”转换到“int”，可能丢失数据
-E:\REngine\src\RenderItem\RenderItem.h(82,20): warning C4267: “return”: 从“size_t”转换到“int”，可能丢失数据
-  DefaultScene.cpp
-E:\REngine\src\Material\Materials.h(94,23): warning C4267: “return”: 从“size_t”转换到“int”，可能丢失数据
-E:\REngine\src\LoadAsset\LoadAsset.h(62,23): warning C4267: “return”: 从“size_t”转换到“int”，可能丢失数据
-E:\REngine\src\RenderItem\RenderItem.h(82,20): warning C4267: “return”: 从“size_t”转换到“int”，可能丢失数据
-  MainApp.cpp
-E:\REngine\src\Material\Materials.h(94,23): warning C4267: “return”: 从“size_t”转换到“int”，可能丢失数据
-E:\REngine\src\LoadAsset\LoadAsset.h(62,23): warning C4267: “return”: 从“size_t”转换到“int”，可能丢失数据
-E:\REngine\src\RenderItem\RenderItem.h(82,20): warning C4267: “return”: 从“size_t”转换到“int”，可能丢失数据
-  PsoContainer.cpp
-E:\REngine\src\Material\Materials.h(94,23): warning C4267: “return”: 从“size_t”转换到“int”，可能丢失数据
-E:\REngine\src\LoadAsset\LoadAsset.h(62,23): warning C4267: “return”: 从“size_t”转换到“int”，可能丢失数据
-E:\REngine\src\RenderItem\RenderItem.h(82,20): warning C4267: “return”: 从“size_t”转换到“int”，可能丢失数据
-  RenderItem.cpp
-E:\REngine\src\Material\Materials.h(94,23): warning C4267: “return”: 从“size_t”转换到“int”，可能丢失数据
-E:\REngine\src\LoadAsset\LoadAsset.h(62,23): warning C4267: “return”: 从“size_t”转换到“int”，可能丢失数据
-E:\REngine\src\RenderItem\RenderItem.h(82,20): warning C4267: “return”: 从“size_t”转换到“int”，可能丢失数据
-E:\REngine\src\RenderItem\RenderItem.cpp(36,77): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
-E:\REngine\src\RenderItem\RenderItem.cpp(36,54): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
-E:\REngine\src\RenderItem\RenderItem.cpp(36,31): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
-E:\REngine\src\RenderItem\RenderItem.cpp(36,8): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
-E:\REngine\src\RenderItem\RenderItem.cpp(35,109): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
-E:\REngine\src\RenderItem\RenderItem.cpp(35,85): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
-E:\REngine\src\RenderItem\RenderItem.cpp(35,61): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
-E:\REngine\src\RenderItem\RenderItem.cpp(42,80): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
-E:\REngine\src\RenderItem\RenderItem.cpp(42,56): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
-E:\REngine\src\RenderItem\RenderItem.cpp(42,32): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
-E:\REngine\src\RenderItem\RenderItem.cpp(42,8): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
-E:\REngine\src\RenderItem\RenderItem.cpp(41,106): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
-E:\REngine\src\RenderItem\RenderItem.cpp(41,82): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
-E:\REngine\src\RenderItem\RenderItem.cpp(41,58): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
-  正在生成代码...
+﻿  RenderItem.cpp
+E:\REngine\src\Material\Materials.h(92,23): warning C4267: “return”: 从“size_t”转换到“int”，可能丢失数据
+E:\REngine\src\LoadAsset\LoadAsset.h(73,23): warning C4267: “return”: 从“size_t”转换到“int”，可能丢失数据
+E:\REngine\src\RenderItem\RenderItem.h(83,20): warning C4267: “return”: 从“size_t”转换到“int”，可能丢失数据
+E:\REngine\src\RenderItem\RenderItem.cpp(41,80): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
+E:\REngine\src\RenderItem\RenderItem.cpp(41,56): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
+E:\REngine\src\RenderItem\RenderItem.cpp(41,32): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
+E:\REngine\src\RenderItem\RenderItem.cpp(41,8): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
+E:\REngine\src\RenderItem\RenderItem.cpp(40,109): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
+E:\REngine\src\RenderItem\RenderItem.cpp(40,85): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
+E:\REngine\src\RenderItem\RenderItem.cpp(40,61): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
+E:\REngine\src\RenderItem\RenderItem.cpp(47,80): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
+E:\REngine\src\RenderItem\RenderItem.cpp(47,56): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
+E:\REngine\src\RenderItem\RenderItem.cpp(47,32): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
+E:\REngine\src\RenderItem\RenderItem.cpp(47,8): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
+E:\REngine\src\RenderItem\RenderItem.cpp(46,107): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
+E:\REngine\src\RenderItem\RenderItem.cpp(46,83): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
+E:\REngine\src\RenderItem\RenderItem.cpp(46,59): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
 LINK : warning LNK4075: 忽略“/INCREMENTAL”(由于“/LTCG”规范)
   LINK : 已指定 /LTCG，但不需要生成代码；从链接命令行中移除 /LTCG 以提高链接器性能
   REngine.vcxproj -> E:\REngine\x64\Debug\REngine.exe

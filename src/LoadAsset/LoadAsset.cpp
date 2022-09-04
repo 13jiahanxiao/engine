@@ -14,13 +14,27 @@ using json = nlohmann::json;
 using namespace REngine;
 LoadAsset::LoadAsset()
 {
+	m_nowTextureIndex = -1;
 	m_meshData.clear();
-	ParseObjectData("ganyu", "Resources/Models/ganyu/ganyu.pmx");
-	LoadTextureJson();
+	LoadObjectFromJson();
 }
 
 LoadAsset::~LoadAsset()
 {
+}
+
+void LoadAsset::LoadObjectFromJson() 
+{
+	std::ifstream f("Resources/Json/LoadObejct.json");
+	json data = json::parse(f);
+	std::string address = data.at("Address");
+	for (int i = 0; i < data["ObjectConfig"].size(); i++)
+	{
+		std::string name = data["ObjectConfig"][i].at("name");
+		std::string fileName = address;
+		fileName += data["ObjectConfig"][i].at("fileName");
+		ParseObjectData(name, fileName);
+	}
 }
 
 void LoadAsset::ParseObjectData(std::string geoName, std::string fileName)
@@ -29,7 +43,7 @@ void LoadAsset::ParseObjectData(std::string geoName, std::string fileName)
 	pMeshData.m_name = geoName;
 
 	Assimp::Importer aiImporter;
-	const aiScene* pModel = aiImporter.ReadFile(fileName, aiProcess_MakeLeftHanded);
+	const aiScene* pModel = aiImporter.ReadFile(fileName, aiProcess_ConvertToLeftHanded);
 	if (nullptr == pModel)
 	{
 		return;
@@ -82,7 +96,9 @@ void LoadAsset::ParseObjectData(std::string geoName, std::string fileName)
 				if (pTexPath.size() > 0)
 				{
 					pTexName += pTexPath;
-					pSub.m_Texture["diffuse"] = pTexName;
+					pSub.m_indexHeap= SaveTextureData(pTexPath, pTexName);
+					SaveMaterialData(pTexPath, pSub.m_indexHeap);
+					pSub.material = pTexPath;
 				}
 			}
 			pSub.m_name = pMesh->mName.C_Str();
@@ -93,17 +109,32 @@ void LoadAsset::ParseObjectData(std::string geoName, std::string fileName)
 	m_meshData.push_back(pMeshData);
 }
 
-void LoadAsset::LoadTextureFormJson(std::string name, std::string fileName, int index, int dimension)
+void LoadAsset::SaveMaterialData(std::string name, int index)
 {
+	if (m_materials.find(name) != m_materials.end())
+		return;
+	LoadMaterialData mat;
+	mat.DiffuseMapIndex = index;
+	m_materials[name] = mat;
+}
+
+int LoadAsset::SaveTextureData(std::string name, std::string fileName, int dimension)
+{
+	auto it = m_textures.find(name);
+	if (it != m_textures.end()) 
+	{
+		return it->second->heapIndex;
+	}
 	auto Tex = std::make_unique<Texture>();
 	Tex->Name = name;
 	Tex->Filename = fileName;
-	Tex->heapIndex = index;
+	Tex->heapIndex = ++m_nowTextureIndex;
 	Tex->Dimension = (D3D12_SRV_DIMENSION)dimension;
-	m_Textures[Tex->Name] = std::move(Tex);
+	m_textures[Tex->Name] = std::move(Tex);
+	return m_nowTextureIndex;
 }
 
-void LoadAsset::LoadTextureJson()
+void LoadAsset::LoadTextureFromJson()
 {
 	std::ifstream f("Resources\\Json\\TextureConfig.json");
 	json data = json::parse(f);
@@ -115,13 +146,13 @@ void LoadAsset::LoadTextureJson()
 		fileName += data["TextureConfig"][i].at("fileName");
 		int index = data["TextureConfig"][i].at("index");
 		int dimension = data["TextureConfig"][i].at("dimension");
-		LoadTextureFormJson(name, fileName, index, dimension);
+		SaveTextureData(name, fileName, dimension);
 	}
 }
 
 void LoadAsset::CreateDDSTexture(Device* device, ID3D12GraphicsCommandList* cmdList)
 {
-	for (auto& [k, v] : m_Textures)
+	for (auto& [k, v] : m_textures)
 	{
 		std::wstring temp = d3dUtil::String2Wstring(v->Filename);
 		ThrowIfFailed(DirectX::CreateDDSTextureFromFile12(device->GetDevice(), cmdList,
@@ -132,7 +163,7 @@ void LoadAsset::CreateDDSTexture(Device* device, ID3D12GraphicsCommandList* cmdL
 
 void LoadAsset::CreateTexture(Device* device, ID3D12GraphicsCommandList* cmdList)
 {
-	for (auto& [k, v] : m_Textures)
+	for (auto& [k, v] : m_textures)
 	{
 		CreateTexture(device->GetDevice(), cmdList, v->Filename,
 			v->Resource, v->UploadHeap);
@@ -141,15 +172,15 @@ void LoadAsset::CreateTexture(Device* device, ID3D12GraphicsCommandList* cmdList
 
 void LoadAsset::BuildTextureHeap(DescriptorHeap* heap)
 {
-	for (auto& [k, v] : m_Textures)
+	for (auto& [k, v] : m_textures)
 	{
 		D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc = {};
 
-		auto tex = m_Textures[v->Name]->Resource;
+		auto tex = m_textures[v->Name]->Resource;
 
 		srvDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
 		srvDesc.Format = tex->GetDesc().Format;
-		srvDesc.ViewDimension = m_Textures[v->Name]->Dimension;
+		srvDesc.ViewDimension = m_textures[v->Name]->Dimension;
 		if (srvDesc.ViewDimension == D3D12_SRV_DIMENSION::D3D12_SRV_DIMENSION_TEXTURECUBE)
 		{
 			srvDesc.TextureCube.MostDetailedMip = 0;
