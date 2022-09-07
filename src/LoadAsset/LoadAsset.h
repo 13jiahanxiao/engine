@@ -58,7 +58,7 @@ namespace REngine
 		std::unordered_map<std::string, LoadMaterialData> GetMaterials() {return m_materials;}
 		void SaveMaterialData(std::string name, int index);
 		
-		int SaveTextureData(std::string name, std::string fileName, int dimension=4);
+		void SaveTextureData(std::string fileName, int dimension=4);
 		void LoadTextureFromJson();
 		//¹¹½¨ÃèÊö·û¶Ñ
 		void BuildTextureHeap(DescriptorHeap* heap);
@@ -76,7 +76,6 @@ namespace REngine
 		std::vector<MeshData> m_meshData;
 		std::unordered_map<std::string, std::unique_ptr<Texture>> m_textures;
 		std::unordered_map<std::string, LoadMaterialData> m_materials;
-		int m_nowTextureIndex;
 	};
 }
 

@@ -60,7 +60,7 @@ struct FrameResource
 {
 public:
 
-	FrameResource(Device* device, UINT passCount, UINT objectCount, UINT materialCount, UINT waveVertCount);
+	FrameResource(Device* device, UINT passCount, UINT objectCount, UINT materialCount);
 	FrameResource(const FrameResource& rhs) = delete;
 	FrameResource& operator=(const FrameResource& rhs) = delete;
 	~FrameResource();

@@ -20,21 +20,9 @@ ID3D12Resource* BlurFilter::Output()
 	return mBlurMap0.Get();
 }
 
-void BlurFilter::BuildDescriptors(DescriptorHeap* heap, UINT mNowHeapSize)
+void BlurFilter::BuildDescriptors(DescriptorHeap* heap)
 {
 	mDescHeap = heap;
-
-	// Save references to the descriptors. 
-	mBlur0CpuSrv = mNowHeapSize;
-	mBlur0CpuUav = mNowHeapSize+1;
-	mBlur1CpuSrv = mNowHeapSize + 2;
-	mBlur1CpuUav = mNowHeapSize +3;
-
-	mBlur0GpuSrv = mNowHeapSize;
-	mBlur0GpuUav = mNowHeapSize+1;
-	mBlur1GpuSrv = mNowHeapSize+2;
-	mBlur1GpuUav = mNowHeapSize+3;
-
 	BuildDescriptors();
 }
 
@@ -90,8 +78,8 @@ void BlurFilter::Execute(ID3D12GraphicsCommandList* cmdList,
 
 		cmdList->SetPipelineState(horzBlurPSO);
 
-		cmdList->SetComputeRootDescriptorTable(1, mDescHeap->hGPU(mBlur0GpuSrv));
-		cmdList->SetComputeRootDescriptorTable(2, mDescHeap->hGPU(mBlur1GpuUav));
+		cmdList->SetComputeRootDescriptorTable(1, mDescHeap->HGPU(mBlur0GpuSrv));
+		cmdList->SetComputeRootDescriptorTable(2, mDescHeap->HGPU(mBlur1GpuUav));
 
 		// How many groups do we need to dispatch to cover a row of pixels, where each
 		// group covers 256 pixels (the 256 is defined in the ComputeShader).
@@ -110,8 +98,8 @@ void BlurFilter::Execute(ID3D12GraphicsCommandList* cmdList,
 
 		cmdList->SetPipelineState(vertBlurPSO);
 
-		cmdList->SetComputeRootDescriptorTable(1, mDescHeap->hGPU(mBlur1GpuSrv));
-		cmdList->SetComputeRootDescriptorTable(2, mDescHeap->hGPU(mBlur0GpuUav));
+		cmdList->SetComputeRootDescriptorTable(1, mDescHeap->HGPU(mBlur1GpuSrv));
+		cmdList->SetComputeRootDescriptorTable(2, mDescHeap->HGPU(mBlur0GpuUav));
 
 		// How many groups do we need to dispatch to cover a column of pixels, where each
 		// group covers 256 pixels  (the 256 is defined in the ComputeShader).
@@ -174,11 +162,15 @@ void BlurFilter::BuildDescriptors()
 	uavDesc.ViewDimension = D3D12_UAV_DIMENSION_TEXTURE2D;
 	uavDesc.Texture2D.MipSlice = 0;
 
-	mDescHeap->CreateSRV(mBlurMap0.Get(), srvDesc, mBlur0CpuSrv);
-	mDescHeap->CreateUAV(mBlurMap0.Get(), uavDesc, mBlur0CpuUav);
+	mBlur0CpuSrv=mDescHeap->CreateSRV(mBlurMap0.Get(), srvDesc);
+	mBlur0GpuSrv = mBlur0CpuSrv;
+	mBlur0CpuUav=mDescHeap->CreateUAV(mBlurMap0.Get(), uavDesc);
+	mBlur0GpuUav = mBlur0CpuUav;
 
-	mDescHeap->CreateSRV(mBlurMap1.Get(), srvDesc, mBlur1CpuSrv);
-	mDescHeap->CreateUAV(mBlurMap1.Get(), uavDesc, mBlur1CpuUav);
+	mBlur1CpuSrv=mDescHeap->CreateSRV(mBlurMap1.Get(), srvDesc);
+	mBlur1GpuSrv = mBlur1CpuSrv;
+	mBlur1CpuUav=mDescHeap->CreateUAV(mBlurMap1.Get(), uavDesc);
+	mBlur1GpuUav = mBlur1CpuUav;
 }
 
 void BlurFilter::BuildResources()

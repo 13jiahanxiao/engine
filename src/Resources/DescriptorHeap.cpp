@@ -3,7 +3,8 @@
 DescriptorHeap::DescriptorHeap(Device* device,D3D12_DESCRIPTOR_HEAP_TYPE Type,uint64 numDescriptors,bool bShaderVisible)
 	: Resource(device),
 	allocatePool(numDescriptors),
-	numDescriptors(numDescriptors) 
+	m_numDescriptors(numDescriptors) ,
+	m_heapUseIndex(-1)
 {
 	m_Desc.NumDescriptors = numDescriptors;
 	m_Desc.Type = Type;
@@ -24,9 +25,15 @@ DescriptorHeap::~DescriptorHeap()
 
 }
 
-void DescriptorHeap::CreateUAV(ID3D12Resource* resource, const D3D12_UNORDERED_ACCESS_VIEW_DESC& pDesc, uint64 index) {
-	m_Device->GetDevice()->CreateUnorderedAccessView(resource, nullptr, &pDesc, hCPU(index));
+uint64 DescriptorHeap::CreateUAV(ID3D12Resource* resource, const D3D12_UNORDERED_ACCESS_VIEW_DESC& pDesc)
+{
+	m_heapUseIndex++;
+	m_Device->GetDevice()->CreateUnorderedAccessView(resource, nullptr, &pDesc, HCPU(m_heapUseIndex));
+	return m_heapUseIndex;
 }
-void DescriptorHeap::CreateSRV(ID3D12Resource* resource, const D3D12_SHADER_RESOURCE_VIEW_DESC& pDesc, uint64 index) {
-	m_Device->GetDevice()->CreateShaderResourceView(resource, &pDesc, hCPU(index));
+uint64 DescriptorHeap::CreateSRV(ID3D12Resource* resource, const D3D12_SHADER_RESOURCE_VIEW_DESC& pDesc)
+{
+	m_heapUseIndex++;
+	m_Device->GetDevice()->CreateShaderResourceView(resource, &pDesc, HCPU(m_heapUseIndex));
+	return m_heapUseIndex;
 }

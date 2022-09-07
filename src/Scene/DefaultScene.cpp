@@ -20,16 +20,11 @@ bool DefaultScene::Initialize()
 	if (!D3DScene::Initialize())
 		return false;
 
-	m_Waves = std::make_unique<Waves>(128, 128, 1.0f, 0.03f, 4.0f, 0.2f);
-
 	m_SunLight.SetLight(1.25f * XM_PI, XM_PIDIV4, 1.0f, { 1.0f, 1.0f, 0.9f }, 0);
 
 	LoadAssetManager = std::make_unique<REngine::LoadAsset>();
 
-	//要使用什么效果，提前分配好空间
-	mPostProcess->EffectBlurFilter();
-	mTextureHeap = std::make_unique<DescriptorHeap>(m_Device.get(), D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV,
-		LoadAssetManager->GetTextureNum() + mPostProcess->GetHeapSize(), true);
+	mTextureHeap = std::make_unique<DescriptorHeap>(m_Device.get(), D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV,128, true);
 	//创建描述符
 	LoadAssetManager->CreateTexture(m_Device.get(), mCommandList.Get());
 	LoadAssetManager->BuildTextureHeap(mTextureHeap.get());
@@ -37,7 +32,7 @@ bool DefaultScene::Initialize()
 	mItemManager->CreateMaterial(LoadAssetManager.get());
 	mRootsignature->Init(LoadAssetManager->GetTextureNum());
 
-	mPostProcess->SetDescriptorHeapAndOffset(mTextureHeap.get(), LoadAssetManager->GetTextureNum());
+	mPostProcess->SetDescriptorHeapAndOffset(mTextureHeap.get());
 
 	mPostProcess->InitBlurFilter(mClientWidth/2, mClientHeight, DXGI_FORMAT_R8G8B8A8_UNORM);
 
@@ -91,14 +86,14 @@ void DefaultScene::Draw(const GameTimer& gt)
 
 	DrawItems();
 
-	//mPostProcess->Execute(mCommandList.Get(), mRootsignature->GetPostProcessRootSign().Get(), mPsoContainer->GetPsoByRenderLayer(RenderLayer::HorzBlur),
-	//	mPsoContainer->GetPsoByRenderLayer(RenderLayer::VertBlur), CurrentBackBuffer(), 20);
+	mPostProcess->Execute(mCommandList.Get(), mRootsignature->GetPostProcessRootSign().Get(), mPsoContainer->GetPsoByRenderLayer(RenderLayer::HorzBlur),
+	mPsoContainer->GetPsoByRenderLayer(RenderLayer::VertBlur), CurrentBackBuffer(), 20);
 
-	//// Prepare to copy blurred output to the back buffer.
-	//mCommandList->ResourceBarrier(1, rvalue_to_lvalue(CD3DX12_RESOURCE_BARRIER::Transition(CurrentBackBuffer(),
-	//	D3D12_RESOURCE_STATE_COPY_SOURCE, D3D12_RESOURCE_STATE_COPY_DEST)));
+	// Prepare to copy blurred output to the back buffer.
+	mCommandList->ResourceBarrier(1, rvalue_to_lvalue(CD3DX12_RESOURCE_BARRIER::Transition(CurrentBackBuffer(),
+		D3D12_RESOURCE_STATE_COPY_SOURCE, D3D12_RESOURCE_STATE_COPY_DEST)));
 
-	//mCommandList->CopyResource(CurrentBackBuffer(), mPostProcess->BlurFilterOutput());
+	mCommandList->CopyResource(CurrentBackBuffer(), mPostProcess->BlurFilterOutput());
 
 	mCommandList->ResourceBarrier(1, rvalue_to_lvalue(CD3DX12_RESOURCE_BARRIER::Transition(CurrentBackBuffer(),
 		D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PRESENT)));
@@ -181,7 +176,6 @@ void DefaultScene::Update(const GameTimer& gt)
 	mItemManager->UpdateCBs(mCurrFrameResource);
 	UpdateMainPassCB(gt);
 	UpdateReflectPassCB(gt);
-	//UpdateWaves(gt);
 }
 
 #pragma region update具体实现
@@ -256,43 +250,6 @@ void DefaultScene::UpdateReflectPassCB(const GameTimer& gt)
 
 	auto currPassCB = mCurrFrameResource->PassCB.get();
 	currPassCB->CopyData(1, mReflectPassCB);
-}
-
-void DefaultScene::UpdateWaves(const GameTimer& gt)
-{
-	// 0.25生成随机波
-	static float t_base = 0.0f;
-	if ((mTimer.TotalTime() - t_base) >= 0.25f)
-	{
-		t_base += 0.25f;
-
-		int i = MathHelper::Rand(4, m_Waves->RowCount() - 5);
-		int j = MathHelper::Rand(4, m_Waves->ColumnCount() - 5);
-
-		float r = MathHelper::RandF(0.2f, 0.5f);
-
-		m_Waves->Disturb(i, j, r);
-	}
-
-	m_Waves->Update(gt.DeltaTime());
-
-	// Update the wave vertex buffer with the new solution.
-	auto currWavesVB = mCurrFrameResource->WavesVB.get();
-	for (int i = 0; i < m_Waves->VertexCount(); ++i)
-	{
-		Vertex v;
-
-		v.Pos = m_Waves->Position(i);
-		v.Normal = m_Waves->Normal(i);
-
-		v.TexC.x = 0.5f + v.Pos.x / m_Waves->Width();
-		v.TexC.y = 0.5f - v.Pos.z / m_Waves->Depth();
-
-		currWavesVB->CopyData(i, v);
-	}
-
-	// Set the dynamic VB of the wave renderitem to the current frame VB.
-	m_WavesRitem->Geo->SetVertexBufferGPU(currWavesVB->GetResource());
 }
 
 void DefaultScene::UpdateLight(const GameTimer& gt)
@@ -379,55 +336,6 @@ void DefaultScene::OnKeyboardInput(const GameTimer& gt)
 #pragma endregion
 
 #pragma region 几何体构造
-void DefaultScene::WavesGeometry()
-{
-	std::vector<std::uint16_t> indices(3 * m_Waves->TriangleCount()); // 3 indices per face
-	assert(m_Waves->VertexCount() < 0x0000ffff);
-
-	int m = m_Waves->RowCount();
-	int n = m_Waves->ColumnCount();
-	int k = 0;
-	for (int i = 0; i < m - 1; ++i)
-	{
-		for (int j = 0; j < n - 1; ++j)
-		{
-			indices[k] = i * n + j;
-			indices[k + 1] = i * n + j + 1;
-			indices[k + 2] = (i + 1) * n + j;
-
-			indices[k + 3] = (i + 1) * n + j;
-			indices[k + 4] = i * n + j + 1;
-			indices[k + 5] = (i + 1) * n + j + 1;
-
-			k += 6; // next quad
-		}
-	}
-
-	UINT vbByteSize = m_Waves->VertexCount() * sizeof(Vertex);
-
-	mItemManager->GetMeshManager()->CreateMeshVertexUpload("waterGeo", vbByteSize, indices);
-	mItemManager->GetMeshManager()->CreateSubMesh("waterGeo", "grid", (UINT)indices.size(), 0,0);
-}
-void DefaultScene::LandGeometry()
-{
-	GeometryGenerator geoGen;
-	GeometryGenerator::MeshData grid = geoGen.CreateGrid(160.0f, 160.0f, 50, 50);
-
-	std::vector<Vertex> vertices(grid.Vertices.size());
-	for (size_t i = 0; i < grid.Vertices.size(); ++i)
-	{
-		auto& p = grid.Vertices[i].Position;
-		vertices[i].Pos = p;
-		vertices[i].Pos.y = GetHillsHeight(p.x, p.z);
-		vertices[i].Normal = GetHillsNormal(p.x, p.z);
-		vertices[i].TexC = grid.Vertices[i].TexC;
-	}
-
-	std::vector<std::uint16_t> indices = grid.GetIndices16();
-
-	mItemManager->GetMeshManager()->CreateMesh("landGeo", vertices, indices);
-	mItemManager->GetMeshManager()->CreateSubMesh("landGeo", "grid", (UINT)indices.size(), 0, 0);
-}
 void DefaultScene::ShapeGeometry()
 {
 	GeometryGenerator geoGen;
@@ -496,46 +404,6 @@ void DefaultScene::ShapeGeometry()
 	mItemManager->GetMeshManager()->CreateSubMesh("shapeGeo", "sphere", (UINT)sphere.Indices32.size(), sphereIndexOffset, sphereVertexOffset);
 	mItemManager->GetMeshManager()->CreateSubMesh("shapeGeo", "cylinder", (UINT)cylinder.Indices32.size(), cylinderIndexOffset, cylinderVertexOffset);
 }
-void DefaultScene::BuildSkullGeometry()
-{
-	std::ifstream fin("Resources/Models/car.txt");
-
-	if (!fin)
-	{
-		MessageBox(0, L"Models/skull.txt not found.", 0, 0);
-		return;
-	}
-
-	UINT vcount = 0;
-	UINT tcount = 0;
-	std::string ignore;
-
-	fin >> ignore >> vcount;
-	fin >> ignore >> tcount;
-	fin >> ignore >> ignore >> ignore >> ignore;
-
-	std::vector<Vertex> vertices(vcount);
-	for (UINT i = 0; i < vcount; ++i)
-	{
-		fin >> vertices[i].Pos.x >> vertices[i].Pos.y >> vertices[i].Pos.z;
-		fin >> vertices[i].Normal.x >> vertices[i].Normal.y >> vertices[i].Normal.z;
-	}
-
-	fin >> ignore;
-	fin >> ignore;
-	fin >> ignore;
-
-	std::vector<std::uint16_t> indices(3 * tcount);
-	for (UINT i = 0; i < tcount; ++i)
-	{
-		fin >> indices[i * 3 + 0] >> indices[i * 3 + 1] >> indices[i * 3 + 2];
-	}
-
-	fin.close();
-
-	mItemManager->GetMeshManager()->CreateMesh("skullGeo", vertices, indices);
-	mItemManager->GetMeshManager()->CreateSubMesh("skullGeo", "skull", (UINT)indices.size(), 0, 0);
-}
 void DefaultScene::BillTreeGeometry()
 {
 	static const int treeCount = 16;
@@ -566,13 +434,9 @@ void DefaultScene::BillTreeGeometry()
 
 void DefaultScene::BuildGeometrys()
 {
-	WavesGeometry();
-	LandGeometry();
 	ShapeGeometry();
-	BuildSkullGeometry();
 	BillTreeGeometry();
 	mItemManager->GetMeshManager()->LoadMesh(LoadAssetManager.get());
-	//mItemManager->GetMeshManager()->LoadMesh("Resources/Models/cow.obj", "loadGeo", "cow");
 }
 #pragma endregion
 
@@ -582,7 +446,7 @@ void DefaultScene::BuildFrameResources()
 	for (int i = 0; i < gNumFrameResources; ++i)
 	{
 		mFrameResources.push_back(std::make_unique<FrameResource>(m_Device.get(),
-			2, (UINT)mItemManager->ItemsSize(), (UINT)mItemManager->GetMaterilalsNum(), m_Waves->VertexCount()));
+			2, (UINT)mItemManager->ItemsSize(), (UINT)mItemManager->GetMaterilalsNum()));
 	}
 }
 
@@ -616,12 +480,6 @@ void DefaultScene::BuildPSOs()
 void DefaultScene::BuildRenderItems()
 {
     mItemManager->LoadRenderItemFromJson();
-	//mItemManager->BuildAllSubRenderItem("ganyu", RenderLayer::Opaque, "ganyu",
-	//	MathHelper::PositionMatrix(0.25f, 0.25f,0.25f, 4.0f,), MathHelper::PositionMatrix());
-	//mItemManager->BuildAllSubRenderItem("shennvpiguan", RenderLayer::Opaque, "shennvpiguan",
-	//	MathHelper::PositionMatrix(0.25f, 0.25f, 0.25f, 1.0f,), MathHelper::PositionMatrix());
-	//mItemManager->BuildAllSubRenderItem("eula", RenderLayer::Opaque, "eula",
-	//	MathHelper::PositionMatrix(0.25f, 0.25f, 0.25f, -2.0f), MathHelper::PositionMatrix());
 
 	//mItemManager->BuildRenderItem("skyBox", RenderLayer::Sky, "shapeGeo", "sphere", "skyBox",
 	//	MathHelper::PositionMatrix(5.0f, 5.0f, 5.0f), MathHelper::PositionMatrix());

@@ -14,7 +14,6 @@ using json = nlohmann::json;
 using namespace REngine;
 LoadAsset::LoadAsset()
 {
-	m_nowTextureIndex = -1;
 	m_meshData.clear();
 	LoadObjectFromJson();
 }
@@ -96,9 +95,8 @@ void LoadAsset::ParseObjectData(std::string geoName, std::string fileName)
 				if (pTexPath.size() > 0)
 				{
 					pTexName += pTexPath;
-					pSub.m_indexHeap= SaveTextureData(pTexPath, pTexName);
-					SaveMaterialData(pTexPath, pSub.m_indexHeap);
-					pSub.material = pTexPath;
+					SaveTextureData(pTexName);
+					pSub.material = pTexName;
 				}
 			}
 			pSub.m_name = pMesh->mName.C_Str();
@@ -118,20 +116,15 @@ void LoadAsset::SaveMaterialData(std::string name, int index)
 	m_materials[name] = mat;
 }
 
-int LoadAsset::SaveTextureData(std::string name, std::string fileName, int dimension)
+void LoadAsset::SaveTextureData(std::string fileName, int dimension)
 {
-	auto it = m_textures.find(name);
-	if (it != m_textures.end()) 
-	{
-		return it->second->heapIndex;
-	}
+	if (m_textures.find(fileName) != m_textures.end())
+		return;
 	auto Tex = std::make_unique<Texture>();
-	Tex->Name = name;
+	Tex->Name = fileName;
 	Tex->Filename = fileName;
-	Tex->heapIndex = ++m_nowTextureIndex;
 	Tex->Dimension = (D3D12_SRV_DIMENSION)dimension;
 	m_textures[Tex->Name] = std::move(Tex);
-	return m_nowTextureIndex;
 }
 
 void LoadAsset::LoadTextureFromJson()
@@ -146,7 +139,7 @@ void LoadAsset::LoadTextureFromJson()
 		fileName += data["TextureConfig"][i].at("fileName");
 		int index = data["TextureConfig"][i].at("index");
 		int dimension = data["TextureConfig"][i].at("dimension");
-		SaveTextureData(name, fileName, dimension);
+		SaveTextureData( fileName, dimension);
 	}
 }
 
@@ -194,8 +187,8 @@ void LoadAsset::BuildTextureHeap(DescriptorHeap* heap)
 			srvDesc.Texture2D.ResourceMinLODClamp = 0.0f;
 		}
 
-
-		heap->CreateSRV(tex.Get(), srvDesc, v->heapIndex);
+		v->heapIndex=heap->CreateSRV(tex.Get(), srvDesc);
+		SaveMaterialData(v->Name, v->heapIndex);
 	}
 }
 

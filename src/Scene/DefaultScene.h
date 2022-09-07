@@ -34,7 +34,6 @@ private:
     void OnKeyboardInput(const GameTimer& gt);
     void UpdateMainPassCB(const GameTimer& gt);
     void UpdateReflectPassCB(const GameTimer& gt);
-	void UpdateWaves(const GameTimer& gt);
     void UpdateLight(const GameTimer& gt);
     void AnimateMaterials(const GameTimer& gt);
     void UpdateCBs(FrameResource* currentFrameResource);
@@ -43,10 +42,7 @@ private:
 
     void DrawItems();
     //几何
-    void BuildSkullGeometry();
     void BuildGeometrys();
-    void LandGeometry();
-	void WavesGeometry();
     void ShapeGeometry();
     void BillTreeGeometry();
     //管线配置
@@ -70,9 +66,6 @@ private:
     
 	PassConstants mMainPassCB;
     PassConstants mReflectPassCB;
-
-	std::unique_ptr<Waves> m_Waves;
-	RenderItem* m_WavesRitem = nullptr;
 
     UINT mPassCbvOffset = 0;
 

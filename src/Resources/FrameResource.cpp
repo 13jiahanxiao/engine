@@ -1,6 +1,6 @@
 #include "FrameResource.h"
 
-FrameResource::FrameResource(Device* device, UINT passCount, UINT objectCount, UINT materialCount, UINT waveVertCount)
+FrameResource::FrameResource(Device* device, UINT passCount, UINT objectCount, UINT materialCount)
 {
     ThrowIfFailed(device->GetDevice()->CreateCommandAllocator(
         D3D12_COMMAND_LIST_TYPE_DIRECT,
@@ -9,8 +9,6 @@ FrameResource::FrameResource(Device* device, UINT passCount, UINT objectCount, U
     PassCB = std::make_unique<UploadBuffer<PassConstants>>(device, passCount, true);
     ObjectCB = std::make_unique<UploadBuffer<ObjectConstants>>(device, objectCount, true);
     MaterialBuffer = std::make_unique<UploadBuffer<MaterialData>>(device, materialCount, false);
-
-	WavesVB = std::make_unique<UploadBuffer<Vertex>>(device, waveVertCount, false);
 }
 
 FrameResource::~FrameResource()

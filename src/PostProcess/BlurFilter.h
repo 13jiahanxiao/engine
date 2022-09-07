@@ -24,7 +24,7 @@ public:
 
 	ID3D12Resource* Output();
 
-	void BuildDescriptors(DescriptorHeap* heap, UINT mNowHeapSize);
+	void BuildDescriptors(DescriptorHeap* heap);
 
 	void OnResize(UINT newWidth, UINT newHeight);
 

@@ -1,7 +1,7 @@
 #include"PostProcess.h"
 
 PostProcess::PostProcess(Device* device,UINT descriptorSize) 
-	:mDevice(device),descriptorSize(descriptorSize)
+	:mDevice(device)
 {
 
 }
@@ -12,7 +12,7 @@ void PostProcess::InitBlurFilter(UINT width, UINT height, DXGI_FORMAT format)
 	mClientWidth = width;
 	mBlurFilter = std::make_unique<BlurFilter>(mDevice->GetDevice(), mClientWidth, mClientHeight, format);
 
-	mBlurFilter->BuildDescriptors(mDescriptorHeap, mNowHeapSize);
+	mBlurFilter->BuildDescriptors(mDescriptorHeap);
 }
 
 void PostProcess::OnResize()
